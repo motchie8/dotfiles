@@ -36,23 +36,6 @@ if isdirectory(expand($PYENV_PATH))
     let g:python_host_prog = $PYENV_PATH . '/versions/neovim2/bin/python'
 endif
 
-" Unite vim settings
-"let g:unite_enable_start_insert=1
-" buffers
-"noremap <C-P> :Unite buffer<CR>
-" files
-"noremap <C-N> :Unite -buffer-name=file file<CR>
-" recent
-"noremap <C-Z> :Unite file_mru<CR>
-" current dir
-"noremap :uff :<C-u>UniteWithBufferDir file -buffer-name=file<CR>
-" split window
-"au FileType unite nnoremap <silent> <buffer> <expr> <C-J> unite#do_action('split')
-"au FileType unite inoremap <silent> <buffer> <expr> <C-J> unite#do_action('split')
-" exit with esc double
-"au FileType unite nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
-"au FileType unite inoremap <silent> <buffer> <ESC><ESC> <ESC>:q<CR>
-
 " keymapping
 inoremap <C-i> <Esc>
 inoremap <C-j>  <down>
@@ -62,14 +45,13 @@ inoremap <C-l>  <right>
 
 noremap <S-h> ^
 noremap <S-l> $
-
 nnoremap <silent> <Space>f "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>
 nmap <Space>r <Space>f:%s/<C-r>///g<Left><Left>
 nnoremap <silent> <Esc><Esc> :<C-u>set nohlsearch!<CR>
 
 " tab intent
-set expandtab
-set tabstop=4
+"set expandtab
+"set tabstop=4
 
 " serach
 set ignorecase
@@ -83,7 +65,7 @@ set cursorline
 set showmatch
 
 " other settings
-set noswapfiledjj
+set noswapfile
 set whichwrap=b,s,h,l,<,>,[,]
 set backspace=indent,eol,start
 
@@ -101,7 +83,5 @@ inoremap " ""<LEFT>
 syntax on
 set t_Co=256
 colorscheme iceberg
-" gosukiwi/vim-atom-dark
 
-" detect filetype
 filetype plugin indent on
