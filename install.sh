@@ -40,7 +40,7 @@ fi
 # install neovim plugins
 pyenv shell neovim3
 pip install -U pip
-pip install -U -r ~/.dotfiles/python/requirements.txt
+pip install --user -r ~/.dotfiles/python/requirements.txt
 # create symbolic links for nvim pyenv
 ln -s `pyenv which flake8` ~/.pyenv/bin/flake8
 #ln -s `pyenv which flake8-import-order` ~/.pyenv/bin/flake8-import-order
