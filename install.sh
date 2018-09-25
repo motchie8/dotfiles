@@ -1,18 +1,5 @@
 #!/bin/bash
 
-# args to specify python version to install
-for OPT in "$@"
-do
-    case $OPT in
-        '-p' )
-            PYTHON_FLAG=1
-	    PYTHON_VERSION=$2
-	    shift 2
-            ;;
-    esac
-    shift
-done
-
 # install libs for pyenv 
 sudo yum install git zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel \
 openssl-devel xz xz-devel libffi-devel make libtool autoconf automake cmake gcc gcc-c++ make pkgconfig unzip gettext -y
@@ -27,17 +14,13 @@ eval "$(pyenv virtualenv-init -)"
 source ~/.bash_profile
 
 # create envs for neovim by pyenv-virtualenv
-if [ "$PYTHON_FLAG" ]; then
-    pyenv install $PYTHON_VERSION
-    pyenv virtualenv --system-site-packages $PYTHON_VERSION neovim3
-else
-    pyenv install 2.7.15
-    pyenv install 3.5.6
-    pyenv virtualenv 2.7.15 neovim2
-    pyenv virtualenv 3.5.6 neovim3
-fi
+pyenv install 2.7.15
+pyenv install 3.5.6
+pyenv virtualenv 2.7.15 neovim2
+pyenv virtualenv 3.5.6 neovim3
 
 # set neovim3 as global env
+pyenv rehash
 pyenv global neovim3
 # install neovim packages
 pip install -U pip
@@ -50,7 +33,6 @@ ln -s `pyenv which autopep8` ~/.pyenv/bin/autopep8
 ln -s `pyenv which isort` ~/.pyenv/bin/isort
 
 # install neovim
-mkdir -p ~/.dotfiles
 cd ~/.dotfiles
 git clone https://github.com/neovim/neovim
 cd neovim
