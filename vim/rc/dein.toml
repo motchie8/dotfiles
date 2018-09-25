@@ -9,9 +9,10 @@ repo = 'cocopon/iceberg.vim'
 # file open
 [[plugins]]
 repo = 'Shougo/denite.nvim'
-hook_add = '''
-    nnoremap <silent><Space>do :<C-u>Denite file_rec<CR>
-    nnoremap <silent><Space>dg :<C-u>Denite grep<CR>
+hook_post_source = '''
+    nnoremap <silent><Space>dl :Denite buffer<CR>
+    nnoremap <silent><Space>do :Denite file/rec<CR>
+    nnoremap <silent><Space>dg :Denite grep<CR>
 '''
 
 # tree
@@ -24,3 +25,26 @@ hook_add = '''
 # show indent
 [[plugins]]
 repo = 'nathanaelkane/vim-indent-guides'
+
+# auto complete
+[[plugins]]
+repo = 'Shougo/deoplete.nvim'
+hook_post_source = '''
+    " Use deoplete.
+    let g:deoplete#enable_at_startup = 1
+    " Use smartcase.
+    call deoplete#custom#option('smart_case', v:true)
+    
+    " <C-h>, <BS>: close popup and delete backword char.
+    inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
+    inoremap <expr><BS>  deoplete#smart_close_popup()."\<C-h>"
+    inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"   
+    inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>" 
+    
+    " <CR>: close popup and save indent.
+    inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+    function! s:my_cr_function() abort
+      return deoplete#close_popup() . "\<CR>"
+    endfunction
+'''
+#
