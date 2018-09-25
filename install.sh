@@ -26,10 +26,10 @@ eval "$(pyenv virtualenv-init -)"
 ' >> ~/.bash_profile
 source ~/.bash_profile
 
-# create envs for neovim
+# create envs for neovim by pyenv-virtualenv
 if [ "$PYTHON_FLAG" ]; then
     pyenv install $PYTHON_VERSION
-    pyenv virtualenv $PYTHON_VERSION neovim3
+    pyenv virtualenv --system-site-packages $PYTHON_VERSION neovim3
 else
     pyenv install 2.7.15
     pyenv install 3.5.6
@@ -37,8 +37,9 @@ else
     pyenv virtualenv 3.5.6 neovim3
 fi
 
-# install neovim plugins
-pyenv shell neovim3
+# set neovim3 as global env
+pyenv global neovim3
+# install neovim packages
 pip install -U pip
 pip install --user -r ~/.dotfiles/python/requirements.txt
 # create symbolic links for nvim pyenv
@@ -49,13 +50,14 @@ ln -s `pyenv which autopep8` ~/.pyenv/bin/autopep8
 ln -s `pyenv which isort` ~/.pyenv/bin/isort
 
 # install neovim
+mkdir -p ~/.dotfiles
 cd ~/.dotfiles
 git clone https://github.com/neovim/neovim
 cd neovim
 make
 sudo make install
 sudo ln -s -T /usr/local/bin/nvim /usr/bin/nvim
-# color schema
+# setup color schema
 cd ~/.dotfiles
 git clone https://github.com/cocopon/iceberg.vim
 
