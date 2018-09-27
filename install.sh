@@ -21,11 +21,13 @@ pyenv virtualenv 3.5.6 neovim3
 
 # setup python libs for neovim
 pyenv rehash
-pyenv shell neovim2
-pip install --user neovim
-pyenv shell neovim3
+source ~/.bash_profile
+pyenv activate neovim2
+pip install neovim
+pyenv deactivate
+pyenv activate neovim3
 pip install -U pip
-pip install --user -r ~/.dotfiles/python/requirements.txt
+pip install -r ~/.dotfiles/python/requirements.txt
 # create symbolic links for nvim pyenv
 ln -s `pyenv which flake8` ~/.pyenv/bin/flake8
 #ln -s `pyenv which flake8-import-order` ~/.pyenv/bin/flake8-import-order
@@ -50,6 +52,6 @@ ln -s -T ~/.dotfiles/.vimrc ~/.vimrc
 mkdir -p ~/.config/nvim
 ln -s -T ~/.vimrc ~/.config/nvim/init.vim
 ln -s ~/.dotfiles/.tmux.conf ~/.tmux.conf
-mkdir -p ~/.vim/colors
-ln -s -T ~/.dotfiles/iceberg.vim/colors/iceberg.vim ~/.vim/colors/iceberg.vim
+mkdir -p ~/.config/nvim/colors
+ln -s -T ~/.dotfiles/iceberg.vim/colors/iceberg.vim ~/.config/nvim/colors/iceberg.vim
 source ~/.bash_profile
