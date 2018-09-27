@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # install libs for pyenv 
-sudo yum install git zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel \
+sudo yum install git xsel zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel \
 openssl-devel xz xz-devel libffi-devel make libtool autoconf automake cmake gcc gcc-c++ make pkgconfig unzip gettext -y
 # install pyenv
 curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
@@ -19,10 +19,11 @@ pyenv install 3.5.6
 pyenv virtualenv 2.7.15 neovim2
 pyenv virtualenv 3.5.6 neovim3
 
-# set neovim3 as global env
+# setup python libs for neovim
 pyenv rehash
-pyenv global neovim3
-# install neovim packages
+pyenv shell neovim2
+pip install --user neovim
+pyenv shell neovim3
 pip install -U pip
 pip install --user -r ~/.dotfiles/python/requirements.txt
 # create symbolic links for nvim pyenv

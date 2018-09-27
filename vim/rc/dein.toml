@@ -9,7 +9,7 @@ repo = 'cocopon/iceberg.vim'
 # file open
 [[plugins]]
 repo = 'Shougo/denite.nvim'
-hook_post_source = '''
+hook_add= '''
     nnoremap <silent><Space>dl :Denite buffer<CR>
     nnoremap <silent><Space>do :Denite file/rec<CR>
     nnoremap <silent><Space>dg :Denite grep<CR>
@@ -29,7 +29,7 @@ repo = 'nathanaelkane/vim-indent-guides'
 # auto complete
 [[plugins]]
 repo = 'Shougo/deoplete.nvim'
-hook_post_source = '''
+hook_add = '''
     " Use deoplete.
     let g:deoplete#enable_at_startup = 1
     " Use smartcase.
