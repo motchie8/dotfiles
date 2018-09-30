@@ -1,7 +1,6 @@
 # dein.vim
 [[plugins]]
 repo = 'Shougo/dein.vim'
-
 # colorschema
 [[plugins]]
 repo = 'cocopon/iceberg.vim'
@@ -37,15 +36,10 @@ hook_add = '''
     " use auto select
     set completeopt+=noinsert
     " <C-h>, <BS>: close popup and delete backword char.
-    inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
-    inoremap <expr><BS>  deoplete#smart_close_popup()."\<C-h>"
-    inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"   
-    inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>" 
-    
-    " <CR>: close popup and save indent.
-    inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-    function! s:my_cr_function() abort
-      return deoplete#close_popup() . "\<CR>"
-    endfunction
+    inoremap <expr><C-h> deoplete#smart_close_popup()."<C-h>"
+    inoremap <expr><BS>  deoplete#smart_close_popup()."<C-h>"
+    inoremap <expr><S-TAB>  pumvisible() ? "<C-p>" : "<S-TAB>" 
+    " <CR>: insert selected word \
+    imap <expr><CR>  pumvisible() ? "<C-y>" : "<CR>"
 '''
 #

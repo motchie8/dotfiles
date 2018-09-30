@@ -1,6 +1,5 @@
 set nocompatible
 filetype off
-
 " directory to install plugins
 let s:dein_dir = expand('~/.cache/dein')
 let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
@@ -38,10 +37,13 @@ endif
 
 " keymapping
 inoremap <C-i> <Esc>
+inoremap jj <Esc>
 inoremap <C-j>  <down>
 inoremap <C-k>  <up>
 inoremap <C-h>  <left>
 inoremap <C-l>  <right>
+imap <expr><TAB>  pumvisible() ? "<C-n>" : "<TAB>"
+
 
 noremap <S-h> ^
 noremap <S-l> $
@@ -50,8 +52,8 @@ nmap <Space>r <Space>f:%s/<C-r>///g<Left><Left>
 nnoremap <silent> <Esc><Esc> :<C-u>set nohlsearch!<CR>
 
 " tab intent
-"set expandtab
-"set tabstop=4
+set expandtab
+set tabstop=4
 
 " serach
 set ignorecase
