@@ -1,6 +1,7 @@
 # dein.vim
 [[plugins]]
 repo = 'Shougo/dein.vim'
+
 # colorschema
 [[plugins]]
 repo = 'cocopon/iceberg.vim'
@@ -32,7 +33,7 @@ hook_add = '''
     " Use deoplete.
     let g:deoplete#enable_at_startup = 1
     " Use smartcase.
-    call deoplete#custom#option('smart_case', v:true)
+    "call deoplete#custom#option('smart_case', v:true)
     " use auto select
     set completeopt+=noinsert
     " <C-h>, <BS>: close popup and delete backword char.
