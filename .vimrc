@@ -26,13 +26,13 @@ endif
 filetype plugin indent on
 syntax enable
 
-if dein#check_install()
-    call dein#install()
-endif
-
 if isdirectory(expand($PYENV_PATH))
     let g:python3_host_prog = $PYENV_PATH . '/versions/neovim3/bin/python'
     let g:python_host_prog = $PYENV_PATH . '/versions/neovim2/bin/python'
+endif
+
+if dein#check_install()
+    call dein#install()
 endif
 
 " keymapping
