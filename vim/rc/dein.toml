@@ -19,7 +19,7 @@ hook_add= '''
 [[plugins]]
 repo = 'scrooloose/nerdtree'
 hook_add = '''
-    nnoremap <silent><Space>t :NERDTreeToggle<CR>
+    nnoremap <silent><Space>nt :NERDTreeToggle<CR>
 '''
 
 # show indent
@@ -42,5 +42,12 @@ hook_add = '''
     inoremap <expr><S-TAB>  pumvisible() ? "<C-p>" : "<S-TAB>" 
     " <CR>: insert selected word \
     imap <expr><CR>  pumvisible() ? "<C-y>" : "<CR>"
+'''
+# terminal
+[[plugins]]
+repo = 'kassio/neoterm'
+hook_add = '''
+    nnoremap <silent><Space>to :Topen<CR>
+    nnoremap <silent><Space>tc :Tclose<CR>
 '''
 #
