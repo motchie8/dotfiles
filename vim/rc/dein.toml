@@ -10,7 +10,7 @@ repo = 'cocopon/iceberg.vim'
 [[plugins]]
 repo = 'Shougo/denite.nvim'
 hook_add= '''
-    nnoremap <silent><Space>dl :Denite buffer<CR>
+    nnoremap <silent><Space>db :Denite buffer<CR>
     nnoremap <silent><Space>do :Denite file/rec<CR>
     nnoremap <silent><Space>dg :Denite grep<CR>
 '''
@@ -18,8 +18,9 @@ hook_add= '''
 # tree
 [[plugins]]
 repo = 'scrooloose/nerdtree'
+
 hook_add = '''
-    nnoremap <silent><Space>nt :NERDTreeToggle<CR>
+    nnoremap <silent><Space>t :NERDTreeToggle<CR>
 '''
 
 # show indent
@@ -48,8 +49,11 @@ hook_add = '''
 [[plugins]]
 repo = 'kassio/neoterm'
 hook_add = '''
-    nnoremap <silent><Space>to :Topen<CR>
-    nnoremap <silent><Space>tc :Tclose<CR>
+    let g:neoterm_size = 8
+    nnoremap <silent> <Space>c :botright Tnew<CR>
+    tnoremap <silent> <ESC> <C-\><C-n><C-w>
+    nnoremap <silent> <Space>e :TREPLSendLine<CR>j0
+    vnoremap <silent> <Space>e V:TREPLSendSelection<CR>'>j0
 '''
 
 # bar
@@ -59,7 +63,7 @@ repo = 'vim-airline/vim-airline'
 [[plugins]]
 repo = 'vim-airline/vim-airline-themes'
 hook_add = '''
-    let g:AirlineTheme = "deus"
+    let g:AirlineTheme = "minimalist"
 '''
 
 # resize window

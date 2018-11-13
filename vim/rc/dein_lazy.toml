@@ -30,17 +30,17 @@ hook_post_source = '''
     let g:ale_python_isort_executable = g:python3_host_prog
     let g:ale_python_isort_options = '-m isort'
     
+    let g:ale_fix_on_save = 1
     let g:ale_sign_column_always = 1
-    let g:ale_lint_on_enter = 1
+    let g:ale_lint_on_enter = 0
     let g:ale_lint_on_save = 1
     let g:ale_lint_on_text_changed = 'never'
-    let g:ale_sign_error = 'E' 
-    let g:ale_sign_warning = 'W'
-    let g:airline#extensions#ale#open_lnum_symbol = '(' 
-    let g:airline#extensions#ale#close_lnum_symbol = ')' 
-    let g:ale_echo_msg_format = '[%linter%]%code: %%s' 
-    highlight link ALEErrorSign Tag 
-    highlight link ALEWarningSign StorageClass
+    let g:ale_sign_error = 'EE' 
+    let g:ale_sign_warning = 'WW'
+
+    let g:ale_open_list = 1
+    let g:ale_keep_list_window_open = 1
+    let g:ale_list_vertical = 1
 
     nmap [ale] <Nop>
     map <Space>l [ale]
