@@ -12,6 +12,7 @@ hook_post_source = '''
     let g:flake8_show_in_gutter=1
     let g:flake8_show_in_file=1
     let g:syntastic_python_flake8_args='--ignore=E501,E225'
+    let g:flake8_ignore = 'E501,E225'
     autocmd BufWritePost *.py call Flake8()
 '''
 
@@ -33,9 +34,24 @@ hook_post_source = '''
     let g:ale_lint_on_enter = 1
     let g:ale_lint_on_save = 1
     let g:ale_lint_on_text_changed = 'never'
+    let g:ale_sign_error = 'E' 
+    let g:ale_sign_warning = 'W'
+    let g:airline#extensions#ale#open_lnum_symbol = '(' 
+    let g:airline#extensions#ale#close_lnum_symbol = ')' 
+    let g:ale_echo_msg_format = '[%linter%]%code: %%s' 
+    highlight link ALEErrorSign Tag 
+    highlight link ALEWarningSign StorageClass
 
     nmap [ale] <Nop>
     map <Space>l [ale]
     nmap <silent> [ale]<C-P> <Plug>(ale_previous)
     nmap <silent> [ale]<C-N> <Plug>(ale_next)
 '''
+
+[[plugins]]
+repo = 'godlygeek/tabular' 
+on_ft = 'markdown'
+
+[[plugins]]
+repo = 'plasticboy/vim-markdown'
+on_ft = 'markdown'

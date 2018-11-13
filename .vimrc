@@ -71,6 +71,9 @@ set noswapfile
 set whichwrap=b,s,h,l,<,>,[,]
 set backspace=indent,eol,start
 
+" clipboard
+set clipboard+=unnamedplus
+
 " autocomplete
 inoremap { {}<Left>
 inoremap {<Enter> {}<Left><CR><ESC><S-o>

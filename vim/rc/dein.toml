@@ -43,6 +43,7 @@ hook_add = '''
     " <CR>: insert selected word \
     imap <expr><CR>  pumvisible() ? "<C-y>" : "<CR>"
 '''
+
 # terminal
 [[plugins]]
 repo = 'kassio/neoterm'
@@ -50,4 +51,17 @@ hook_add = '''
     nnoremap <silent><Space>to :Topen<CR>
     nnoremap <silent><Space>tc :Tclose<CR>
 '''
-#
+
+# bar
+[[plugins]]
+repo = 'vim-airline/vim-airline'
+
+[[plugins]]
+repo = 'vim-airline/vim-airline-themes'
+hook_add = '''
+    let g:AirlineTheme = "deus"
+'''
+
+# resize window
+[[plugins]]
+repo = 'simeji/winresizer'
