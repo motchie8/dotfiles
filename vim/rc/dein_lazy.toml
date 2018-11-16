@@ -1,9 +1,8 @@
-# deoplete for jedi ok
+# deoplete for jedi
 [[plugins]]
 repo = 'zchee/deoplete-jedi'
 on_ft = 'python'
 
-# for flake8 ok
 [[plugins]]
 repo = 'nvie/vim-flake8'
 on_ft = 'python'

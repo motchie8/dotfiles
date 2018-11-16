@@ -50,10 +50,11 @@ hook_add = '''
 repo = 'kassio/neoterm'
 hook_add = '''
     let g:neoterm_size = 8
+    let g:neoterm_autoscroll = 1
     nnoremap <silent> <Space>c :botright Tnew<CR>
     tnoremap <silent> <ESC> <C-\><C-n><C-w>
-    nnoremap <silent> <Space>e :TREPLSendLine<CR>j0
-    vnoremap <silent> <Space>e V:TREPLSendSelection<CR>'>j0
+    nnoremap <silent> <Space>e :TREPLSendLine<CR>
+    vnoremap <silent> <Space>e V:TREPLSendSelection<CR>
 '''
 
 # bar
