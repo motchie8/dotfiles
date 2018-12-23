@@ -1,8 +1,9 @@
-# deoplete for jedi
+# python auto complete
 [[plugins]]
 repo = 'zchee/deoplete-jedi'
 on_ft = 'python'
 
+# python syntax and style check
 [[plugins]]
 repo = 'nvie/vim-flake8'
 on_ft = 'python'
@@ -14,6 +15,7 @@ hook_source = '''
     autocmd BufWritePost *.py call Flake8()
 '''
 
+# python linter
 [[plugins]]
 repo = 'w0rp/ale'
 on_ft = 'python'
@@ -38,14 +40,14 @@ hook_source = '''
     let g:ale_sign_error = '!!' 
     let g:ale_sign_warning = '=='
 
-    nmap <silent> <Space>lk <Plug>(ale_previous_wrap)
-    nmap <silent> <Space>lj <Plug>(ale_next_wrap)
+    nmap <silent> <Space>k <Plug>(ale_previous_wrap)
+    nmap <silent> <Space>j <Plug>(ale_next_wrap)
 '''
 
-[[plugins]]
-repo = 'godlygeek/tabular' 
-on_ft = 'markdown'
-
+# markdown
 [[plugins]]
 repo = 'plasticboy/vim-markdown'
 on_ft = 'markdown'
+hook_source = '''
+    let g:vim_markdown_folding_disabled = 1
+'''

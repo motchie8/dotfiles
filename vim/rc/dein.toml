@@ -1,12 +1,12 @@
-# dein.vim
+# plugin manager
 [[plugins]]
 repo = 'Shougo/dein.vim'
 
-# colorschema
+# color schema
 [[plugins]]
 repo = 'cocopon/iceberg.vim'
 
-# file open
+# file finder
 [[plugins]]
 repo = 'Shougo/denite.nvim'
 hook_add= '''
@@ -18,7 +18,6 @@ hook_add= '''
 # tree
 [[plugins]]
 repo = 'scrooloose/nerdtree'
-
 hook_add = '''
     nnoremap <silent><Space>t :NERDTreeToggle<CR>
 '''
@@ -61,6 +60,7 @@ hook_add = '''
 [[plugins]]
 repo = 'vim-airline/vim-airline'
 
+# bar thema
 [[plugins]]
 repo = 'vim-airline/vim-airline-themes'
 hook_add = '''
@@ -70,3 +70,11 @@ hook_add = '''
 # resize window
 [[plugins]]
 repo = 'simeji/winresizer'
+
+# git
+[[plugins]]
+repo = "airblade/vim-gitgutter"
+
+# git
+[[plugins]]
+repo = "tpope/vim-fugitive"
