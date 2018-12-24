@@ -42,7 +42,7 @@ cd ~/.dotfiles
 git clone https://github.com/neovim/neovim
 cd neovim
 make clean
-make CMAKE_BUILD_TYPE=Release
+make CMAKE_BUILD_TYPE=RelWithDebInfo
 sudo make install
 sudo ln -s -T /usr/local/bin/nvim /usr/bin/nvim
 
