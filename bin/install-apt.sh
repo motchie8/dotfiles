@@ -24,7 +24,7 @@ pyenv rehash
 source ~/.bash_profile
 pyenv activate neovim2
 pip install --upgrade pip
-pip install neovim
+pip install neovim pynvim
 pyenv deactivate
 pyenv activate neovim3
 pip install --upgrade pip
