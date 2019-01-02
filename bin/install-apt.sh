@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # install libraries for pyenv and neovim
-sudo apt-get update -y && sudo apt-get install build-essential zlib1g-dev libssl-dev libreadline-dev libbz2-dev libsqlite3-dev wget cmake pkg-config unzip libtool libtool-bin m4 automake gettext zsh -y
+sudo apt-get update -y && sudo apt-get install curl build-essential zlib1g-dev libssl-dev libreadline-dev libbz2-dev libsqlite3-dev wget cmake pkg-config unzip libtool libtool-bin m4 automake gettext zsh -y
 
 # install pyenv
 curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
