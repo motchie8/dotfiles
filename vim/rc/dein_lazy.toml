@@ -50,4 +50,6 @@ repo = 'plasticboy/vim-markdown'
 on_ft = 'markdown'
 hook_source = '''
     let g:vim_markdown_folding_disabled = 1
+    inoremap <TAB> <left><left><space><space><right><right><BS> 
+    inoremap <S-TAB> <left><left><left><left><Delete><Delete><right><right><Delete><Delete><BS> 
 '''
