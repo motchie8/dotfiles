@@ -11,8 +11,8 @@ export PATH="$HOME/.pyenv/bin:$PATH"
 export PYENV_PATH=$HOME/.pyenv
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
-' >> ~/.bash_profile
-source ~/.bash_profile
+' >> ~/.bashrc
+source ~/.bashrc
 
 # create envs for neovim by pyenv-virtualenv
 pyenv install 2.7.15
@@ -59,4 +59,4 @@ ln -s ~/.dotfiles/.tmux.conf ~/.tmux.conf
 mkdir -p ~/.config/nvim/colors
 ln -s -T ~/.dotfiles/iceberg.vim/colors/iceberg.vim ~/.config/nvim/colors/iceberg.vim
 
-source ~/.bash_profile
+source ~/.bashrc
