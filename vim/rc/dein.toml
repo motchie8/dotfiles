@@ -10,9 +10,9 @@ repo = 'cocopon/iceberg.vim'
 [[plugins]]
 repo = 'Shougo/denite.nvim'
 hook_add= '''
-    nnoremap <silent><Space>db :Denite buffer<CR>
-    nnoremap <silent><Space>do :Denite file/rec<CR>
-    nnoremap <silent><Space>dg :Denite grep<CR>
+    nnoremap <silent>sd :Denite buffer<CR>
+    nnoremap <silent>sr :Denite file/rec<CR>
+    nnoremap <silent>sg :Denite grep<CR>
 '''
 
 # tree
@@ -51,7 +51,8 @@ hook_add = '''
     let g:neoterm_size = 8
     let g:neoterm_autoscroll = 1
     nnoremap <silent> <Space>c :botright Tnew<CR>
-    tnoremap <silent> <ESC> <C-\><C-n><C-w>
+    tnoremap <silent> <ESC> <C-\><C-n>
+    tnoremap <silent> jj <C-\><C-n>
     nnoremap <silent> <Space>e :TREPLSendLine<CR>
     vnoremap <silent> <Space>e V:TREPLSendSelection<CR>
 '''
