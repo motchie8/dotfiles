@@ -35,18 +35,33 @@ if dein#check_install()
     call dein#install()
 endif
 
-" keymapping
+" keymappings
+" ESC
 inoremap <C-i> <Esc>
 inoremap jj <Esc>
+" move cursor
 inoremap <C-j>  <down>
 inoremap <C-k>  <up>
 inoremap <C-h>  <left>
 inoremap <C-l>  <right>
-imap <expr><TAB>  pumvisible() ? "<C-n>" : "<TAB>"
-
-
 noremap <S-h> ^
 noremap <S-l> $
+" window operations
+nnoremap s <Nop>
+nnoremap sj <C-w>j
+nnoremap sk <C-w>k
+nnoremap sh <C-w>h
+nnoremap sl <C-w>l
+nnoremap sJ <C-w>J
+nnoremap sK <C-w>K
+nnoremap sH <C-w>H
+nnoremap sL <C-w>L
+nnoremap sw <C-w>_<C-w>|
+nnoremap sW <C-w>
+
+" auto completion
+imap <expr><TAB>  pumvisible() ? "<C-n>" : "<TAB>"
+" search and replace
 nnoremap <silent> <Space>f "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>
 nmap <Space>r <Space>f:%s/<C-r>///g<Left><Left>
 nnoremap <silent> <Esc><Esc> :<C-u>set nohlsearch!<CR>
@@ -88,5 +103,8 @@ inoremap " ""<LEFT>
 syntax on
 set t_Co=256
 colorscheme iceberg
+
+" shell
+set sh=bash
 
 filetype plugin indent on
