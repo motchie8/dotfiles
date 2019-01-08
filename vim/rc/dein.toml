@@ -79,3 +79,12 @@ repo = "airblade/vim-gitgutter"
 # git
 [[plugins]]
 repo = "tpope/vim-fugitive"
+
+# easymotion
+[[plugins]]
+repo = "Lokaltog/vim-easymotion"
+hook_add = '''
+    let g:EasyMotion_do_mapping = 0 
+    nmap w <Plug>(easymotion-overwin-w)
+    nmap f <Plug>(easymotion-overwin-f)
+'''
