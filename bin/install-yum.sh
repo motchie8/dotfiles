@@ -50,17 +50,6 @@ sudo ln -s -T /usr/local/bin/nvim /usr/bin/nvim
 cd ~/.dotfiles
 git clone https://github.com/cocopon/iceberg.vim
 
-# symbolic links
-ln -s -T ~/.dotfiles/vim ~/.vim
-ln -s -T ~/.dotfiles/.vimrc ~/.vimrc
-mkdir -p ~/.config/nvim
-ln -s -T ~/.vimrc ~/.config/nvim/init.vim
-ln -s ~/.dotfiles/.tmux.conf ~/.tmux.conf
-mkdir -p ~/.config/nvim/colors
-ln -s -T ~/.dotfiles/iceberg.vim/colors/iceberg.vim ~/.config/nvim/colors/iceberg.vim
-
-source ~/.bashrc
-
 # install gtags
 wget http://tamacom.com/global/global-6.6.3.tar.gz
 tar xzvf global-6.6.3.tar.gz
@@ -69,3 +58,16 @@ cd global-6.6.3/
 make CFLAGS="-std=gnu99"
 sudo make install
 pip install pygments
+
+# symbolic links
+ln -s -T ~/.dotfiles/vim ~/.vim
+ln -s -T ~/.dotfiles/.vimrc ~/.vimrc
+mkdir -p ~/.config/nvim
+ln -s -T ~/.vimrc ~/.config/nvim/init.vim
+ln -s ~/.dotfiles/.tmux.conf ~/.tmux.conf
+mkdir -p ~/.config/nvim/colors
+ln -s -T ~/.dotfiles/iceberg.vim/colors/iceberg.vim ~/.config/nvim/colors/iceberg.vim
+ln -s -T ~/.dotfiles/.globalrc ~/.globalrc
+
+source ~/.bashrc
+
