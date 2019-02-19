@@ -58,6 +58,8 @@ nnoremap sH <C-w>H
 nnoremap sL <C-w>L
 nnoremap sw <C-w>_<C-w>|
 nnoremap sW <C-w>
+" open window in vertical split for quickfix
+autocmd! FileType qf nnoremap <Space>s <C-w><Enter><C-w>L
 
 " auto completion
 imap <expr><TAB>  pumvisible() ? "<C-n>" : "<TAB>"
