@@ -2,7 +2,7 @@
 
 # install libraries for pyenv and neovim 
 sudp yum update -y && sudo yum install git xsel zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel \
-openssl-devel xz xz-devel libffi-devel make libtool autoconf automake cmake gcc gcc-c++ make pkgconfig unzip gettext patch -y
+openssl-devel xz xz-devel libffi-devel make libtool autoconf automake cmake gcc gcc-c++ make pkgconfig unzip gettext patch ctags -y
 
 # install pyenv
 curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
@@ -60,3 +60,12 @@ mkdir -p ~/.config/nvim/colors
 ln -s -T ~/.dotfiles/iceberg.vim/colors/iceberg.vim ~/.config/nvim/colors/iceberg.vim
 
 source ~/.bashrc
+
+# install gtags
+wget http://tamacom.com/global/global-6.6.3.tar.gz
+tar xzvf global-6.6.3.tar.gz
+cd global-6.6.3/
+./configure
+make CFLAGS="-std=gnu99"
+sudo make install
+pip install pygments
