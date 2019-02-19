@@ -1,3 +1,6 @@
 global-*
 iceberg.vim/
 neovim/
+GPATH
+GRTAGS
+GTAGS
