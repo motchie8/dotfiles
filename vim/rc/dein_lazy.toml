@@ -2,17 +2,8 @@
 [[plugins]]
 repo = 'zchee/deoplete-jedi'
 on_ft = 'python'
-
-# python syntax and style check
-[[plugins]]
-repo = 'nvie/vim-flake8'
-on_ft = 'python'
 hook_source = '''
-    let g:flake8_quickfix_height=7
-    let g:flake8_show_in_gutter=1
-    let g:flake8_show_in_file=1
-    let g:syntastic_python_flake8_args='--ignore=E501,E225'
-    autocmd BufWritePost *.py call Flake8()
+    let g:deoplete#sources#jedi#python_path = system('PYTHON_VERSION=`pyenv version` && echo -n ${PYENV_PATH}/versions/${PYTHON_VERSION%% *}/bin/python')
 '''
 
 # python linter
@@ -20,29 +11,42 @@ hook_source = '''
 repo = 'w0rp/ale'
 on_ft = 'python'
 hook_source = '''
-    let g:ale_linters = {'python': ['flake8']}
+    let g:ale_linters = {'python': ['flake8', 'pylint']}
     let g:ale_fixers = {'python': ['autopep8', 'black', 'isort']}
 
     let g:ale_python_flake8_executable = g:python3_host_prog
-    let g:ale_python_flake8_options = '-m flake8'
-
+    let g:ale_python_pylint_executable = g:python3_host_prog
     let g:ale_python_autopep8_executable = g:python3_host_prog
-    let g:ale_python_autopep8_options = '-m autopep8'
-
+    let g:ale_python_black_executable = g:python3_host_prog
     let g:ale_python_isort_executable = g:python3_host_prog
+
+    let g:ale_python_flake8_options = '-m flake8 --ignore E501,E225,W503,E203'
+    let g:ale_python_pylint_options = '-m pylint'
+    let g:ale_python_autopep8_options = '-m autopep8'
+    let g:ale_python_black_options = '-m black'
     let g:ale_python_isort_options = '-m isort'
     
+    let g:ale_set_loclist = 1
+    let g:ale_set_quickfix = 1
+    let g:ale_sign_column_always = 0
+
     let g:ale_fix_on_save = 1
-    let g:ale_sign_column_always = 1
     let g:ale_lint_on_enter = 0
     let g:ale_lint_on_save = 1
     let g:ale_lint_on_text_changed = 'never'
-    let g:ale_sign_error = '!!' 
-    let g:ale_sign_warning = '=='
+    let g:ale_sign_error = 'EE' 
+    let g:ale_sign_warning = 'WW'
+    let g:ale_echo_msg_format = '[%linter%] [%severity%] %s'
 
     nmap <silent> <Space>k <Plug>(ale_previous_wrap)
     nmap <silent> <Space>j <Plug>(ale_next_wrap)
+    nmap <silent> <Space>a <Plug>(ale_fix)
 '''
+
+#[[plugins]]
+#repo = 'lambdalisue/vim-pyenv'
+#on_ft = 'python'
+
 
 # markdown
 [[plugins]]

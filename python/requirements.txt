@@ -4,4 +4,5 @@ flake8-import-order
 autopep8
 jedi
 isort
-
+black
+pylint
