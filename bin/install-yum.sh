@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# install development tools
+sudo yum groupinstall "Development Tools" -y
 # install libraries for pyenv and neovim 
 sudo yum update -y && sudo yum install git xsel zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel \
 openssl-devel xz xz-devel libffi-devel make libtool autoconf automake cmake gcc gcc-c++ make pkgconfig unzip gettext patch ctags -y
