@@ -58,6 +58,13 @@ nnoremap sH <C-w>H
 nnoremap sL <C-w>L
 nnoremap sw <C-w>_<C-w>|
 nnoremap sW <C-w>
+" buffer operations
+nnoremap <silent>bp :bprevious<CR>
+nnoremap <silent>bn :bnext<CR>
+nnoremap <silent>bb :b#<CR>
+nnoremap <silent>bd :bdelete<CR>
+:set hidden
+
 " open window in vertical split for quickfix
 autocmd! FileType qf nnoremap <Space>s <C-w><Enter><C-w>L
 
