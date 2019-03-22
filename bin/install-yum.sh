@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # install libraries for pyenv and neovim 
-sudp yum update -y && sudo yum install git xsel zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel \
+sudo yum update -y && sudo yum install git xsel zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel \
 openssl-devel xz xz-devel libffi-devel make libtool autoconf automake cmake gcc gcc-c++ make pkgconfig unzip gettext patch ctags -y
 
 # install pyenv
@@ -16,19 +16,22 @@ source ~/.bashrc
 
 # create envs for neovim by pyenv-virtualenv
 pyenv install 2.7.15
-pyenv install 3.5.6
+pyenv install 3.6.6
 pyenv virtualenv 2.7.15 neovim2
-pyenv virtualenv 3.5.6 neovim3
+pyenv virtualenv 3.6.6 neovim3
 
 # setup python libs for each env
 pyenv rehash
 source ~/.bash_profile
 pyenv activate neovim2
 pip install --upgrade pip
-pip install neovim pynvim
+pip install pynvim
+pip install neovim
 pyenv deactivate
 pyenv activate neovim3
 pip install --upgrade pip
+pip install pynvim
+pip install neovim
 pip install -r ~/.dotfiles/python/requirements.txt
 # create symbolic links
 ln -s `pyenv which flake8` ~/.pyenv/bin/flake8
