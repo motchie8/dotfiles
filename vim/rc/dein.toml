@@ -20,6 +20,7 @@ hook_add= '''
 repo = 'scrooloose/nerdtree'
 hook_add = '''
     nnoremap <silent><Space>t :NERDTreeToggle<CR>
+    nnoremap <silent><Space>T :NERDTree<CR>
 '''
 
 # show indent
