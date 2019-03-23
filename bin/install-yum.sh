@@ -71,18 +71,18 @@ if [ ! -e ~/.dotfiles/iceberg.vim ]; then
 fi
 
 # install gtags
-if ! type gtags >/dev/null 2>&1; then
-  echo "install gtags"
-  wget http://tamacom.com/global/global-6.6.3.tar.gz
-  tar xzvf global-6.6.3.tar.gz
-  cd global-6.6.3/
-  ./configure
-  make CFLAGS="-std=gnu99"
-  sudo make install
-  pyenv activate neovim3
-  pip install pygments
-  pyenv deactivate
-fi
+#if ! type gtags >/dev/null 2>&1; then
+#  echo "install gtags"
+#  wget http://tamacom.com/global/global-6.6.3.tar.gz
+#  tar xzvf global-6.6.3.tar.gz
+#  cd global-6.6.3/
+#  ./configure
+#  make CFLAGS="-std=gnu99"
+#  sudo make install
+#  pyenv activate neovim3
+#  pip install pygments
+#  pyenv deactivate
+#fi
 
 # symbolic links
 if [ ! -e ~/.vim ]; then
@@ -94,6 +94,8 @@ fi
 if [ ! -e ~/.tmux.conf ]; then
   ln -s ~/.dotfiles/.tmux.conf ~/.tmux.conf
 fi
-
+#if [ ! -e ~/.globalrc ]; then
+#  ln -s -T ~/.dotfiles/.globalrc ~/.globalrc
+#fi
 source ~/.bashrc
 echo "process finished"
