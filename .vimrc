@@ -39,6 +39,7 @@ endif
 " ESC
 inoremap <C-i> <Esc>
 inoremap jj <Esc>
+nnoremap ; :
 " move cursor
 inoremap <C-j>  <down>
 inoremap <C-k>  <up>
