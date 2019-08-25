@@ -8,7 +8,7 @@ openssl-devel xz xz-devel libffi-devel make libtool autoconf automake cmake gcc 
 
 # setup pyenv
 if ! type pyenv >/dev/null 2>&1; then
-  echo "install pyenv"
+  echo "[INFO] install pyenv"
   curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
   echo '
   export PATH="$HOME/.pyenv/bin:$PATH"
@@ -50,7 +50,7 @@ fi
 
 # setup neovim
 if ! type nvim >/dev/null 2>&1; then  
-  echo "install neovim"
+  echo "[INFO] install neovim"
   cd ~/.dotfiles
   git clone https://github.com/neovim/neovim
   cd neovim
@@ -60,6 +60,17 @@ if ! type nvim >/dev/null 2>&1; then
   sudo ln -s -T /usr/local/bin/nvim /usr/bin/nvim
   mkdir -p ~/.config/nvim
   ln -s -T ~/.vimrc ~/.config/nvim/init.vim
+fi
+
+# update neovim
+cd ~/.dotfiles/neovim
+git pull | grep -q "Already up-to-date"
+if [ $? -ne 0 ]; then
+  echo "[INFO] update neovim"
+  git pull
+  make distclean
+  make CMAKE_BUILD_TYPE=RelWithDebInfo
+  sudo make install
 fi
 
 cd ~/.dotfiles
@@ -98,4 +109,4 @@ fi
 #  ln -s -T ~/.dotfiles/.globalrc ~/.globalrc
 #fi
 source ~/.bashrc
-echo "process finished"
+echo "[INFO] process finished"

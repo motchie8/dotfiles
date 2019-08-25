@@ -34,7 +34,8 @@ hook_add = '''
     " Use deoplete.
     let g:deoplete#enable_at_startup = 1
     " Use smartcase.
-    "call deoplete#custom#option('smart_case', v:true)
+    call deoplete#custom#option('smart_case', v:true)
+    call deoplete#custom#option('auto_complete_delay', 150)
     " use auto select
     set completeopt+=noinsert
     " <C-h>, <BS>: close popup and delete backword char.
@@ -51,7 +52,7 @@ repo = 'kassio/neoterm'
 hook_add = '''
     let g:neoterm_size = 8
     let g:neoterm_autoscroll = 1
-    nnoremap <silent> <Space>c :botright Tnew<CR>
+    nnoremap <silent> <Space>c :botright Tnew<CR>:T source ~/.bash_profile<CR>
     tnoremap <silent> <ESC> <C-\><C-n>
     tnoremap <silent> jj <C-\><C-n>
     nnoremap <silent> <Space>e :TREPLSendLine<CR>
@@ -86,8 +87,8 @@ repo = "tpope/vim-fugitive"
 repo = "Lokaltog/vim-easymotion"
 hook_add = '''
     let g:EasyMotion_do_mapping = 0 
-    nmap w <Plug>(easymotion-overwin-w)
-    nmap f <Plug>(easymotion-overwin-f)
+    "nmap w <Plug>(easymotion-overwin-w)
+    nmap f <Plug>(easymotion-overwin-f2)
 '''
 
 # gtags
