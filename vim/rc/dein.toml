@@ -11,7 +11,7 @@ repo = 'cocopon/iceberg.vim'
 repo = 'Shougo/denite.nvim'
 hook_add= '''
     nnoremap <silent>sd :Denite buffer<CR>
-    nnoremap <silent>sr :Denite file/rec<CR>
+    nnoremap <silent>sf :Denite file/rec<CR>
     nnoremap <silent>sg :Denite grep<CR>
 '''
 

@@ -1,7 +1,16 @@
 #!/bin/bash
 
 # install development tools
-sudo yum groupinstall "Development Tools" -y
+sudo yum update -y && sudo yum groupinstall "Development Tools" -y
+
+# highlight less
+cat ~/.bashrc | grep -q "LESSOPEN"
+if [ $? -ne 0 ]; then
+  sudo yum install source-highlight -y
+  echo "LESS=' -R '" >> ~/.bashrc
+  echo "LESSOPEN='| src-hilite-lesspipe.sh %s'" >> ~/.bashrc
+fi
+
 # install libraries for pyenv and neovim 
 sudo yum update -y && sudo yum install git xsel zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel \
 openssl-devel xz xz-devel libffi-devel make libtool autoconf automake cmake gcc gcc-c++ make pkgconfig unzip gettext patch ctags -y
@@ -11,11 +20,11 @@ if ! type pyenv >/dev/null 2>&1; then
   echo "[INFO] install pyenv"
   curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
   echo '
-  export PATH="$HOME/.pyenv/bin:$PATH"
-  export PYENV_PATH=$HOME/.pyenv
-  eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
-  ' >> ~/.bashrc
+export PATH="$HOME/.pyenv/bin:$PATH"
+export PYENV_PATH=$HOME/.pyenv
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+' >> ~/.bashrc
   source ~/.bashrc
 else
   pyenv update
@@ -24,6 +33,7 @@ fi
 # create envs for neovim by pyenv-virtualenv
 pyenv install -s 2.7.16
 pyenv install -s 3.6.8
+pyenv install -s 3.7.4
 # neovim2
 pyenv virtualenv 2.7.16 neovim2
 if [ $? -eq 0 ]; then
