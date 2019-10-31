@@ -13,7 +13,8 @@ fi
 
 # install libraries for pyenv and neovim 
 sudo yum update -y && sudo yum install git xsel zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel \
-openssl-devel xz xz-devel libffi-devel make libtool autoconf automake cmake gcc gcc-c++ make pkgconfig unzip gettext patch ctags -y
+openssl-devel xz xz-devel libffi-devel make libtool autoconf automake cmake gcc gcc-c++ make pkgconfig unzip \
+xclip gettext patch ctags -y
 
 # setup pyenv
 if ! type pyenv >/dev/null 2>&1; then
@@ -32,8 +33,8 @@ fi
 
 # create envs for neovim by pyenv-virtualenv
 pyenv install -s 2.7.16
-pyenv install -s 3.6.8
-pyenv install -s 3.7.4
+# pyenv install -s 3.6.8
+pyenv install -s 3.7.5
 # neovim2
 pyenv virtualenv 2.7.16 neovim2
 if [ $? -eq 0 ]; then
@@ -46,7 +47,7 @@ if [ $? -eq 0 ]; then
   pyenv deactivate
 fi
 # neovim3
-pyenv virtualenv 3.6.8 neovim3
+pyenv virtualenv 3.7.5 neovim3
 if [ $? -eq 0 ]; then
   pyenv rehash
   source ~/.bashrc
@@ -91,6 +92,22 @@ if [ ! -e ~/.dotfiles/iceberg.vim ]; then
   ln -s -T ~/.dotfiles/iceberg.vim/colors/iceberg.vim ~/.config/nvim/colors/iceberg.vim
 fi
 
+# setup go
+if ! type go > /dev/null 2>&1; then
+  wget https://dl.google.com/go/go1.13.3.linux-amd64.tar.gz
+  sudo tar -C /usr/local -xzf go1.13.3.linux-amd64.tar.gz
+  echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.bashrc
+  source ~/.bash_profile
+fi
+
+# setup lemonade
+if ! type lemonade > /dev/null 2>&1; then
+  go get github.com/pocke/lemonade
+  cd ~/go/src/github.com/lemonade-command/lemonade/
+  make install
+  sudo ln -s -T ~/go/bin/lemonade /usr/local/bin/lemonade
+fi
+
 # install gtags
 #if ! type gtags >/dev/null 2>&1; then
 #  echo "install gtags"
@@ -114,6 +131,10 @@ if [ ! -e ~/.vimrc ]; then
 fi
 if [ ! -e ~/.tmux.conf ]; then
   ln -s ~/.dotfiles/.tmux.conf ~/.tmux.conf
+fi
+if [ ! -e ~/.config/lemonade.toml ]; then
+  mkdir -p ~/.config
+  ln -s ~/.dotfiles/lemonade.toml ~/.config/lemonade.toml
 fi
 #if [ ! -e ~/.globalrc ]; then
 #  ln -s -T ~/.dotfiles/.globalrc ~/.globalrc
