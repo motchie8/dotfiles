@@ -62,13 +62,23 @@ hook_add = '''
     imap <expr><CR>  pumvisible() ? "<C-y>" : "<CR>"
 '''
 
+[[plugins]]
+repo = 'Shougo/neosnippet.vim'
+hook_add = '''
+    let g:neosnippet#enable_snipmate_compatibility = 1
+    let g:neosnippet#snippets_directory='~/.dotfiles/vim/snippets'
+'''
+
+[[plugins]]
+repo = 'Shougo/neosnippet-snippets'
 # terminal
 [[plugins]]
 repo = 'kassio/neoterm'
 hook_add = '''
     let g:neoterm_size = 8
     let g:neoterm_autoscroll = 1
-    nnoremap <silent> <Space>c :botright Tnew<CR>:T source ~/.bash_profile<CR>
+    " nnoremap <silent> <Space>c :botright Tnew<CR>:T source ~/.bash_profile<CR>
+    nnoremap <silent> <Space>c :botright Tnew<CR>
     tnoremap <silent> <ESC> <C-\><C-n>
     tnoremap <silent> jj <C-\><C-n>
     nnoremap <silent> <Space>e :TREPLSendLine<CR>

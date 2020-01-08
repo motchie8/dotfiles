@@ -92,6 +92,15 @@ if [ ! -e ~/.dotfiles/iceberg.vim ]; then
   ln -s -T ~/.dotfiles/iceberg.vim/colors/iceberg.vim ~/.config/nvim/colors/iceberg.vim
 fi
 
+git clone https://github.com/flrnd/plastic.vim
+ln -s -T ~/.dotfiles/plastic.vim/colors/plastic.vim ~/.config/nvim/colors/plastic.vim
+git clone https://github.com/flrnd/candid.vim
+ln -s -T ~/.dotfiles/candid.vim/colors/candid.vim ~/.config/nvim/colors/candid.vim
+git clone https://github.com/Rigellute/rigel
+ln -s -T ~/.dotfiles/rigel/colors/rigel.vim ~/.config/nvim/colors/rigel.vim
+git clone https://github.com/sainnhe/edge
+ln -s -T ~/.dotfiles/edge/colors/edge.vim ~/.config/nvim/colors/edge.vim
+
 # setup go
 if ! type go > /dev/null 2>&1; then
   wget https://dl.google.com/go/go1.13.3.linux-amd64.tar.gz
@@ -107,6 +116,14 @@ if ! type lemonade > /dev/null 2>&1; then
   make install
   sudo ln -s -T ~/go/bin/lemonade /usr/local/bin/lemonade
 fi
+
+# setup aws-cfn-snippet.vim
+# git clone https://github.com/lunarxlark/aws-cfn-snippet.vim.git
+# rm aws-cloudformation-user-guide -rf
+# git clone https://github.com/awsdocs/aws-cloudformation-user-guide.git
+# bash make-cfn-snippet.sh
+# cp snippets/* ~/.dotfiles/vim/snippets/
+
 
 # install gtags
 #if ! type gtags >/dev/null 2>&1; then
