@@ -26,6 +26,7 @@ endif
 filetype plugin indent on
 syntax enable
 
+" python path
 if isdirectory(expand($PYENV_PATH))
     let g:python3_host_prog = $PYENV_PATH . '/versions/neovim3/bin/python'
     let g:python_host_prog = $PYENV_PATH . '/versions/neovim2/bin/python'
@@ -35,11 +36,12 @@ if dein#check_install()
     call dein#install()
 endif
 
+set hidden
+
 " keymappings
-" ESC
-inoremap <C-i> <Esc>
-inoremap jj <Esc>
+inoremap jj <ESC>
 nnoremap ; :
+
 " move cursor
 inoremap <C-j>  <down>
 inoremap <C-k>  <up>
@@ -47,12 +49,13 @@ inoremap <C-h>  <left>
 inoremap <C-l>  <right>
 noremap <S-h> ^
 noremap <S-l> $
-" window operations
+" move cursor
 nnoremap s <Nop>
 nnoremap sj <C-w>j
 nnoremap sk <C-w>k
 nnoremap sh <C-w>h
 nnoremap sl <C-w>l
+" move window
 nnoremap sJ <C-w>J
 nnoremap sK <C-w>K
 nnoremap sH <C-w>H
@@ -60,11 +63,11 @@ nnoremap sL <C-w>L
 nnoremap sw <C-w>_<C-w>|
 nnoremap sW <C-w>
 " buffer operations
-nnoremap <silent>bp :bprevious<CR>
-nnoremap <silent>bn :bnext<CR>
-nnoremap <silent>bb :b#<CR>
-nnoremap <silent>bd :bdelete<CR>
-:set hidden
+nnoremap <silent> <Space>bp :bprevious<CR>
+nnoremap <silent> <Space>bn :bnext<CR>
+nnoremap <silent> <Space>bb :b#<CR>
+nnoremap <silent> <Space>bd :bdelete<CR>
+
 
 " open window in vertical split for quickfix
 autocmd! FileType qf nnoremap <Space>s <C-w><Enter><C-w>L
@@ -76,9 +79,13 @@ nnoremap <silent> <Space>f "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>
 nmap <Space>r <Space>f:%s/<C-r>///g<Left><Left>
 nnoremap <silent> <Esc><Esc> :<C-u>set nohlsearch!<CR>
 
-" tab intent
+" tab
 set expandtab
 set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set autoindent
+set smartindent
 
 " serach
 set ignorecase
@@ -91,10 +98,30 @@ set number
 set cursorline
 set showmatch
 
-" other settings
+" file
 set noswapfile
+set autoread
+set nobackup
+set nowritebackup
+
+" line
 set whichwrap=b,s,h,l,<,>,[,]
+
+" scroll
+set scrolloff=12
+set sidescrolloff=16
+set sidescroll=1
+
+" blank
 set backspace=indent,eol,start
+set list
+
+" sourd
+set visualbell t_vb=
+set noerrorbells 
+
+" other settings
+set cmdheight=2
 
 " clipboard
 set clipboard+=unnamedplus

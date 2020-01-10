@@ -92,14 +92,15 @@ if [ ! -e ~/.dotfiles/iceberg.vim ]; then
   ln -s -T ~/.dotfiles/iceberg.vim/colors/iceberg.vim ~/.config/nvim/colors/iceberg.vim
 fi
 
-git clone https://github.com/flrnd/plastic.vim
-ln -s -T ~/.dotfiles/plastic.vim/colors/plastic.vim ~/.config/nvim/colors/plastic.vim
-git clone https://github.com/flrnd/candid.vim
-ln -s -T ~/.dotfiles/candid.vim/colors/candid.vim ~/.config/nvim/colors/candid.vim
-git clone https://github.com/Rigellute/rigel
-ln -s -T ~/.dotfiles/rigel/colors/rigel.vim ~/.config/nvim/colors/rigel.vim
-git clone https://github.com/sainnhe/edge
-ln -s -T ~/.dotfiles/edge/colors/edge.vim ~/.config/nvim/colors/edge.vim
+# color schemas
+# git clone https://github.com/flrnd/plastic.vim
+# ln -s -T ~/.dotfiles/plastic.vim/colors/plastic.vim ~/.config/nvim/colors/plastic.vim
+# git clone https://github.com/flrnd/candid.vim
+# ln -s -T ~/.dotfiles/candid.vim/colors/candid.vim ~/.config/nvim/colors/candid.vim
+# git clone https://github.com/Rigellute/rigel
+# ln -s -T ~/.dotfiles/rigel/colors/rigel.vim ~/.config/nvim/colors/rigel.vim
+# git clone https://github.com/sainnhe/edge
+# ln -s -T ~/.dotfiles/edge/colors/edge.vim ~/.config/nvim/colors/edge.vim
 
 # setup go
 if ! type go > /dev/null 2>&1; then
@@ -124,6 +125,39 @@ fi
 # bash make-cfn-snippet.sh
 # cp snippets/* ~/.dotfiles/vim/snippets/
 
+# setup coc.nvim
+# install nodejs
+if [ ! -x "$(command -v node)" ]; then
+    curl -sL https://rpm.nodesource.com/setup_12.x | sudo bash -
+    sudo yum install gcc-c++ make -y
+    sudo yum install nodejs -y
+fi
+# install coc.nvim
+if [ ! -d ~/.local/share/nvim/site/pack/coc ]; then
+    mkdir -p ~/.local/share/nvim/site/pack/coc/start
+    cd ~/.local/share/nvim/site/pack/coc/start
+    curl --fail -L https://github.com/neoclide/coc.nvim/archive/release.tar.gz | tar xzfv -
+    # setup coc-extensions config
+    mkdir -p ~/.config/coc/extensions
+    ln -s ~/.dotfiles/coc.package.json ~/.config/coc/extensions/package.json
+    cd ~/.dotfiles
+fi
+
+
+# install fzf
+if [ ! -d ~/.fzf ]; then
+  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+  ~/.fzf/install --all
+fi
+
+# keyboard mapping
+if [ ! -x "$(command -v xmodmap)" ]; then
+  sudo yum install xmodmap xev -y
+  # backup
+  xmodmap -pke > ~/.dotfiles/.Xmodmap_default
+  # symbolic link
+  ln -s -T ~/.dotfiles/.Xmodmap ~/.Xmodmap
+fi
 
 # install gtags
 #if ! type gtags >/dev/null 2>&1; then
