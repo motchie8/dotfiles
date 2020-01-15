@@ -126,11 +126,12 @@ fi
 # cp snippets/* ~/.dotfiles/vim/snippets/
 
 # setup coc.nvim
-# install nodejs
+# install nodejs and yarn
 if [ ! -x "$(command -v node)" ]; then
     curl -sL https://rpm.nodesource.com/setup_12.x | sudo bash -
     sudo yum install gcc-c++ make -y
     sudo yum install nodejs -y
+    curl --compressed -o- -L https://yarnpkg.com/install.sh | bash
 fi
 # install coc.nvim
 if [ ! -d ~/.local/share/nvim/site/pack/coc ]; then
