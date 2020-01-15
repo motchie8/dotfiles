@@ -1,6 +1,14 @@
 global-*
-iceberg.vim/
 neovim/
 GPATH
 GRTAGS
 GTAGS
+
+node_modules/
+vim/sessions/
+
+candid.vim/
+iceberg.vim/
+rigel/
+plastic.vim/
+edge/
