@@ -126,10 +126,9 @@ hook_add = '''
 [[plugins]]
 repo = 'neoclide/coc.nvim'
 rev = 'release'
-on_i = 1
+# on_i = 1
 merged = '0'
-# on_ft = 'python'
-hook_source = '''
+hook_add = '''
     " You will have bad experience for diagnostic messages when it's default 4000.
     set updatetime=300
     " don't give |ins-completion-menu| messages.

@@ -151,15 +151,6 @@ if [ ! -d ~/.fzf ]; then
   ~/.fzf/install --all
 fi
 
-# keyboard mapping
-if [ ! -x "$(command -v xmodmap)" ]; then
-  sudo yum install xmodmap xev -y
-  # backup
-  xmodmap -pke > ~/.dotfiles/.Xmodmap_default
-  # symbolic link
-  ln -s -T ~/.dotfiles/.Xmodmap ~/.Xmodmap
-fi
-
 # install gtags
 #if ! type gtags >/dev/null 2>&1; then
 #  echo "install gtags"
