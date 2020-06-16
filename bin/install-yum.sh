@@ -33,8 +33,7 @@ fi
 
 # create envs for neovim by pyenv-virtualenv
 pyenv install -s 2.7.16
-# pyenv install -s 3.6.8
-pyenv install -s 3.7.5
+pyenv install -s 3.7.7
 # neovim2
 pyenv virtualenv 2.7.16 neovim2
 if [ $? -eq 0 ]; then
@@ -47,7 +46,7 @@ if [ $? -eq 0 ]; then
   pyenv deactivate
 fi
 # neovim3
-pyenv virtualenv 3.7.5 neovim3
+pyenv virtualenv 3.7.7 neovim3
 if [ $? -eq 0 ]; then
   pyenv rehash
   source ~/.bashrc
