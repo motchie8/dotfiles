@@ -139,9 +139,7 @@ if [ ! -d ~/.local/share/nvim/site/pack/coc ]; then
     mkdir -p ~/.local/share/nvim/site/pack/coc/start
     cd ~/.local/share/nvim/site/pack/coc/start
     curl --fail -L https://github.com/neoclide/coc.nvim/archive/release.tar.gz | tar xzfv -
-    # setup coc-extensions config
-    mkdir -p ~/.config/coc/extensions
-    ln -s ~/.dotfiles/coc.package.json ~/.config/coc/extensions/package.json
+    ln -s ~/.dotfiles/coc-settings.json ~/.config/nvim/coc-settings.json
     cd ~/.dotfiles
 fi
 

@@ -1,28 +1,21 @@
 {
-  "dependencies": {
-    "coc-json": ">=1.2.4",
-    "coc-lists": ">=1.3.6",
-    "coc-metals": ">=0.5.3",
-    "coc-python": ">=1.2.6",
-    "coc-snippets": ">=2.1.17",
-    "coc-yaml": ">=1.0.2"
-  },
   "languageserver": {
-    "bash": {
-      "command": "bash-language-server",
-      "args": ["start"],
-      "filetypes": ["sh"],
-      "ignoredRootPaths": ["~"]
-    },
     "efm": {
       "command": "efm-langserver",
       "args": [],
-      "filetypes": ["markdown"]
-    },
-    "metals": {
-      "command": "metals-vim",
-      "rootPatterns": ["build.sbt"],
-      "filetypes": ["scala", "sbt"]
+      // custom config path
+      // "args": ["-c", "/path/to/your/config.yaml"],
+      "filetypes": ["vim", "eruby", "markdown"]
     }
   }
+  // "dependencies": {
+  //   "coc-cfn-lint": ">=0.1.1",
+  //   "coc-json": ">=1.2.6",
+  //   "coc-lists": ">=1.3.8",
+  //   "coc-metals": ">=0.5.3",
+  //   "coc-pyright": ">=1.1.52",
+  //   "coc-python": ">=1.2.12",
+  //   "coc-sh": ">=0.5.1",
+  //   "coc-yaml": ">=1.0.4"
+  // }
 }

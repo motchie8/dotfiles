@@ -80,6 +80,7 @@ repo = 'nathanaelkane/vim-indent-guides'
 [[plugins]]
 repo = 'kassio/neoterm'
 hook_add = '''
+    let g:neoterm_shell = &shell
     let g:neoterm_size = 8
     let g:neoterm_autoscroll = 1
     " nnoremap <silent> <Space>c :botright Tnew<CR>:T source ~/.bash_profile<CR>
