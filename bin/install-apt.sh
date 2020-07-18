@@ -84,11 +84,12 @@ if [ $? -ne 0 ]; then
 fi
 
 cd ~/.dotfiles
-# setup neovim color schema
+# setup color schema
 if [ ! -e ~/.dotfiles/iceberg.vim ]; then
   git clone https://github.com/cocopon/iceberg.vim
   mkdir -p ~/.config/nvim/colors
   ln -s -T ~/.dotfiles/iceberg.vim/colors/iceberg.vim ~/.config/nvim/colors/iceberg.vim
+  wget -O $HOME/.dotfiles/iceberg.tmux.conf https://raw.githubusercontent.com/gkeep/iceberg-dark/master/.tmux/iceberg.tmux.conf
 fi
 
 # color schemas

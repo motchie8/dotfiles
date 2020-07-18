@@ -6,6 +6,9 @@ repo = 'Shougo/dein.vim'
 [[plugins]]
 repo = 'cocopon/iceberg.vim'
 
+[[plugins]]
+repo = 'gkeep/iceberg-dark'
+
 # file finder
 [[plugins]]
 repo = 'Shougo/denite.nvim'
@@ -94,13 +97,17 @@ hook_add = '''
 # bar
 [[plugins]]
 repo = 'vim-airline/vim-airline'
+hook_add = '''
+    let g:airline_theme='icebergDark'
+'''
+
 
 # bar thema
-[[plugins]]
-repo = 'vim-airline/vim-airline-themes'
-hook_add = '''
-    let g:AirlineTheme = "minimalist"
-'''
+# [[plugins]]
+# repo = 'vim-airline/vim-airline-themes'
+# hook_add = '''
+#     let g:AirlineTheme = "minimalist"
+# '''
 
 # resize window
 [[plugins]]
@@ -272,3 +279,7 @@ repo = 'SirVer/ultisnips'
 #    let g:gen_tags#ctags_auto_gen = 1
 #    let g:gen_tags#gtags_auto_gen = 1
 #'''
+
+# font
+[[plugins]]
+repo = 'ryanoasis/vim-devicons'

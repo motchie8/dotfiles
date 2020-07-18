@@ -65,11 +65,12 @@ if ! type nvim >/dev/null 2>&1; then
 fi
 
 cd ~/.dotfiles
-# setup neovim color schema
+# setup color schema
 if [ ! -e ~/.dotfiles/iceberg.vim ]; then
   git clone https://github.com/cocopon/iceberg.vim
   mkdir -p ~/.config/nvim/colors
   ln -s ~/.dotfiles/iceberg.vim/colors/iceberg.vim ~/.config/nvim/colors/iceberg.vim
+  wget -O $HOME/.dotfiles/iceberg.tmux.conf https://raw.githubusercontent.com/gkeep/iceberg-dark/master/.tmux/iceberg.tmux.conf
 fi
 
 # setup go
@@ -128,10 +129,6 @@ fi
 if [ ! -e ~/.config/lemonade.toml ]; then
   mkdir -p ~/.config
   ln -s ~/.dotfiles/lemonade.toml ~/.config/lemonade.toml
-fi
-if [ ! -e ~/.config/coc/extensions/package.json ]; then
-  mkdir -p ~/.config/coc/extensions
-  ln -s ~/.dotfiles/coc.package.json ~/.config/coc/extensions/package.json
 fi
 
 source ~/.zshrc
