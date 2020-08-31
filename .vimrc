@@ -1,12 +1,9 @@
 set nocompatible
 filetype off
 
-
 if &compatible
   set nocompatible               " Be iMproved
 endif
-
-
 " directory to install plugins
 let s:dein_dir = expand('~/.cache/dein')
 let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
@@ -14,8 +11,13 @@ if &runtimepath !~# '/dein.vim'
     if !isdirectory(s:dein_repo_dir)
         execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
     endif
+    if has("unix")
+        execute 'set runtimepath^=' . fnamemodify(s:dein_repo_dir, ':p')
+    endif
 endif
-execute 'set runtimepath^=' . fnamemodify(s:dein_repo_dir, ':p')
+if has("mac")
+    execute 'set runtimepath^=' . fnamemodify(s:dein_repo_dir, ':p')
+endif
 if dein#load_state(s:dein_dir)
     call dein#begin(s:dein_dir)
 
@@ -34,6 +36,10 @@ filetype plugin indent on
 syntax enable
 
 " python path
+if isdirectory(expand($PYENV_PATH))
+    let g:python3_host_prog = $PYENV_PATH . '/versions/neovim3/bin/python'
+    let g:python_host_prog = $PYENV_PATH . '/versions/neovim2/bin/python'
+endif
 if isdirectory(expand($PYENV_ROOT))
     let g:python3_host_prog = $PYENV_ROOT . '/versions/neovim3/bin/python'
     let g:python_host_prog = $PYENV_ROOT . '/versions/neovim2/bin/python'
@@ -75,7 +81,6 @@ nnoremap <silent> <Space>bn :bnext<CR>
 nnoremap <silent> <Space>bb :b#<CR>
 nnoremap <silent> <Space>bd :bdelete<CR>
 
-
 " open window in vertical split for quickfix
 autocmd! FileType qf nnoremap <Space>s <C-w><Enter><C-w>L
 
@@ -103,7 +108,9 @@ set incsearch
 " cursor
 set number
 set cursorline
+" set cursorcolumn
 set showmatch
+set ruler
 
 " file
 set noswapfile
@@ -129,6 +136,7 @@ set noerrorbells
 
 " other settings
 set cmdheight=2
+set laststatus=2
 
 " clipboard
 set clipboard+=unnamedplus
@@ -149,6 +157,6 @@ set t_Co=256
 colorscheme iceberg
 
 " shell
-set sh=bash
+set sh=zsh
 
 filetype plugin indent on

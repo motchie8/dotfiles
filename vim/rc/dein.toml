@@ -137,6 +137,7 @@ rev = 'release'
 # on_i = 1
 merged = '0'
 hook_add = '''
+    let g:coc_global_extensions = [ 'coc-lists', 'coc-json', 'coc-python', 'coc-pyright', 'coc-snippets', 'coc-cfn-lint', 'coc-sh', 'coc-yaml', 'coc-template' ]
     " You will have bad experience for diagnostic messages when it's default 4000.
     set updatetime=300
     " don't give |ins-completion-menu| messages.

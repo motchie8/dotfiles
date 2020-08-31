@@ -11,10 +11,10 @@ if [ $? -ne 0 ]; then
   echo "LESSOPEN='| src-hilite-lesspipe.sh %s'" >> ~/.bashrc
 fi
 
-# install libraries for pyenv and neovim 
+# install libraries for pyenv, neovim, vim plugins and zsh
 sudo yum update -y && sudo yum install git xsel zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel \
 openssl-devel xz xz-devel libffi-devel make libtool autoconf automake cmake gcc gcc-c++ make pkgconfig unzip \
-xclip gettext patch ctags -y
+xclip gettext patch ctags zsh zplug -y
 
 # setup pyenv
 if ! type pyenv >/dev/null 2>&1; then

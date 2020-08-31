@@ -1,19 +1,59 @@
-#!/bin/zsh
+#!/bin/bash
 
+RC_SCRIPT=zshrc
+ln -s ~/.$RC_SCRIPT ~/.dotfiles/.$RC_SCRIPT
+
+OS=$(cat /etc/os-release | grep -E '^ID="[^"]*"$' | tr -d '"' | awk -F '[=]' '{print $NF}')
 # install brew
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+if ! type brew >/dev/null 2>&1; then
+  if [ "$OS" = "centos" ] || [ "$OS" = "amzn" ]; then
+    sudo yum groupinstall 'Development Tools'
+    sudo yum install curl file git
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    # TODO add brew to PATH
+  elif [ "$OS" = "ubuntu"]; then
+    sudo apt update -y && sudo apt-get install build-essential curl file git -y
+    sudo apt-get install build-essential -y
+    echo 'eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> ~/.zprofile
+    eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+    brew install gcc
+  else
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    export PATH="$PATH:/home/linuxbrew/.linuxbrew/bin/:/usr/local/bin"
+  fi
+fi
 
-# install packages
+# install libraries
 brew update
-brew install node yarn wget tmux go
+brew install node yarn wget tmux go zsh zplug fzf
+
+# setup zsh
+DEFAULT_SHELL=$(echo $SHELL | awk -F '[/]' '{print $NF}')
+if [ "$DEFAULT_SHELL" != "zsh" ]; then
+  chsh -s /usr/local/bin/zsh
+fi
+# install zprezto
+# if [ ! -d ${ZDOTDIR:-$HOME}/.zprezto ]; then
+#   zsh
+#   git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
+#   setopt EXTENDED_GLOB
+#   for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
+#     rcfile_name=$(echo $rcfile | awk -F '[/]' '{print $NF}')
+#     if [ "$rcfile_name" != "zshrc" ] ; then
+#       ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}" 
+#     fi
+#   done
+# fi
+zsh
 
 # highlight less
-cat ~/.zshrc | grep -q "LESSOPEN"
+cat ~/.$RC_SCRIPT | grep -q "LESSOPEN"
 if [ $? -ne 0 ]; then
   brew install source-highlight
-  echo "LESS=' -R '" >> ~/.zshrc
-  echo "LESSOPEN='| src-hilite-lesspipe.sh %s'" >> ~/.zshrc
+  echo "LESS=' -R '" >> ~/.$RC_SCRIPT
+  echo "LESSOPEN='| src-hilite-lesspipe.sh %s'" >> ~/.$RC_SCRIPT
 fi
+
 # setup pyenv
 if ! type pyenv >/dev/null 2>&1; then
   echo "[INFO] install pyenv"
@@ -23,38 +63,38 @@ if ! type pyenv >/dev/null 2>&1; then
   export PYENV_PATH=$HOME/.pyenv
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
-  ' >> ~/.zshrc
-  source ~/.zshrc
+  ' >> ~/.$RC_SCRIPT
+  source ~/.$RC_SCRIPT
 else
   brew update pyenv
 fi
 
 # create envs for neovim by pyenv-virtualenv
-pyenv install -s 2.7.18
-pyenv install -s 3.7.7
-# neovim2
-pyenv virtualenv 2.7.18 neovim2
-if [ $? -eq 0 ]; then
-  pyenv rehash
-  source ~/.zshrc
-  pyenv activate neovim2
-  pip install --upgrade pip
-  pip install pynvim
-  pip install neovim
-  pyenv deactivate
-fi
-# neovim3
-pyenv virtualenv 3.7.7 neovim3
-if [ $? -eq 0 ]; then
-  pyenv rehash
-  source ~/.zshrc
-  pyenv activate neovim3
-  pip install --upgrade pip
-  pip install pynvim
-  pip install neovim
-  pip install -r ~/.dotfiles/python/requirements.txt
-  pyenv deactivate
-fi
+PYTHON2_VERSION=2.7.18
+PYTHON3_VERSION=3.7.7
+PYTHON_VERSIONS=($PYTHON2_VERSION $PYTHON3_VERSION)
+NEOVIM_VIRTUAL_ENVS=("neovim2" "neovim3")
+i=0
+for PYTHON_VERSION in "${PYTHON_VERSIONS[@]}" 
+do
+  NEOVIM_VIRTUAL_ENV=${NEOVIM_VIRTUAL_ENVS[i]}
+  pyenv versions | grep -q $PYTHON_VERSION
+  if [ $? -ne 0 ]; then
+    pyenv install -s $PYTHON_VERSION
+    pyenv virtualenv $PYTHON_VERSION $NEOVIM_VIRTUAL_ENV
+    pyenv rehash
+    source ~/.$RC_SCRIPT
+    pyenv activate $NEOVIM_VIRTUAL_ENV
+    pip install --upgrade pip
+    pip install pynvim
+    pip install neovim
+    if [ "$NEOVIM_VIRTUAL_ENV" = "neovim3" ]; then
+      pip install -r ~/.dotfiles/python/requirements.txt
+    fi
+    pyenv deactivate
+    let i++
+  fi
+done
 
 # setup neovim
 if ! type nvim >/dev/null 2>&1; then  
@@ -73,22 +113,6 @@ if [ ! -e ~/.dotfiles/iceberg.vim ]; then
   wget -O $HOME/.dotfiles/iceberg.tmux.conf https://raw.githubusercontent.com/gkeep/iceberg-dark/master/.tmux/iceberg.tmux.conf
 fi
 
-# setup go
-# if ! type go > /dev/null 2>&1; then
-#   wget https://dl.google.com/go/go1.13.3.linux-amd64.tar.gz
-#   sudo tar -C /usr/local -xzf go1.13.3.linux-amd64.tar.gz
-#   echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.zshrc
-#   source ~/.bash_profile
-# fi
-
-# setup lemonade
-# if ! type lemonade > /dev/null 2>&1; then
-#   go get github.com/pocke/lemonade
-#   cd ~/go/src/github.com/lemonade-command/lemonade/
-#   make install
-#   sudo ln -s -T ~/go/bin/lemonade /usr/local/bin/lemonade
-# fi
-
 # setup aws-cfn-snippet.vim
 # git clone https://github.com/lunarxlark/aws-cfn-snippet.vim.git
 # rm aws-cloudformation-user-guide -rf
@@ -98,9 +122,8 @@ fi
 
 # setup coc.nvim
 ln -s ~/.dotfiles/coc-settings.json ~/.config/nvim/coc-settings.json
-
 # for coc-nvim extension's dependency
-go get github.com/mattn/efm-langserver
+# go get github.com/mattn/efm-langserver
 
 # install gtags
 #if ! type gtags >/dev/null 2>&1; then
@@ -125,11 +148,12 @@ if [ ! -e ~/.vimrc ]; then
 fi
 if [ ! -e ~/.tmux.conf ]; then
   ln -s ~/.dotfiles/.tmux.conf ~/.tmux.conf
+  # ln -s ~/.dotfiles/.tmux.host.conf ~/.tmux.conf
 fi
-if [ ! -e ~/.config/lemonade.toml ]; then
-  mkdir -p ~/.config
-  ln -s ~/.dotfiles/lemonade.toml ~/.config/lemonade.toml
-fi
+# if [ ! -e ~/.config/lemonade.toml ]; then
+#   mkdir -p ~/.config
+#   ln -s ~/.dotfiles/lemonade.toml ~/.config/lemonade.toml
+# fi
 
-source ~/.zshrc
+source ~/.$RC_SCRIPT
 echo "[INFO] process finished"

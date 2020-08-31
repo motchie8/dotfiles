@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # install libraries for pyenv and neovim
-sudo apt update -y && sudo apt install curl build-essential zlib1g-dev libssl-dev libreadline-dev libbz2-dev libsqlite3-dev wget cmake pkg-config unzip libtool libtool-bin m4 automake gettext zsh -y
+sudo apt update -y && sudo apt install curl build-essential zlib1g-dev libssl-dev libreadline-dev libbz2-dev libsqlite3-dev wget cmake pkg-config unzip libtool libtool-bin m4 automake gettext zsh zplug x11-apps -y
 
 sudo apt install libffi-dev -y
 

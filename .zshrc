@@ -1,3 +1,6 @@
+# source ~/.bashrc
+export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
+
 # -----------------------------
 # General
 # -----------------------------
@@ -129,7 +132,7 @@ zstyle ':completion:*' menu select
 setopt list_packed
 
 # 補完候補にファイルの種類も表示する
-#setopt list_types
+setopt list_types
 
 # 色の設定
 export LSCOLORS=Exfxcxdxbxegedabagacad
@@ -191,7 +194,14 @@ if [[ ! -d ~/.zplug ]];then
   git clone https://github.com/zplug/zplug ~/.zplug
 fi
 
-source ~/.zplug/init.zsh
+if [ -d ~/.zplug/unit.zsh ]; then
+  source ~/.zplug/init.zsh
+elif [ -d /homelinuxbrew/.linuxbrew/opt/zplug ]; then
+  export ZPLUG_HOME=/home/linuxbrew/.linuxbrew/opt/zplug
+  source $ZPLUG_HOME/init.zsh
+else
+  echo "zplug init.zsh was not loaded correctly"
+fi
 
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-autosuggestions"
@@ -203,3 +213,8 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 LESS=' -R '
 LESSOPEN='| src-hilite-lesspipe.sh %s'
+
+if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+fi
+zstyle ':prezto:module:prompt' theme 'skwp'
