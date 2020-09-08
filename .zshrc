@@ -15,6 +15,9 @@ export EDITOR=vim
 
 # パスを追加したい場合
 export PATH="$HOME/bin:$PATH"
+if [ -e /home/linuxbrew/.linuxbrew/bin ]; then
+    export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+fi
 
 # cdした際のディレクトリをディレクトリスタックへ自動追加
 setopt auto_pushd
@@ -123,7 +126,7 @@ autoload -Uz compinit ; compinit
 setopt complete_in_word
 
 # コマンドミスを修正
-setopt correct
+# setopt correct
 
 # 補完の選択を楽にする
 zstyle ':completion:*' menu select
@@ -190,14 +193,11 @@ alias ll='ls -l'
 alias vz='vim ~/.zshrc'
 alias diff='diff -U1'
 
-if [[ ! -d ~/.zplug ]];then
-  git clone https://github.com/zplug/zplug ~/.zplug
-fi
-
-if [ -d ~/.zplug/unit.zsh ]; then
-  source ~/.zplug/init.zsh
-elif [ -d /homelinuxbrew/.linuxbrew/opt/zplug ]; then
+if [ -e /home/linuxbrew/.linuxbrew/opt/zplug ]; then
   export ZPLUG_HOME=/home/linuxbrew/.linuxbrew/opt/zplug
+  source $ZPLUG_HOME/init.zsh
+elif [ -e /usr/local/bin/zplug ]; then
+  export ZPLUG_HOME=/usr/local/bin/zplug
   source $ZPLUG_HOME/init.zsh
 else
   echo "zplug init.zsh was not loaded correctly"
