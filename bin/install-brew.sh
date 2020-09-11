@@ -32,19 +32,22 @@ DEFAULT_SHELL=$(echo $SHELL | awk -F '[/]' '{print $NF}')
 if [ "$DEFAULT_SHELL" != "zsh" ]; then
   chsh -s /usr/local/bin/zsh
 fi
+
+if [[ ! -e "~/.dotfiles/.zprezto" ]]; then
+
+
 # install zprezto
-# if [ ! -d ${ZDOTDIR:-$HOME}/.zprezto ]; then
-#   zsh
-#   git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
-#   setopt EXTENDED_GLOB
-#   for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
-#     rcfile_name=$(echo $rcfile | awk -F '[/]' '{print $NF}')
-#     if [ "$rcfile_name" != "zshrc" ] ; then
-#       ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}" 
-#     fi
-#   done
-# fi
-zsh
+if [ ! -e $HOME/.dotfiles/.zprezto ]; then
+  zsh
+  git clone --recursive https://github.com/sorin-ionescu/prezto.git ~/.dotfiles/.zprezto
+  setopt EXTENDED_GLOB
+  for rcfile in $HOME/.dotfiles/.zprezto/runcoms/^README.md(.N); do
+    rcfile_name="."$(echo $rcfile | awk -F '[/]' '{print $NF}')
+    if [ ! -e $HOME/$rcfile_name ]; then
+      ln -s "$rcfile" "$HOME/$rcfile_name" 
+    fi
+  done
+fi
 
 # highlight less
 cat ~/.$RC_SCRIPT | grep -q "LESSOPEN"

@@ -127,6 +127,7 @@ setopt complete_in_word
 
 # コマンドミスを修正
 # setopt correct
+unsetopt correctall
 
 # 補完の選択を楽にする
 zstyle ':completion:*' menu select
@@ -213,8 +214,6 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 LESS=' -R '
 LESSOPEN='| src-hilite-lesspipe.sh %s'
-
-if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
-fi
-zstyle ':prezto:module:prompt' theme 'skwp'
+source "~/.dotfiles/.zprezto/init.zsh"
+prompt skwp
+# zstyle ':prezto:module:prompt' theme 'skwp'
