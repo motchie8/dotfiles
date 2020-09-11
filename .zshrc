@@ -214,6 +214,6 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 LESS=' -R '
 LESSOPEN='| src-hilite-lesspipe.sh %s'
-source "~/.dotfiles/.zprezto/init.zsh"
+source $HOME/.dotfiles/.zprezto/init.zsh
 prompt skwp
 # zstyle ':prezto:module:prompt' theme 'skwp'
