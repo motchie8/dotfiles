@@ -6,21 +6,21 @@ ln -s ~/.$RC_SCRIPT ~/.dotfiles/.$RC_SCRIPT
 OS=$(cat /etc/os-release | grep -E '^ID="[^"]*"$' | tr -d '"' | awk -F '[=]' '{print $NF}')
 # install brew
 if ! type brew >/dev/null 2>&1; then
+  echo "[INFO] Install Homebrew"
   if [ "$OS" = "centos" ] || [ "$OS" = "amzn" ]; then
-    sudo yum groupinstall 'Development Tools'
-    sudo yum install curl file git
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    sudo yum groupinstall 'Development Tools' -y
+    sudo yum install curl file git -y
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" 
     # TODO add brew to PATH
   elif [ "$OS" = "ubuntu"]; then
     sudo apt update -y && sudo apt-get install build-essential curl file git -y
-    sudo apt-get install build-essential -y
     echo 'eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> ~/.zprofile
-    eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
     brew install gcc
   else
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-    export PATH="$PATH:/home/linuxbrew/.linuxbrew/bin/:/usr/local/bin"
   fi
+  eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+  brew install gcc
 fi
 
 # install libraries
@@ -30,14 +30,12 @@ brew install node yarn wget tmux go zsh zplug fzf
 # setup zsh
 DEFAULT_SHELL=$(echo $SHELL | awk -F '[/]' '{print $NF}')
 if [ "$DEFAULT_SHELL" != "zsh" ]; then
-  chsh -s /usr/local/bin/zsh
+  chsh -s /home/linuxbrew/.linuxbrew/bin/zsh
 fi
-
-if [[ ! -e "~/.dotfiles/.zprezto" ]]; then
-
 
 # install zprezto
 if [ ! -e $HOME/.dotfiles/.zprezto ]; then
+  echo "[INFO] Install zprezto"
   zsh
   git clone --recursive https://github.com/sorin-ionescu/prezto.git ~/.dotfiles/.zprezto
   setopt EXTENDED_GLOB
@@ -124,7 +122,9 @@ fi
 # cp snippets/* ~/.dotfiles/vim/snippets/
 
 # setup coc.nvim
-ln -s ~/.dotfiles/coc-settings.json ~/.config/nvim/coc-settings.json
+if [ ! -e ~/.config/nvim/coc-settings.json ]; then
+  ln -s ~/.dotfiles/coc-settings.json ~/.config/nvim/coc-settings.json
+fi
 # for coc-nvim extension's dependency
 # go get github.com/mattn/efm-langserver
 

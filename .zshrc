@@ -7,6 +7,12 @@ export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
 # 色を使用
 autoload -Uz colors ; colors
 
+# set locale
+export LANG="ja_JP.utf8"
+export LC_ALL="ja_JP.utf8"
+export LC_CTYPE="ja_JP.utf8"
+export LANGUAGE="ja_JP:ja"
+
 # エディタをvimに設定
 export EDITOR=vim
 
@@ -17,6 +23,7 @@ export EDITOR=vim
 export PATH="$HOME/bin:$PATH"
 if [ -e /home/linuxbrew/.linuxbrew/bin ]; then
     export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+    eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 fi
 
 # cdした際のディレクトリをディレクトリスタックへ自動追加
