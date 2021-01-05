@@ -1,15 +1,24 @@
 #!/bin/bash
+set -eu
 
 RC_SCRIPT=zshrc
-ln -s ~/.$RC_SCRIPT ~/.dotfiles/.$RC_SCRIPT
-
+if [ ! -L ~/.$RC_SCRIPT ]; then
+  ln -s ~/.dotfiles/.$RC_SCRIPT ~/.$RC_SCRIPT
+fi
 OS=$(cat /etc/os-release | grep -E '^ID="[^"]*"$' | tr -d '"' | awk -F '[=]' '{print $NF}')
 # install brew
 if ! type brew >/dev/null 2>&1; then
   echo "[INFO] Install Homebrew"
+  if [ ${EUID:-${UID}} = 0 ]; then
+    echo "[ERROR] Homebrew cannot be installed using root user. Change user and revoke script."
+    echo "User creation command example: 'USERNAME="ec2-user" && useradd -m \$USERNAME && usermod -aG wheel \$USERNAME && su \$USERNAME'"
+    exit 1
+  fi
+  # install using non-interactive mode
+  export CI=1
   if [ "$OS" = "centos" ] || [ "$OS" = "amzn" ]; then
     sudo yum groupinstall 'Development Tools' -y
-    sudo yum install curl file git -y
+    sudo yum install curl file git util-linux-user which ruby -y
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" 
     # TODO add brew to PATH
   elif [ "$OS" = "ubuntu"]; then
@@ -17,6 +26,8 @@ if ! type brew >/dev/null 2>&1; then
     echo 'eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> ~/.zprofile
     brew install gcc
   else
+    sudo yum groupinstall 'Development Tools' -y
+    sudo yum install curl file git -y
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
   fi
   eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
@@ -30,6 +41,10 @@ brew install node yarn wget tmux go zsh zplug fzf
 # setup zsh
 DEFAULT_SHELL=$(echo $SHELL | awk -F '[/]' '{print $NF}')
 if [ "$DEFAULT_SHELL" != "zsh" ]; then
+  cat /etc/shells | grep -q "zsh"
+  if [ $? -ne 0 ]; then
+    echo "/home/linuxbrew/.linuxbrew/bin/zsh" >> /etc/shells
+  fi
   chsh -s /home/linuxbrew/.linuxbrew/bin/zsh
 fi
 
@@ -60,6 +75,7 @@ if ! type pyenv >/dev/null 2>&1; then
   echo "[INFO] install pyenv"
   brew install pyenv pyenv-virtualenv
   echo '
+
   export PATH="$HOME/.pyenv/bin:$PATH"
   export PYENV_PATH=$HOME/.pyenv
   eval "$(pyenv init -)"
@@ -102,6 +118,7 @@ if ! type nvim >/dev/null 2>&1; then
   echo "[INFO] install neovim"
   brew install neovim
   mkdir -p ~/.config/nvim
+  ln -s ~/.dotfiles/.vimrc ~/.vimrc
   ln -s ~/.vimrc ~/.config/nvim/init.vim
 fi
 
@@ -122,7 +139,7 @@ fi
 # cp snippets/* ~/.dotfiles/vim/snippets/
 
 # setup coc.nvim
-if [ ! -e ~/.config/nvim/coc-settings.json ]; then
+if [ ! -L ~/.config/nvim/coc-settings.json ]; then
   ln -s ~/.dotfiles/coc-settings.json ~/.config/nvim/coc-settings.json
 fi
 # for coc-nvim extension's dependency
@@ -143,17 +160,17 @@ fi
 #fi
 
 # symbolic links
-if [ ! -e ~/.vim ]; then
+if [ ! -L ~/.vim ]; then
   ln -s ~/.dotfiles/vim ~/.vim
 fi
-if [ ! -e ~/.vimrc ]; then
+if [ ! -L ~/.vimrc ]; then
   ln -s ~/.dotfiles/.vimrc ~/.vimrc
 fi
-if [ ! -e ~/.tmux.conf ]; then
+if [ ! -L ~/.tmux.conf ]; then
   ln -s ~/.dotfiles/.tmux.conf ~/.tmux.conf
   # ln -s ~/.dotfiles/.tmux.host.conf ~/.tmux.conf
 fi
-# if [ ! -e ~/.config/lemonade.toml ]; then
+# if [ ! -L ~/.config/lemonade.toml ]; then
 #   mkdir -p ~/.config
 #   ln -s ~/.dotfiles/lemonade.toml ~/.config/lemonade.toml
 # fi
