@@ -1,5 +1,51 @@
 # source ~/.bashrc
-export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
+# -----------------------------
+# Custom settings
+# -----------------------------
+# set locale
+export LANG="ja_JP.utf8"
+export LC_ALL="ja_JP.utf8"
+export LC_CTYPE="ja_JP.utf8"
+export LANGUAGE="ja_JP:ja"
+
+# setup PATH
+export PATH="$HOME/bin:$PATH"
+if [ -e /home/linuxbrew/.linuxbrew/bin ]; then
+    export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+    eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+fi
+
+# setup pyenv
+export PYENV_ROOT="$HOME/.pyenv"  # Defines the directory under which Python versions and shims reside.
+export PYENV_SHELL=zsh
+export PATH="$PYENV_ROOT/bin:$PATH"
+if which pyenv > /dev/null; then
+  eval "$(pyenv init -)" 
+  eval "$(pyenv virtualenv-init -)"
+fi
+
+LESS=' -R '
+LESSOPEN='| src-hilite-lesspipe.sh %s'
+
+# setup zplug
+if [ -e /home/linuxbrew/.linuxbrew/opt/zplug ]; then
+  export ZPLUG_HOME=/home/linuxbrew/.linuxbrew/opt/zplug
+  source $ZPLUG_HOME/init.zsh
+elif [ -e /usr/local/bin/zplug ]; then
+  export ZPLUG_HOME=/usr/local/bin/zplug
+  source $ZPLUG_HOME/init.zsh
+else
+  echo "zplug init.zsh was not loaded correctly"
+fi
+zplug "zsh-users/zsh-completions"
+zplug "zsh-users/zsh-autosuggestions"
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
+zplug "b4b4r07/enhancd", use:init.sh
+
+source $HOME/.dotfiles/.zprezto/init.zsh
+
+# setup DISPLAY for X11 clipboard sharing
+# export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
 
 # -----------------------------
 # General
@@ -7,24 +53,11 @@ export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
 # 色を使用
 autoload -Uz colors ; colors
 
-# set locale
-export LANG="ja_JP.utf8"
-export LC_ALL="ja_JP.utf8"
-export LC_CTYPE="ja_JP.utf8"
-export LANGUAGE="ja_JP:ja"
-
 # エディタをvimに設定
 export EDITOR=vim
 
 # Ctrl+Dでログアウトしてしまうことを防ぐ
 #setopt IGNOREEOF
-
-# パスを追加したい場合
-export PATH="$HOME/bin:$PATH"
-if [ -e /home/linuxbrew/.linuxbrew/bin ]; then
-    export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
-    eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-fi
 
 # cdした際のディレクトリをディレクトリスタックへ自動追加
 setopt auto_pushd
@@ -196,31 +229,9 @@ setopt inc_append_history
 # ヒストリを呼び出してから実行する間に一旦編集できる状態になる
 setopt hist_verify
 
+# alias
 alias ll='ls -l'
-
-alias vz='vim ~/.zshrc'
 alias diff='diff -U1'
 
-if [ -e /home/linuxbrew/.linuxbrew/opt/zplug ]; then
-  export ZPLUG_HOME=/home/linuxbrew/.linuxbrew/opt/zplug
-  source $ZPLUG_HOME/init.zsh
-elif [ -e /usr/local/bin/zplug ]; then
-  export ZPLUG_HOME=/usr/local/bin/zplug
-  source $ZPLUG_HOME/init.zsh
-else
-  echo "zplug init.zsh was not loaded correctly"
-fi
-
-zplug "zsh-users/zsh-completions"
-zplug "zsh-users/zsh-autosuggestions"
-zplug "zsh-users/zsh-syntax-highlighting", defer:2
-zplug "b4b4r07/enhancd", use:init.sh
-
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-LESS=' -R '
-LESSOPEN='| src-hilite-lesspipe.sh %s'
-source $HOME/.dotfiles/.zprezto/init.zsh
 prompt skwp
 # zstyle ':prezto:module:prompt' theme 'skwp'

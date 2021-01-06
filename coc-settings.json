@@ -1,13 +1,13 @@
 {
-  "languageserver": {
-    "efm": {
-      "command": "efm-langserver",
-      "args": [],
-      // custom config path
-      // "args": ["-c", "/path/to/your/config.yaml"],
-      "filetypes": ["vim", "eruby", "markdown"]
-    }
-  }
+  //"languageserver": {
+  //  "efm": {
+  //    "command": "efm-langserver",
+  //    "args": [],
+  //    // custom config path
+  //    // "args": ["-c", "/path/to/your/config.yaml"],
+  //    "filetypes": ["vim", "eruby", "markdown"]
+  //  }
+  //}
   // "dependencies": {
   //   "coc-cfn-lint": ">=0.1.1",
   //   "coc-json": ">=1.2.6",
