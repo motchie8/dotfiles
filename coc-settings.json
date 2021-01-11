@@ -1,21 +1,15 @@
 {
-  //"languageserver": {
-  //  "efm": {
-  //    "command": "efm-langserver",
-  //    "args": [],
-  //    // custom config path
-  //    // "args": ["-c", "/path/to/your/config.yaml"],
-  //    "filetypes": ["vim", "eruby", "markdown"]
-  //  }
-  //}
-  // "dependencies": {
-  //   "coc-cfn-lint": ">=0.1.1",
-  //   "coc-json": ">=1.2.6",
-  //   "coc-lists": ">=1.3.8",
-  //   "coc-metals": ">=0.5.3",
-  //   "coc-pyright": ">=1.1.52",
-  //   "coc-python": ">=1.2.12",
-  //   "coc-sh": ">=0.5.1",
-  //   "coc-yaml": ">=1.0.4"
-  // }
+  "jedi.enable": true,
+  "jedi.startupMessage": true,
+  "jedi.markupKindPreferred": "markdown",
+  "jedi.trace.server": "verbose",
+  "jedi.jediSettings.autoImportModules": [],
+  "jedi.executable.command": "jedi-language-server",
+  "jedi.executable.args": [],
+  "jedi.completion.disableSnippets": false,
+  "jedi.diagnostics.enable": true,
+  "jedi.diagnostics.didOpen": true,
+  "jedi.diagnostics.didChange": true,
+  "jedi.diagnostics.didSave": true,
+  "jedi.workspace.extraPaths": []
 }
