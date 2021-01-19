@@ -58,6 +58,12 @@
 #     nmap <silent> <Space>j <Plug>(ale_next_wrap)
 #     nmap <silent> <Space>a <Plug>(ale_fix)
 # '''
+[[plugins]]
+repo = 'lambdalisue/vim-pyenv'
+on_ft = 'rust'
+hook_source = '''
+    let g:rustfmt_autosave = 1
+'''
 
 [[plugins]]
 repo = 'lambdalisue/vim-pyenv'
