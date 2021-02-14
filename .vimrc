@@ -71,8 +71,6 @@ nnoremap <silent> <Space>bd :bdelete<CR>
 " open window in vertical split for quickfix
 autocmd! FileType qf nnoremap <Space>s <C-w><Enter><C-w>L
 
-" auto completion
-imap <expr><TAB>  pumvisible() ? "<C-n>" : "<TAB>"
 " search and replace
 nnoremap <silent> <Space>f "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>
 nmap <Space>r <Space>f:%s/<C-r>///g<Left><Left>

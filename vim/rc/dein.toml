@@ -68,13 +68,6 @@ hook_add = '''
     let g:airline_theme='icebergDark'
 '''
 
-# bar thema
-# [[plugins]]
-# repo = 'vim-airline/vim-airline-themes'
-# hook_add = '''
-#     let g:AirlineTheme = "minimalist"
-# '''
-
 # resize window
 [[plugins]]
 repo = 'simeji/winresizer'
@@ -104,10 +97,10 @@ rev = 'release'
 merged = '0'
 hook_add = '''
     " add default extensions
-    " let g:coc_global_extensions = [ 'coc-lists', 'coc-json', 'coc-python', 'coc-pyright', 'coc-snippets', 'coc-cfn-lint', 'coc-sh', 'coc-yaml', 'coc-template' ]
+    " let g:coc_global_extensions = [ 'coc-lists', 'coc-json', 'coc-yaml', 'coc-pyright', 'coc-jedi', 'coc-cfn-lint', 'coc-sh', 'coc-rls', 'coc-rust-analyzer' ]
 
     " TextEdit might fail if hidden is not set.
-    set hidden 
+    set hidden
 
     " Some servers have issues with backup files, see #649.
     set nobackup
@@ -251,9 +244,7 @@ hook_add = '''
     set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
     
     " Mappings for CoCList
-    " Show all diagnostics.
-
-    " Note: disable these mappings for other plugin mappings
+    " " Show all diagnostics.
     " nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
     " " Manage extensions.
     " nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
@@ -263,7 +254,7 @@ hook_add = '''
     " nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
     " " Search workspace symbols.
     " nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
-    " " Do default action for next item.
+    " Do default action for next item.
     " nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
     " " Do default action for previous item.
     " nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>

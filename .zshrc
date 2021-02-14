@@ -9,7 +9,7 @@ export LC_CTYPE="ja_JP.utf8"
 export LANGUAGE="ja_JP:ja"
 
 # setup PATH
-export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/bin:$HOME/.cargo/bin:$PATH"
 if [ -e /home/linuxbrew/.linuxbrew/bin ]; then
     export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
     eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
