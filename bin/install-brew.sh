@@ -55,14 +55,10 @@ if [ ! -e $HOME/.dotfiles/.zprezto ]; then
   git clone --recursive https://github.com/sorin-ionescu/prezto.git ~/.dotfiles/.zprezto
   for rcfile_name in zlogin zlogout zpreztorc zprofile zshenv; do
     if [ ! -e $HOME/$rcfile_name ]; then
-      ln -s "$HOME/.dotfiles/.zprezto/runcoms/.$rcfile" "$HOME/.$rcfile_name" 
+      ln -s "$HOME/.dotfiles/.zprezto/runcoms/.$rcfile_name" "$HOME/.$rcfile_name" 
     fi
   done
 fi
-
-# setup pyenv
-# export PATH="$HOME/.pyenv/bin:$PATH"
-# export PYENV_PATH=$HOME/.pyenv
 
 # create envs for neovim by pyenv-virtualenv
 export PYENV_ROOT="$HOME/.pyenv"
