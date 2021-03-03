@@ -1,0 +1,41 @@
+{
+  "configurations": {
+    "Python: Attach To Vim": {
+      "variables": {
+        "port": "5678",
+        "host": "localhost"
+      },
+      "adapter": "multi-session",
+      "configuration": {
+        "request": "attach"
+      }
+    },
+    "Python: Start debugger": {
+      "adapter": "debugpy",
+      "configuration": {
+        "name": "python",
+        "type": "python",
+        "request": "launch",
+        "program": "${file}",
+        "cwd": "${workspaceFolder}",
+        "stopOnEntry": true,
+        "console": "externalTerminal",
+        "debugOptions": []
+      }
+    },
+    "rust": {
+      "adapter": "CodeLLDB",
+      "configuration": {
+        "name": "rust",
+        "request": "launch",
+        "type": "lldb",
+        "program": "${workspaceFolder}/target/debug/<project name>",
+        "cwd": "${workspaceFolder}",
+        "cargo": {
+          "args": ["test", "--no-run"]
+        },
+        "terminal": "external"
+      }
+    }
+  }
+}

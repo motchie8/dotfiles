@@ -61,6 +61,22 @@
 [[plugins]]
 repo = 'lambdalisue/vim-pyenv'
 on_ft = ['rust', 'python']
-hook_source = '''
+hook_add = '''
     let g:rustfmt_autosave = 1
+'''
+
+[[plugins]]
+# on_ft = ["python", "rust"]
+repo = "puremourning/vimspector"
+# build = "./install_gadget.py --enable-python --enable-rust"
+build = "./install_gadget.py --basedir $HOME/.dotfiles/vimspector-config --enable-python --enable-rust"
+hook_add = '''
+    let g:vimspector_enable_mappings = 'HUMAN'
+    " let g:vimspector_base_dir = expand('$HOME/.dotfiles/vimspector-config')
+    " for normal mode - the word under the cursor
+    nmap <Space>di :VimspectorBalloonEval<CR>
+    " for visual mode, the visually selected text
+    xmap <Space>di :VimspectorBalloonEval<CR>
+    " debugger command
+    nnoremap <silent> <Space>db :call vimspector#Launch()<CR>
 '''
