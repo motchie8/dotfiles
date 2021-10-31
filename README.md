@@ -1,7 +1,7 @@
 # .dotfiles
-dotfiles for python environment with neovim
+setup script and dotfiles for development environment with neovim, zsh and pyenv.
 
 ## Install
 ```
-$ ./bin/install-brew.sh
+$ ./bin/install.sh
 ```
