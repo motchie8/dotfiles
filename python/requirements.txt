@@ -6,3 +6,7 @@ jedi
 isort
 black
 pylint
+jupytext
+qtconsole
+pyqt5
+jupyter

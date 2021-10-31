@@ -2,31 +2,31 @@
 # -----------------------------
 # Custom settings
 # -----------------------------
-# set locale
-export LANG="ja_JP.utf8"
-export LC_ALL="ja_JP.utf8"
-export LC_CTYPE="ja_JP.utf8"
-export LANGUAGE="ja_JP:ja"
 
 # setup PATH
-export PATH="$HOME/bin:$HOME/.cargo/bin:$PATH"
+## for rust
+# export PATH="$HOME/bin:$HOME/.cargo/bin:$PATH"
+export PATH="/home/motchie/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin:$PATH"
+export PATH="/usr/local/bin:$PATH"
+## for homebrew in non macOS envs
 if [ -e /home/linuxbrew/.linuxbrew/bin ]; then
     export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
     eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 fi
-
-# setup pyenv
-export PYENV_ROOT="$HOME/.pyenv"  # Defines the directory under which Python versions and shims reside.
-export PYENV_SHELL=zsh
-export PATH="$PYENV_ROOT/bin:$PATH"
+## for pyenv
+export PATH="$HOME/.pyenv/bin:$PATH"
+export PYENV_PATH=$HOME/.pyenv
 if which pyenv > /dev/null; then
-  eval "$(pyenv init -)" 
-  eval "$(pyenv virtualenv-init -)"
+    eval "$(pyenv init --path)"
+    # eval "$(pyenv init -)" 
+    eval "$(pyenv virtualenv-init -)"
 fi
-
-LESS=' -R '
-LESSOPEN='| src-hilite-lesspipe.sh %s'
-
+# export PATH="$PYENV_ROOT/shims:$PATH"
+# export PYENV_SHELL=zsh
+# for npm
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+ 
 # setup zplug
 if [ -e /home/linuxbrew/.linuxbrew/opt/zplug ]; then
   export ZPLUG_HOME=/home/linuxbrew/.linuxbrew/opt/zplug
@@ -37,6 +37,7 @@ elif [ -e /usr/local/bin/zplug ]; then
 else
   echo "zplug init.zsh was not loaded correctly"
 fi
+
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
@@ -44,12 +45,57 @@ zplug "b4b4r07/enhancd", use:init.sh
 
 source $HOME/.dotfiles/.zprezto/init.zsh
 
-# setup DISPLAY for X11 clipboard sharing
-# export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
+# setup alias
+alias ll='ls -l'
+alias diff='diff -U1'
+
+LESS=' -R '
+LESSOPEN='| src-hilite-lesspipe.sh %s'
+
+# Completion
+## Bash互換モードの有効化
+autoload bashcompinit && bashcompinit
+
+autoload -Uz compinit && compinit
+## AWS CLI
+if [ -e /usr/local/bin/aws_completer ]; then
+    complete -C '/usr/local/bin/aws_completer' aws
+fi
+## Terraform
+if [ -e /usr/bin/terraform ]; then
+    # terraform -install-autocomplete
+    complete -o nospace -C /usr/bin/terraform terraform
+fi
+
+## fzf
+# fh - repeat history
+fh() {
+  print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed -E 's/ *[0-9]*\*? *//' | sed -E 's/\\/\\\\/g')
+}
+# fbr - checkout git branch (including remote branches), sorted by most recent commit, limit 30 last branches
+fbr() {
+  local branches branch
+  branches=$(git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)") &&
+  branch=$(echo "$branches" |
+           fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+  git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+}
+
+# setup DISPLAY for X11 clipboard sharing for WSL
+if [ -e /mnt/wsl ]; then
+  export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
+fi
 
 # -----------------------------
 # General
 # -----------------------------
+
+# set locale
+export LANG="ja_JP.utf8"
+export LC_ALL="ja_JP.utf8"
+export LC_CTYPE="ja_JP.utf8"
+export LANGUAGE="ja_JP:ja"
+
 # 色を使用
 autoload -Uz colors ; colors
 
@@ -102,16 +148,16 @@ setopt notify
 setopt print_eight_bit
 
 # 終了ステータスが0以外の場合にステータスを表示する
-setopt print_exit_value
+#setopt print_exit_value
 
 # ファイル名の展開でディレクトリにマッチした場合 末尾に / を付加
 setopt mark_dirs
 
 # コマンドのスペルチェックをする
-setopt correct
+# setopt correct
 
 # コマンドライン全てのスペルチェックをする
-setopt correct_all
+# setopt correct_all
 
 # 上書きリダイレクトの禁止
 setopt no_clobber
@@ -156,18 +202,16 @@ ulimit -c 0
 # %t    時間(hh:mm(am/pm))
 PROMPT='%F{cyan}%n@%m%f:%~# '
 
+# promptテーマ設定
+prompt skwp
+# zstyle ':prezto:module:prompt' theme 'skwp'
+
 # -----------------------------
 # Completion
 # -----------------------------
-# 自動補完を有効にする
-autoload -Uz compinit ; compinit
 
 # 単語の入力途中でもTab補完を有効化
 setopt complete_in_word
-
-# コマンドミスを修正
-# setopt correct
-unsetopt correctall
 
 # 補完の選択を楽にする
 zstyle ':completion:*' menu select
@@ -228,10 +272,3 @@ setopt inc_append_history
 
 # ヒストリを呼び出してから実行する間に一旦編集できる状態になる
 setopt hist_verify
-
-# alias
-alias ll='ls -l'
-alias diff='diff -U1'
-
-prompt skwp
-# zstyle ':prezto:module:prompt' theme 'skwp'

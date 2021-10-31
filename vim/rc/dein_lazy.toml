@@ -1,73 +1,72 @@
-# python auto complete
-# [[plugins]]
-# repo = 'zchee/deoplete-jedi'
-# on_ft = 'python'
-# hook_source = '''
-#     let g:deoplete#sources#jedi#python_path = system('PYTHON_VERSION=`pyenv version` && echo -n ${PYENV_PATH}/versions/${PYTHON_VERSION%% *}/bin/python')
-# '''
-# # python auto complete
-# [[plugins]]
-# repo = 'davidhalter/jedi-vim'
-# on_ft = 'python'
-# hook_source = '''
-#     let g:jedi#auto_vim_configuration = 0
-#     let g:jedi#completions_enabled = 0
-#     let g:jedi#smart_auto_mappings = 1
-#     let g:jedi#use_tabs_not_buffers = 0 
-#     autocmd FileType python setlocal completeopt-=preview
-#     let g:jedi#goto_command = "<Space>g"
-#     let g:jedi#goto_assignments_command = "<Space>G"
-#     highlight jediFat ctermbg=darkgray
-# '''
-
-# python linter
-# [[plugins]]
-# repo = 'w0rp/ale'
-# on_ft = 'python'
-# hook_source = '''
-#     let g:ale_linters = {'python': ['flake8']}
-#     "let g:ale_linters = {'python': ['flake8', 'pylint']}
-#     let g:ale_fixers = {'python': ['autopep8', 'black', 'isort']}
-#     "let g:ale_fixers = {'python': ['black']}
-# 
-#     let g:ale_python_flake8_executable = g:python3_host_prog
-#     let g:ale_python_pylint_executable = g:python3_host_prog
-#     let g:ale_python_autopep8_executable = g:python3_host_prog
-#     let g:ale_python_black_executable = g:python3_host_prog
-#     let g:ale_python_isort_executable = g:python3_host_prog
-# 
-#     let g:ale_python_flake8_options = '-m flake8 --ignore E501,E225,W503,E203'
-#     let g:ale_python_pylint_options = '-m pylint'
-#     let g:ale_python_autopep8_options = '-m autopep8'
-#     let g:ale_python_black_options = '-m black'
-#     let g:ale_python_isort_options = '-m isort'
-#     
-#     let g:ale_set_loclist = 1
-#     let g:ale_set_quickfix = 1
-#     let g:ale_sign_column_always = 0
-# 
-#     let g:ale_fix_on_save = 1
-#     let g:ale_lint_on_enter = 0
-#     let g:ale_lint_on_save = 1
-#     let g:ale_lint_on_text_changed = 'never'
-#     let g:ale_sign_error = 'EE' 
-#     let g:ale_sign_warning = 'WW'
-#     let g:ale_echo_msg_format = '[%linter%] [%severity%] %s'
-# 
-#     nmap <silent> <Space>k <Plug>(ale_previous_wrap)
-#     nmap <silent> <Space>j <Plug>(ale_next_wrap)
-#     nmap <silent> <Space>a <Plug>(ale_fix)
-# '''
+### Python ###
 [[plugins]]
 repo = 'lambdalisue/vim-pyenv'
 on_ft = ['rust', 'python']
 hook_add = '''
+    " TODO: rustup component add rustfmt
+    " let g:rustfmt_autosave = 1
+    syntax enable
+    filetype plugin indent on
+'''
+
+### Rust ###
+[[plugins]]
+repo = "rust-lang/rust.vim"
+on_ft = ["rust"]
+hook_add = '''
     let g:rustfmt_autosave = 1
 '''
 
+### Jupyter ###
 [[plugins]]
-# on_ft = ["python", "rust"]
+repo = "goerz/jupytext.vim"
+on_ft = ["python", "ipynb"]
+hook_add = '''
+    " セルの区切り文字をVSCode互換の # %% に指定する
+    let g:jupytext_fmt = 'py:percent'
+    " vimのPython向けシンタックスハイライトを有効にする
+    let g:jupytext_filetype_map = {'py': 'python'}
+'''
+
+[[plugins]]
+repo = "jupyter-vim/jupyter-vim"
+on_ft = ["python", "ipynb"]
+hook_add = '''
+    "" Run current file
+    "nnoremap <buffer> <silent> <localleader>R :JupyterRunFile<CR>
+    "nnoremap <buffer> <silent> <localleader>I :PythonImportThisFile<CR>
+    "" Change to directory of current file
+    "nnoremap <buffer> <silent> <localleader>d :JupyterCd %:p:h<CR>
+    "" Send a selection of lines
+    "nnoremap <buffer> <silent> <localleader>X :JupyterSendCell<CR>
+    "nnoremap <buffer> <silent> <localleader>E :JupyterSendRange<CR>
+    "nmap     <buffer> <silent> <localleader>e <Plug>JupyterRunTextObj
+    "vmap     <buffer> <silent> <localleader>e <Plug>JupyterRunVisual
+    "" Debugging maps
+    "nnoremap <buffer> <silent> <localleader>b :PythonSetBreak<CR>
+'''
+
+### SQL ###
+[[plugins]]
+repo = 'kristijanhusak/vim-dadbod-ui'
+on_ft = ["sql"]
+
+[[plugins]]
+repo = 'kristijanhusak/vim-dadbod'
+on_ft = ["sql"]
+depends = ['vim-dadbod-ui']
+hook_add = '''
+    " specify db connections in .env using the following prefix
+    let g:db_ui_dotenv_variable_prefix = 'DB_UI_'
+'''
+
+[[plugins]]
+repo = 'vim-scripts/dbext.vim'
+
+### Debugger ###
+[[plugins]]
 repo = "puremourning/vimspector"
+on_ft = ["python", "rust"]
 # build = "./install_gadget.py --enable-python --enable-rust"
 build = "./install_gadget.py --basedir $HOME/.dotfiles/vimspector-config --enable-python --enable-rust"
 hook_add = '''
