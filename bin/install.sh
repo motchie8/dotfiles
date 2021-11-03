@@ -16,6 +16,9 @@ if [ "$OS" = "centos" ] || [ "$OS" = "amzn" ]; then
       xz-devel libffi-devel make libtool autoconf automake \
       cmake gcc gcc-c++ make pkgconfig unzip xclip gettext \
       patch ctags zsh zplug
+    # install neovim prerequisites
+    sudo yum -y install ninja-build libtool autoconf automake \
+        cmake gcc gcc-c++ make pkgconfig unzip patch gettext curl
     # install neovim
     if ! type nvim >/dev/null 2>&1; then  
         echo "[INFO] install neovim for $OS"
@@ -31,11 +34,12 @@ if [ "$OS" = "centos" ] || [ "$OS" = "amzn" ]; then
     fi
     # update neovim
     pushd ~/.dotfiles/neovim
-    git pull | grep -q "Already up-to-date"
-    if [ $? -ne 0 ]; then
+    result=0
+    output=$(git pull | grep -q "Already up to date") || result=$?
+    if [ $result -ne 0 ]; then
         echo "[INFO] update neovim"
         git pull
-        make distclean
+        sudo make distclean
         make CMAKE_BUILD_TYPE=RelWithDebInfo
         sudo make install
     fi
@@ -92,16 +96,11 @@ if ! type pyenv >/dev/null 2>&1; then
     export _OLD_VIRTUAL_PS1=""
     eval "$(pyenv init --path)"
     eval "$(pyenv virtualenv-init -)"
+elif type brew >/dev/null 2>&1; then
+    brew upgrade pyenv
 else
   pyenv update
 fi
-## set env to avoid errors in pyenv/virtualenv init
-#export PROMPT_COMMAND=""
-#export PYENV_VIRTUALENV_DISABLE_PROMPT=1
-#eval "$(pyenv virtualenv-init -)"
-#export _OLD_VIRTUAL_PATH=""
-#export _OLD_VIRTUAL_PYTHONHOME=""
-#export _OLD_VIRTUAL_PS1=""
 
 # create envs and install python versions for neovim by pyenv-virtualenv
 PYENV_ROOT="$HOME/.pyenv"
@@ -112,11 +111,11 @@ NEOVIM_VIRTUAL_ENVS=("neovim2" "neovim3")
 i=0
 for PYTHON_VERSION in "${PYTHON_VERSIONS[@]}" 
 do
-    pyenv install -s $PYTHON_VERSION
     NEOVIM_VIRTUAL_ENV=${NEOVIM_VIRTUAL_ENVS[i]}
     result=0
     output=$(pyenv versions | grep -q $NEOVIM_VIRTUAL_ENV) || result=$?
    if [ $result -ne 0 ]; then 
+        pyenv install -s $PYTHON_VERSION
         pyenv virtualenv $PYTHON_VERSION $NEOVIM_VIRTUAL_ENV
         PYTHON_PATH=$PYENV_ROOT/versions/$NEOVIM_VIRTUAL_ENV/bin/python
         eval "$PYTHON_PATH -m pip install --upgrade pip"
@@ -132,11 +131,11 @@ done
 DEFAULT_SHELL=$(echo $SHELL | awk -F '[/]' '{print $NF}')
 if [ "$DEFAULT_SHELL" != "zsh" ]; then
     result=$(cat /etc/shells | grep -q "zsh")
+    echo "[INFO] Change default shell to zsh"
     if [ $? -ne 0 ]; then
-        echo "[INFO] Change default shell to zsh"
         echo $(which zsh) >> /etc/shells
     fi
-  # chsh -s /home/linuxbrew/.linuxbrew/bin/zsh
+    sudo chsh -s $(which zsh) $(whoami)
 fi
 
 # install zprezto and setup zsh dotfiles
