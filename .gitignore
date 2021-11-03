@@ -12,3 +12,9 @@ plastic.vim/
 edge/
 .env
 .zprezto
+<<<<<<< HEAD
+=======
+.zplug
+iceberg.tmux.conf
+>>>>>>> 6f4064b... Update configs
+vimspector-config
