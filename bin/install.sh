@@ -15,7 +15,7 @@ if [ "$OS" = "centos" ] || [ "$OS" = "amzn" ]; then
       readline-devel sqlite sqlite-devel openssl-devel xz \
       xz-devel libffi-devel make libtool autoconf automake \
       cmake gcc gcc-c++ make pkgconfig unzip xclip gettext \
-      patch ctags zsh zplug
+      patch ctags zsh
     # install neovim prerequisites
     sudo yum -y install ninja-build libtool autoconf automake \
         cmake gcc gcc-c++ make pkgconfig unzip patch gettext curl
@@ -54,15 +54,17 @@ elif [ "$OS" = "ubuntu" ]; then
     # set timezone
     TZ=Asia/Tokyo
     sudo ln -snf /usr/share/zoneinfo/$TZ /etc/localtime # && echo $TZ > /etc/timezone
-    export DEBIAN_FRONTEND=noninteractive
+    export DEBIAN_FEND=noninteractive
     sudo apt update -y && sudo apt install -y build-essential  
     sudo apt-key adv --refresh-keys --keyserver keyserver.ubuntu.com
+    sudo apt-get install -y language-pack-ja
     sudo apt-get install -y software-properties-common && sudo apt-get update -y
+    sudo update-locale LANG=ja_JP.UTF-8
     # install zsh, pyenv and vim plugin dependencies
     sudo apt install -y curl git file zlib1g-dev libssl-dev \
       libreadline-dev libbz2-dev libsqlite3-dev wget cmake \
       pkg-config unzip libtool libtool-bin m4 automake gettext \
-      zsh zplug x11-apps libffi-dev yarn
+      zsh x11-apps libffi-dev yarn
     # install neovim nightly
     # NOTE: nvim-treesitter needs Neovim nightly
     sudo add-apt-repository -y ppa:neovim-ppa/unstable  # ppa:neovim-ppa/stable
@@ -72,7 +74,7 @@ elif type sw_vers >/dev/null 2>&1; then
    brew update
    set +e
    # install pyenv, vim plugins and zsh
-   brew install node yarn wget tmux go zsh zplug fzf source-highlight gcc  # pyenv pyenv-virtualenv
+   brew install node yarn wget tmux go zsh fzf source-highlight gcc  # pyenv pyenv-virtualenv
    # install neovim nightly
    brew install --HEAD luajit
    brew install --HEAD neovim 
@@ -138,15 +140,23 @@ if [ "$DEFAULT_SHELL" != "zsh" ]; then
     sudo chsh -s $(which zsh) $(whoami)
 fi
 
+# install zplug
+if [ ! -e $HOME/.dotfiles/.zplug ]; then
+    echo "[INFO] Install zplug"
+    export ZPLUG_HOME=$HOME/.dotfiles/.zplug
+    git clone https://github.com/zplug/zplug $ZPLUG_HOME
+fi
+
+
 # install zprezto and setup zsh dotfiles
 if [ ! -e $HOME/.dotfiles/.zprezto ]; then
-  echo "[INFO] Install zprezto"
-  git clone --recursive https://github.com/sorin-ionescu/prezto.git ~/.dotfiles/.zprezto
-  for rcfile_name in zlogin zlogout zpreztorc zprofile zshenv; do
-    if [ ! -e $HOME/$rcfile_name ]; then
-      ln -s "$HOME/.dotfiles/.zprezto/runcoms/.$rcfile_name" "$HOME/.$rcfile_name" 
-    fi
-  done
+    echo "[INFO] Install zprezto"
+    git clone --recursive https://github.com/sorin-ionescu/prezto.git ~/.dotfiles/.zprezto
+    for rcfile_name in zlogin zlogout zpreztorc zprofile zshenv; do
+        if [ ! -e $HOME/$rcfile_name ]; then
+            ln -s "$HOME/.dotfiles/.zprezto/runcoms/.$rcfile_name" "$HOME/.$rcfile_name" 
+        fi
+    done
 fi
 
 # download color schema for vim
@@ -185,7 +195,7 @@ fi
 if [ ! -L ~/.vimrc ]; then
   ln -s ~/.dotfiles/.vimrc ~/.vimrc
 fi
-if [ ! -e ~/.config/nvim ]; then
+if [ ! -L ~/.config/nvim/init.vim ]; then
   mkdir -p ~/.config/nvim 
   ln -s ~/.vimrc ~/.config/nvim/init.vim
 fi

@@ -12,4 +12,6 @@ plastic.vim/
 edge/
 .env
 .zprezto
+.zplug
+iceberg.tmux.conf
 vimspector-config

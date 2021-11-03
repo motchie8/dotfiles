@@ -28,14 +28,9 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
  
 # setup zplug
-if [ -e /home/linuxbrew/.linuxbrew/opt/zplug ]; then
-  export ZPLUG_HOME=/home/linuxbrew/.linuxbrew/opt/zplug
+export ZPLUG_HOME=$HOME/.dotfiles/.zplug
+if [ -e $ZPLUG_HOME ]; then
   source $ZPLUG_HOME/init.zsh
-elif [ -e /usr/local/bin/zplug ]; then
-  export ZPLUG_HOME=/usr/local/bin/zplug
-  source $ZPLUG_HOME/init.zsh
-else
-  echo "zplug init.zsh was not loaded correctly"
 fi
 
 zplug "zsh-users/zsh-completions"
@@ -203,8 +198,8 @@ ulimit -c 0
 PROMPT='%F{cyan}%n@%m%f:%~# '
 
 # promptテーマ設定
-prompt skwp
-# zstyle ':prezto:module:prompt' theme 'skwp'
+# prompt skwp
+zstyle ':prezto:module:prompt' theme 'skwp'
 
 # -----------------------------
 # Completion

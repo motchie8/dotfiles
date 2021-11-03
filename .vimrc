@@ -30,11 +30,11 @@ endif
 filetype plugin indent on
 syntax enable
 
-let s:pyenv_root = expand('~/.pyenv')
+let g:pyenv_root = expand('~/.pyenv')
 " python path
-if isdirectory(s:pyenv_root)
-    let g:python3_host_prog = s:pyenv_root . '/versions/neovim3/bin/python'
-    let g:python_host_prog = s:pyenv_root . '/versions/neovim2/bin/python'
+if isdirectory(g:pyenv_root)
+    let g:python3_host_prog = g:pyenv_root . '/versions/neovim3/bin/python'
+    let g:python_host_prog = g:pyenv_root . '/versions/neovim2/bin/python'
 endif
 
 set hidden
