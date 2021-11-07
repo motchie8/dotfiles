@@ -101,7 +101,7 @@ if ! type pyenv >/dev/null 2>&1; then
 elif type brew >/dev/null 2>&1; then
     brew upgrade pyenv
 else
-  pyenv update
+    pyenv update
 fi
 
 # create envs and install python versions for neovim by pyenv-virtualenv
@@ -116,7 +116,7 @@ do
     NEOVIM_VIRTUAL_ENV=${NEOVIM_VIRTUAL_ENVS[i]}
     result=0
     output=$(pyenv versions | grep -q $NEOVIM_VIRTUAL_ENV) || result=$?
-   if [ $result -ne 0 ]; then 
+    if [ $result -ne 0 ]; then 
         pyenv install -s $PYTHON_VERSION
         pyenv virtualenv $PYTHON_VERSION $NEOVIM_VIRTUAL_ENV
         PYTHON_PATH=$PYENV_ROOT/versions/$NEOVIM_VIRTUAL_ENV/bin/python

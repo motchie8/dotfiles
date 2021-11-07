@@ -1,8 +1,5 @@
 global-*
 neovim/
-GPATH
-GRTAGS
-GTAGS
 node_modules/
 vim/sessions/
 candid.vim/
@@ -11,10 +8,9 @@ rigel/
 plastic.vim/
 edge/
 .env
-.secrets
 .zprezto
-.zplug
-iceberg.tmux.conf
+.git
 vimspector-config
+.secrets
 .globalrc
 vim/selected
