@@ -22,10 +22,12 @@ hook_add = '''
 repo = "goerz/jupytext.vim"
 on_ft = ["python", "ipynb"]
 hook_add = '''
+    let g:jupytext_enable = 1
     " セルの区切り文字をVSCode互換の # %% に指定する
     let g:jupytext_fmt = 'py:percent'
     " vimのPython向けシンタックスハイライトを有効にする
     let g:jupytext_filetype_map = {'py': 'python'}
+    let g:jupytext_command = '~/.pyenv/versions/neovim3/bin/jupytext'
 '''
 
 [[plugins]]
@@ -49,11 +51,11 @@ hook_add = '''
 ### SQL ###
 [[plugins]]
 repo = 'kristijanhusak/vim-dadbod-ui'
-on_ft = ["sql"]
+# on_ft = ["sql"]
 
 [[plugins]]
 repo = 'kristijanhusak/vim-dadbod'
-on_ft = ["sql"]
+# on_ft = ["sql"]
 depends = ['vim-dadbod-ui']
 hook_add = '''
     " specify db connections in .env using the following prefix
