@@ -14,15 +14,15 @@ if [ -e /home/linuxbrew/.linuxbrew/bin ]; then
     eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 fi
 ## for pyenv
-export PATH="$HOME/.pyenv/bin:$PATH"
 export PYENV_PATH=$HOME/.pyenv
+export PYENV_ROOT=$HOME/.pyenv
+export PATH="$PYENV_ROOT/shims:$PATH"
+export PATH="$PYENV_PATH/bin:$PATH"
 if which pyenv > /dev/null; then
     eval "$(pyenv init --path)"
-    # eval "$(pyenv init -)" 
     eval "$(pyenv virtualenv-init -)"
+    eval "$(pyenv init -)" 
 fi
-# export PATH="$PYENV_ROOT/shims:$PATH"
-# export PYENV_SHELL=zsh
 # for npm
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm

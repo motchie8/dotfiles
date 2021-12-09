@@ -11,14 +11,30 @@ if [ "$OS" = "centos" ] || [ "$OS" = "amzn" ]; then
     fi
     sudo yum update -y && sudo yum groupinstall "Development Tools" -y
     # install zsh, pyenv and vim plugin dependencies
+    # uninstall openssl10 for openssl11
+    sudo yum remove openssl -y
     sudo yum install -y git xsel zlib-devel bzip2 bzip2-devel \
-      readline-devel sqlite sqlite-devel openssl-devel xz \
+      readline-devel sqlite sqlite-devel openssl11-devel xz \
       xz-devel libffi-devel make libtool autoconf automake \
       cmake gcc gcc-c++ make pkgconfig unzip xclip gettext \
-      patch ctags zsh
+      patch ctags zsh wget util-linux-user
     # install neovim prerequisites
     sudo yum -y install ninja-build libtool autoconf automake \
         cmake gcc gcc-c++ make pkgconfig unzip patch gettext curl
+    # install cmake v3
+    if [ ! -e ~/.dotfiles/cmake-3.22.1 ]; then
+	# uninstall cmake v2
+	sudo yum remove cmake -y
+        pushd ~/.dotfiles
+        wget https://cmake.org/files/v3.22/cmake-3.22.1.tar.gz
+        tar -xvzf cmake-3.22.1.tar.gz
+        pushd cmake-3.22.1
+        ./bootstrap
+        sudo make
+        sudo make install
+        popd
+        popd
+    fi
     # install neovim
     if ! type nvim >/dev/null 2>&1; then  
         echo "[INFO] install neovim for $OS"
