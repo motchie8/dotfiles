@@ -5,11 +5,11 @@
 
 # setup PATH
 ## for rust
-# export PATH="$HOME/bin:$HOME/.cargo/bin:$PATH"
-export PATH="/home/motchie/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin:$PATH"
-export PATH="/usr/local/bin:$PATH"
+export PATH="$HOME/bin:$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin:$PATH"
 ## for go
 export PATH=$PATH:/usr/local/go/bin
+export PATH=$PATH:$HOME/go/bin
 ## for homebrew in non macOS envs
 if [ -e /home/linuxbrew/.linuxbrew/bin ]; then
     export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
