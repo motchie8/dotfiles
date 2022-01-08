@@ -18,10 +18,14 @@ if [ "$OS" = "centos" ] || [ "$OS" = "amzn" ]; then
       xz-devel libffi-devel make libtool autoconf automake \
       cmake gcc gcc-c++ make pkgconfig unzip xclip gettext \
       patch ctags zsh wget util-linux-user
+    # install xclip
+    sudo amazon-linux-extras install epel -y
+    sudo yum-config-manager --enable epel
+    sudo yum install xclip -y
     # install neovim prerequisites
     sudo yum -y install ninja-build libtool autoconf automake \
-        cmake gcc gcc-c++ make pkgconfig unzip patch gettext curl
-    # install cmake v3
+        gcc gcc-c++ make pkgconfig unzip patch gettext curl
+    # install cmake v3 for nvim
     if [ ! -e ~/.dotfiles/cmake-3.22.1 ]; then
 	# uninstall cmake v2
 	sudo yum remove cmake -y
@@ -35,10 +39,7 @@ if [ "$OS" = "centos" ] || [ "$OS" = "amzn" ]; then
         popd
         popd
     fi
-    # install xclip
-    sudo amazon-linux-extras install epel -y
-    sudo yum-config-manager --enable epel
-    sudo yum install xclip -y
+    
     # install neovim
     if ! type nvim >/dev/null 2>&1; then  
         echo "[INFO] install neovim for $OS"
@@ -250,6 +251,7 @@ if ! type go > /dev/null 2>&1; then
         wget https://go.dev/dl/go1.17.6.linux-amd64.tar.gz
         sudo rm -rf /usr/local/go
         sudo tar -C /usr/local -xzf go1.17.6.linux-amd64.tar.gz
+	rm go1.17.6.linux-amd64.tar.gz
 	export PATH=$PATH:/usr/local/go/bin
     fi
 fi

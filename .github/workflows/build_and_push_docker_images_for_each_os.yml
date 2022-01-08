@@ -1,0 +1,22 @@
+# test locally: $ act --secret-file .secrets
+name: Build and push docker images for each OS
+on:
+  push:
+    branches:
+      - main
+      - master
+jobs:
+  build_and_push_docker_image_for_ubuntu:
+    uses: motchie8/.dotfiles/.github/workflows/build_and_push_docker_image.yml
+    with:
+      os: ubuntu
+    secrets:
+      docker_username: ${{ secrets.DOCKER_USERNAME }}
+      docker_password: ${{ secrets.DOCKER_PASSWORD }}
+  build_and_push_docker_image_for_amzn2:
+    uses: motchie8/.dotfiles/.github/workflows/build_and_push_docker_image.yml
+    with:
+      os: amzn2
+    secrets:
+      docker_username: ${{ secrets.DOCKER_USERNAME }}
+      docker_password: ${{ secrets.DOCKER_PASSWORD }}
