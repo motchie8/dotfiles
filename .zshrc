@@ -8,6 +8,8 @@
 # export PATH="$HOME/bin:$HOME/.cargo/bin:$PATH"
 export PATH="/home/motchie/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin:$PATH"
 export PATH="/usr/local/bin:$PATH"
+## for go
+export PATH=$PATH:/usr/local/go/bin
 ## for homebrew in non macOS envs
 if [ -e /home/linuxbrew/.linuxbrew/bin ]; then
     export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"

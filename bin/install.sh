@@ -35,6 +35,10 @@ if [ "$OS" = "centos" ] || [ "$OS" = "amzn" ]; then
         popd
         popd
     fi
+    # install xclip
+    sudo amazon-linux-extras install epel -y
+    sudo yum-config-manager --enable epel
+    sudo yum install xclip -y
     # install neovim
     if ! type nvim >/dev/null 2>&1; then  
         echo "[INFO] install neovim for $OS"
@@ -90,7 +94,7 @@ elif type sw_vers >/dev/null 2>&1; then
    brew update
    set +e
    # install pyenv, vim plugins and zsh
-   brew install node yarn wget tmux go zsh fzf source-highlight gcc  # pyenv pyenv-virtualenv
+   brew install node yarn wget tmux go zsh fzf source-highlight gcc cmake # pyenv pyenv-virtualenv
    # install neovim nightly
    brew install --HEAD luajit
    brew install --HEAD neovim 
@@ -201,6 +205,20 @@ if ! type node > /dev/null 2>&1; then
     # nvm use --lts
 fi
 
+# install tmux-mem-cpu-load
+if [ ! -e ~/.dotfiles/tmux/tmux-mem-cpu-load ]; then
+    git clone https://github.com/thewtex/tmux-mem-cpu-load.git ~/.dotfiles/tmux/tmux-mem-cpu-load
+    pushd ~/.dotfiles/tmux/tmux-mem-cpu-load
+    cmake .
+    make
+    if type sw_vers >/dev/null 2>&1; then
+        make install
+    else
+	sudo make install
+    fi
+    popd
+fi
+
 # setup symbolic links
 if [ ! -L ~/.zshrc ]; then
   ln -s ~/.dotfiles/.zshrc ~/.zshrc
@@ -224,14 +242,21 @@ if [ ! -L ~/.config/nvim/coc-settings.json ]; then
   ln -s ~/.dotfiles/coc-settings.json ~/.config/nvim/coc-settings.json
 fi
 
+# install go
+if ! type go > /dev/null 2>&1; then
+    if type brew >/dev/null 2>&1; then
+        brew install go
+    else
+        wget https://go.dev/dl/go1.17.6.linux-amd64.tar.gz
+        sudo rm -rf /usr/local/go
+        sudo tar -C /usr/local -xzf go1.17.6.linux-amd64.tar.gz
+    fi
+fi
+# install git-appraise
+go get github.com/google/git-appraise/git-appraise
+    
 # NOTE: Commented out because it is not currently in use
 ## install lemonade to copy text from Linux to Windows via SSH
-#if ! type go > /dev/null 2>&1; then
-#  wget https://dl.google.com/go/go1.13.3.linux-amd64.tar.gz
-#  sudo tar -C /usr/local -xzf go1.13.3.linux-amd64.tar.gz
-#  echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.bashrc
-#  source ~/.bash_profile
-#fi
 #if ! type lemonade > /dev/null 2>&1; then
 #  go get github.com/pocke/lemonade
 #  cd ~/go/src/github.com/lemonade-command/lemonade/
