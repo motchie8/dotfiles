@@ -34,7 +34,7 @@ if [ "$OS" = "centos" ] || [ "$OS" = "amzn" ]; then
         tar -xvzf cmake-3.22.1.tar.gz
         pushd cmake-3.22.1
         ./bootstrap
-        sudo make
+        make
         sudo make install
         popd
         popd
