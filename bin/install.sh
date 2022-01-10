@@ -22,6 +22,9 @@ if [ "$OS" = "centos" ] || [ "$OS" = "amzn" ]; then
     sudo amazon-linux-extras install epel -y
     sudo yum-config-manager --enable epel
     sudo yum install xclip -y
+    # install ripgrep for telescope
+    sudo yum-config-manager --add-repo=https://copr.fedorainfracloud.org/coprs/carlwgeorge/ripgrep/repo/epel-7/carlwgeorge-ripgrep-epel-7.repo
+    sudo yum install ripgrep -y
     # install neovim prerequisites
     sudo yum -y install ninja-build libtool autoconf automake \
         gcc gcc-c++ make pkgconfig unzip patch gettext curl
@@ -86,6 +89,8 @@ elif [ "$OS" = "ubuntu" ]; then
       libreadline-dev libbz2-dev libsqlite3-dev wget cmake \
       pkg-config unzip libtool libtool-bin m4 automake gettext \
       zsh x11-apps libffi-dev yarn
+    # install ripgrep for telescope
+    sudo apt-get install ripgrep -y
     # install neovim nightly
     # NOTE: nvim-treesitter needs Neovim nightly
     sudo add-apt-repository -y ppa:neovim-ppa/unstable  # ppa:neovim-ppa/stable
@@ -95,7 +100,7 @@ elif type sw_vers >/dev/null 2>&1; then
    brew update
    set +e
    # install pyenv, vim plugins and zsh
-   brew install node yarn wget tmux go zsh fzf source-highlight gcc cmake # pyenv pyenv-virtualenv
+   brew install node yarn wget tmux go zsh fzf source-highlight gcc cmake ripgrep # pyenv pyenv-virtualenv
    # install neovim nightly
    brew install --HEAD luajit
    brew install --HEAD neovim 
