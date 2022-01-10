@@ -17,7 +17,7 @@ if [ "$OS" = "centos" ] || [ "$OS" = "amzn" ]; then
       readline-devel sqlite sqlite-devel openssl11-devel xz \
       xz-devel libffi-devel make libtool autoconf automake \
       cmake gcc gcc-c++ make pkgconfig unzip xclip gettext \
-      patch ctags zsh wget util-linux-user
+      patch ctags zsh wget util-linux-user which
     # install xclip
     sudo amazon-linux-extras install epel -y
     sudo yum-config-manager --enable epel

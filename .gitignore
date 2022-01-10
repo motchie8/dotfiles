@@ -19,3 +19,4 @@ iceberg.tmux.conf
 vimspector-config
 .globalrc
 vim/selected
+tmux/
