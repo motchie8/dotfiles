@@ -39,6 +39,7 @@ if [ "$OS" = "centos" ] || [ "$OS" = "amzn" ]; then
         popd
         popd
     fi
+    export PATH="/usr/local/bin:$PATH"
     
     # install neovim
     if ! type nvim >/dev/null 2>&1; then  
