@@ -33,13 +33,12 @@ if [ "$OS" = "centos" ] || [ "$OS" = "amzn" ]; then
         wget https://cmake.org/files/v3.22/cmake-3.22.1.tar.gz
         tar -xvzf cmake-3.22.1.tar.gz
         pushd cmake-3.22.1
-        ./bootstrap
+        ./bootstrap --prefix=/usr
         make
         sudo make install
         popd
         popd
     fi
-    export PATH="/usr/local/bin:$PATH"
     
     # install neovim
     if ! type nvim >/dev/null 2>&1; then  
