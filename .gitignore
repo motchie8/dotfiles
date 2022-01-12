@@ -20,3 +20,4 @@ vimspector-config
 .globalrc
 vim/selected
 tmux/
+fzf/

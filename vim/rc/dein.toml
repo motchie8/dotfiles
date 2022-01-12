@@ -76,6 +76,7 @@ hook_add = '''
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
     ensure_installed = "maintained",
+    ignore_install = { "php", "tlaplus" },
     highlight = {
         enable = true,
         disable = {}

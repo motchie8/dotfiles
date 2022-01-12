@@ -64,7 +64,8 @@ if [ -e /usr/bin/terraform ]; then
     complete -o nospace -C /usr/bin/terraform terraform
 fi
 
-## fzf
+# for fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # fh - repeat history
 fh() {
   print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed -E 's/ *[0-9]*\*? *//' | sed -E 's/\\/\\\\/g')
@@ -88,10 +89,13 @@ fi
 # -----------------------------
 
 # set locale
-export LANG="ja_JP.utf8"
-export LC_ALL="ja_JP.utf8"
-export LC_CTYPE="ja_JP.utf8"
+export LANG="ja_JP.UTF-8"
+export LC_ALL="ja_JP.UTF-8"
+export LC_CTYPE="ja_JP.UTF-8"
 export LANGUAGE="ja_JP:ja"
+
+# CLIでコメントを有効化
+setopt interactivecomments
 
 # 色を使用
 autoload -Uz colors ; colors

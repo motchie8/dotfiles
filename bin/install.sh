@@ -100,7 +100,7 @@ elif type sw_vers >/dev/null 2>&1; then
    brew update
    set +e
    # install pyenv, vim plugins and zsh
-   brew install node yarn wget tmux go zsh fzf source-highlight gcc cmake ripgrep # pyenv pyenv-virtualenv
+   brew install node yarn wget tmux go zsh source-highlight gcc cmake ripgrep # pyenv pyenv-virtualenv
    # install neovim nightly
    brew install --HEAD luajit
    brew install --HEAD neovim 
@@ -242,6 +242,12 @@ fi
 go get github.com/google/git-appraise/git-appraise
 # install act for github actions
 go install github.com/nektos/act@latest
+
+# install fzf
+if [ ! -e ~/.dotfiles/fzf ]; then
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.dotfiles/fzf
+    ~/.dotfiles/fzf/install --key-bindings --completion --no-update-rc
+fi
     
 # NOTE: Commented out because it is not currently in use
 ## install lemonade to copy text from Linux to Windows via SSH
