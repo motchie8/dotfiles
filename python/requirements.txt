@@ -1,3 +1,5 @@
+wheel
+poetry
 neovim
 flake8
 flake8-import-order
@@ -10,3 +12,5 @@ jupytext
 qtconsole
 pyqt5
 jupyter
+pysen
+mypy

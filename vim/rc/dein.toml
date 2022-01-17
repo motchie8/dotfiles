@@ -179,7 +179,7 @@ rev = 'release'
 merged = '0'
 hook_add = '''
     " add default extensions
-    " let g:coc_global_extensions = [ 'coc-lists', 'coc-json', 'coc-yaml', 'coc-pyright', 'coc-jedi', 'coc-cfn-lint', 'coc-sh', 'coc-rls', 'coc-rust-analyzer' ]
+    let g:coc_global_extensions = [ 'coc-lists', 'coc-highlight', 'coc-json', 'coc-yaml', 'coc-pyright', 'coc-jedi', 'coc-cfn-lint', 'coc-sh', 'coc-rls', 'coc-rust-analyzer', '@yaegassy/coc-pysen' ]
 
     " TextEdit might fail if hidden is not set.
     set hidden
