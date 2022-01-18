@@ -128,14 +128,14 @@ set laststatus=2
 set clipboard+=unnamedplus
 
 " autocomplete
-inoremap { {}<Left>
-inoremap {<Enter> {}<Left><CR><ESC><S-o>
-inoremap ( ()<ESC>i
-inoremap (<Enter> ()<Left><CR><ESC><S-o>
-inoremap [ []<ESC>i
-inoremap [<Enter> []<Left><CR><ESC><S-o>
-inoremap ' ''<LEFT>
-inoremap " ""<LEFT>
+" inoremap { {}<Left>
+" inoremap {<Enter> {}<Left><CR><ESC><S-o>
+" inoremap ( ()<ESC>i
+" inoremap (<Enter> ()<Left><CR><ESC><S-o>
+" inoremap [ []<ESC>i
+" inoremap [<Enter> []<Left><CR><ESC><S-o>
+" inoremap ' ''<LEFT>
+" inoremap " ""<LEFT>
 
 " color schema
 syntax on

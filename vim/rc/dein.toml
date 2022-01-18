@@ -128,6 +128,10 @@ hook_add = '''
 [[plugins]]
 repo = "tpope/vim-dotenv"
 
+# autocomplete brackets
+[[plugins]]
+repo = "jiangmiao/auto-pairs"
+
 # cheetsheet
 [[plugins]]
 repo = 'sudormrfbin/cheatsheet.nvim'
@@ -179,7 +183,23 @@ rev = 'release'
 merged = '0'
 hook_add = '''
     " add default extensions
-    let g:coc_global_extensions = [ 'coc-lists', 'coc-highlight', 'coc-json', 'coc-yaml', 'coc-pyright', 'coc-jedi', 'coc-cfn-lint', 'coc-sh', 'coc-rls', 'coc-rust-analyzer', '@yaegassy/coc-pysen' ]
+    let g:coc_global_extensions = [\
+        'coc-lists',\
+        'coc-highlight',\
+        'coc-json',/
+        'coc-yaml',/
+        'coc-pyright',/
+        'coc-jedi',/
+        'coc-cfn-lint',/
+        'coc-sh',/
+        'coc-rls',/
+        'coc-rust-analyzer',/
+        '@yaegassy/coc-pysen',/
+        'coc-tsserver',/
+        'coc-eslint',/
+        'coc-prettier',/
+        'coc-react-refactor'\
+    ]
 
     " TextEdit might fail if hidden is not set.
     set hidden
