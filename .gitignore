@@ -21,3 +21,4 @@ vimspector-config
 vim/selected
 tmux/
 fzf/
+vim/.netrwhist

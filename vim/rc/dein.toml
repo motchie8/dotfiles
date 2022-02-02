@@ -137,7 +137,7 @@ repo = "jiangmiao/auto-pairs"
 repo = 'sudormrfbin/cheatsheet.nvim'
 hook_add = '''
 lua <<EOF
-require("cheatsheet").setup({
+require'cheatsheet'.setup {
     -- Whether to show bundled cheatsheets
     -- For generic cheatsheets like default, unicode, nerd-fonts, etc
     -- bundled_cheatsheets = {
@@ -165,7 +165,7 @@ require("cheatsheet").setup({
         ['<C-Y>'] = require('cheatsheet.telescope.actions').copy_cheat_value,
         ['<C-E>'] = require('cheatsheet.telescope.actions').edit_user_cheatsheet,
     }
-})
+}
 EOF
 '''
 [[plugins]]
@@ -183,23 +183,7 @@ rev = 'release'
 merged = '0'
 hook_add = '''
     " add default extensions
-    let g:coc_global_extensions = [\
-        'coc-lists',\
-        'coc-highlight',\
-        'coc-json',/
-        'coc-yaml',/
-        'coc-pyright',/
-        'coc-jedi',/
-        'coc-cfn-lint',/
-        'coc-sh',/
-        'coc-rls',/
-        'coc-rust-analyzer',/
-        '@yaegassy/coc-pysen',/
-        'coc-tsserver',/
-        'coc-eslint',/
-        'coc-prettier',/
-        'coc-react-refactor'\
-    ]
+    let g:coc_global_extensions = ['coc-lists', 'coc-highlight', 'coc-json', 'coc-yaml', 'coc-pyright', 'coc-jedi', 'coc-cfn-lint', 'coc-sh', 'coc-rls', 'coc-rust-analyzer', '@yaegassy/coc-pysen', 'coc-tsserver', 'coc-eslint', 'coc-prettier', 'coc-react-refactor']
 
     " TextEdit might fail if hidden is not set.
     set hidden
