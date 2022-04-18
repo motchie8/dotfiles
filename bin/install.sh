@@ -1,6 +1,42 @@
-#!/bin/bash
-# install libraries for each OS
-set -eux
+#!/usr/bin/env bash
+set -eu
+
+usage_exit() {
+    echo -e "Usage: $0\n    --target [remote|local]" 1>&2
+    exit 1
+}
+
+OPT=$(getopt -o h -l target:,help -- "$@")
+
+if [ $? != 0 ]; then
+    usage_exit
+fi
+eval set -- "$OPT"
+TARGET=
+while true
+do
+    case $1 in
+        --target) TARGET=$2 
+            shift 2
+            ;;
+        -h | --help) usage_exit
+            ;;
+        --) shift
+            break
+            ;;
+        *)
+            echo "Unexpected behavior" 1>&2
+            exit 1
+            ;;
+    esac
+done
+
+if [ "${TARGET:-}" = "" ];then
+    usage_exit
+elif [ $TARGET != "remote" ] && [ $TARGET != "local" ]; then
+    echo "target argument must be 'remote' or 'local', but given value was $TARGET."
+    exit 1
+fi
 
 OS=$(cat /etc/os-release | grep -E '^ID="?[^"]*"?$' | tr -d '"' | awk -F '[=]' '{print $NF}')
 
@@ -192,12 +228,15 @@ if [ ! -e ~/.dotfiles/iceberg.vim ]; then
   git clone https://github.com/cocopon/iceberg.vim
   mkdir -p ~/.config/nvim/colors
   ln -s ~/.dotfiles/iceberg.vim/colors/iceberg.vim ~/.config/nvim/colors/iceberg.vim
-  wget -O $HOME/.dotfiles/iceberg.tmux.conf https://raw.githubusercontent.com/gkeep/iceberg-dark/master/.tmux/iceberg.tmux.conf
   popd
 else
   pushd ~/.dotfiles/iceberg.vim
   git pull
   popd
+fi
+
+if [ ! -e ~/.dotfiles/iceberg.tmux.conf ];then
+    wget -O $HOME/.dotfiles/iceberg.tmux.conf https://raw.githubusercontent.com/gkeep/iceberg-dark/master/.tmux/iceberg.tmux.conf
 fi
 
 # install or update npm and node for coc-nvim
@@ -238,10 +277,12 @@ if ! type go > /dev/null 2>&1; then
     fi
 fi
 
-# install git-appraise
-go get github.com/google/git-appraise/git-appraise
-# install act for github actions
-go install github.com/nektos/act@latest
+if [ ! -e ~/go/bin/git-appraise ];then
+    # install git-appraise
+    go get github.com/google/git-appraise/git-appraise
+    # install act for github actions
+    go install github.com/nektos/act@latest
+fi
 
 # install fzf
 if [ ! -e ~/.dotfiles/fzf ]; then
@@ -279,9 +320,14 @@ if [ ! -L ~/.config/nvim/init.vim ]; then
   ln -s ~/.vimrc ~/.config/nvim/init.vim
 fi
 if [ ! -L ~/.tmux.conf ]; then
-  ln -s ~/.dotfiles/.tmux.conf ~/.tmux.conf
-  # NOTE: tmux config for SSH host client to avoid hotkeys to duplicate
-  # ln -s ~/.dotfiles/.tmux.host.conf ~/.tmux.conf
+  if [ $TARGET = "remote" ]; then
+      ln -s ~/.dotfiles/remote.tmux.conf ~/.tmux.conf
+  elif [ $TARGET = "local" ]; then
+      ln -s ~/.dotfiles/local.tmux.conf ~/.tmux.conf
+  else
+      echo "target argument must be 'remote' or 'local', but given value was $TARGET."
+      exit 1
+  fi
 fi
 if [ ! -L ~/.config/nvim/coc-settings.json ]; then
   ln -s ~/.dotfiles/coc-settings.json ~/.config/nvim/coc-settings.json

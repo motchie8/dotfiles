@@ -1,3 +1,25 @@
+### Viewer ###
+[[plugins]]
+repo = 'nvim-treesitter/nvim-treesitter'
+hook_post_update = 'TSUpdate'
+merged = '0'
+on_event = 'BufRead'
+hook_source = '''
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+    ensure_installed = "maintained",
+    ignore_install = { "php", "tlaplus" },
+    highlight = {
+        enable = true,
+        disable = {}
+    },
+    indent = {
+        enable = true
+    }
+}
+EOF
+'''
+
 ### Python ###
 [[plugins]]
 repo = 'lambdalisue/vim-pyenv'
@@ -22,6 +44,7 @@ hook_add = '''
 repo = "goerz/jupytext.vim"
 on_ft = ["python", "ipynb"]
 hook_add = '''
+    execute 'source' '~/.cache/dein/repos/github.com/goerz/jupytext.vim/plugin/jupytext.vim'
     let g:jupytext_enable = 1
     " セルの区切り文字をVSCode互換の # %% に指定する
     let g:jupytext_fmt = 'py:percent'
