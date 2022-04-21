@@ -14,3 +14,44 @@ parser.add_argument(
 	type=${2:type},
 )
 endsnippet
+
+snippet def "Definition with Google Style Docstring"
+def ${1:func}(${2:arg1}: ${3:type}) -> ${4:type}:
+	"""description
+
+	Args:
+		$2 ($3): description
+
+	Returns:
+		$4: description
+
+	Examples:
+		>>> $1($2=...)
+		"value"
+	"""
+endsnippet
+
+snippet defn "Definition with Numpy Style Docstring"
+def ${1:func}(${2:arg1}: ${3:type}) -> ${4:type}:
+	"""description
+
+	Parameters
+	-------
+	$2 : $3
+		description
+
+	Returns
+	-------
+	$4
+		description
+
+	Examples
+	------
+	>>> $1($2=...)
+	"value"
+	"""
+endsnippet
+
+snippet assert "Assert Dict Equals"
+unittest.TestCase().assertDictEqual(${1:expected}, ${2:actual})
+endsnippet
