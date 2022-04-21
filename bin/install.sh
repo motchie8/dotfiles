@@ -12,7 +12,6 @@ if [ $? != 0 ]; then
     usage_exit
 fi
 eval set -- "$OPT"
-TARGET=
 while true
 do
     case $1 in

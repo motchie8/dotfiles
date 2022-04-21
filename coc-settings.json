@@ -22,5 +22,10 @@
       "initializationOptions": {},
       "settings": {}
     }
-  }
+  },
+  "snippets.ultisnips.directories": [
+    "~/.cache/dein/repos/github.com/honza/vim-snippets/UltiSnips",
+    "~/.dotfiles/snippets"
+  ],
+ "suggest.noselect": false
 }

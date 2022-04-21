@@ -74,11 +74,11 @@ hook_add = '''
 ### SQL ###
 [[plugins]]
 repo = 'kristijanhusak/vim-dadbod-ui'
-# on_ft = ["sql"]
+on_ft = ["sql"]
 
 [[plugins]]
 repo = 'kristijanhusak/vim-dadbod'
-# on_ft = ["sql"]
+on_ft = ["sql"]
 depends = ['vim-dadbod-ui']
 hook_add = '''
     " specify db connections in .env using the following prefix

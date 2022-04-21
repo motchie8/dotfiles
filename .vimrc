@@ -1,3 +1,11 @@
+" set python path
+let g:pyenv_root = expand('~/.pyenv')
+" python path
+if isdirectory(g:pyenv_root)
+    let g:python3_host_prog = g:pyenv_root . '/versions/neovim3/bin/python'
+    let g:python_host_prog = g:pyenv_root . '/versions/neovim2/bin/python'
+endif
+
 " setup dein.vim
 if &compatible
   set nocompatible
@@ -30,15 +38,7 @@ endif
 filetype plugin indent on
 syntax enable
 
-let g:pyenv_root = expand('~/.pyenv')
-" python path
-if isdirectory(g:pyenv_root)
-    let g:python3_host_prog = g:pyenv_root . '/versions/neovim3/bin/python'
-    let g:python_host_prog = g:pyenv_root . '/versions/neovim2/bin/python'
-endif
-
 set hidden
-
 " keymappings
 inoremap jj <ESC>
 nnoremap ; :

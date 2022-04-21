@@ -1,0 +1,16 @@
+snippet args "Initialize argument parser"
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument(
+	"--${1:key}",
+	type=${2:type},
+)
+args = parser.parse_args()
+endsnippet
+
+snippet arg "Add argument parser"
+parser.add_argument(
+	"--${1:key}",
+	type=${2:type},
+)
+endsnippet

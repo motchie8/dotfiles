@@ -78,6 +78,7 @@ hook_add = '''
     let g:neoterm_shell = &shell
     let g:neoterm_size = 8
     let g:neoterm_autoscroll = 1
+    let g:neoterm_repl_python = &shell
     nnoremap <silent> <Space>C :botright Tnew<CR>:T source venv/bin/activate<CR>
     nnoremap <silent> <Space>c :botright Tnew<CR>
     tnoremap <silent> <ESC> <C-\><C-n>
@@ -153,6 +154,10 @@ repo = 'nvim-lua/plenary.nvim'
 [[plugins]]
 repo = 'nvim-telescope/telescope.nvim'
 
+# Snippet
+[[plugins]]
+repo = 'honza/vim-snippets'
+
 # IDE
 [[plugins]]
 repo = 'neoclide/coc.nvim'
@@ -160,6 +165,8 @@ rev = 'release'
 # on_i = 1
 merged = '0'
 hook_add = '''
+
+    nmap <silent> CocAction CocActionAsync
     " add default extensions
     let g:coc_global_extensions = ['coc-lists', 'coc-highlight', 'coc-json', 'coc-yaml', 'coc-pyright', 'coc-jedi', 'coc-cfn-lint', 'coc-sh', 'coc-rls', 'coc-rust-analyzer', '@yaegassy/coc-pysen', 'coc-tsserver', 'coc-eslint', 'coc-prettier', 'coc-react-refactor']
 
@@ -259,8 +266,9 @@ hook_add = '''
     
     " Applying codeAction to the selected region.
     " Example: `<Space>aap` for current paragraph
-    xmap <Space>a  <Plug>(coc-codeaction-selected)
-    nmap <Space>a  <Plug>(coc-codeaction-selected)
+    " nnoremap <silent><nowait> <Space>a  :<C-u>CocAction<cr>
+    " xmap <Space>a  <Plug>(coc-codeaction-selected)
+    " nmap <Space>a  <Plug>(coc-codeaction-selected)
 
     " Remap keys for applying codeAction to the current buffer.
     nmap <Space>ac  <Plug>(coc-codeaction)
