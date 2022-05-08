@@ -97,7 +97,6 @@ if [ "$OS" = "centos" ] || [ "$OS" = "amzn" ]; then
     output=$(git pull | grep -q "Already up to date") || result=$?
     if [ $result -ne 0 ]; then
         echo "[INFO] update neovim"
-        git pull
         sudo make distclean
         make CMAKE_BUILD_TYPE=RelWithDebInfo
         sudo make install
@@ -202,12 +201,15 @@ if [ "$DEFAULT_SHELL" != "zsh" ]; then
 fi
 
 # install zplug
+export ZPLUG_HOME=$HOME/.dotfiles/.zplug
 if [ ! -e $HOME/.dotfiles/.zplug ]; then
     echo "[INFO] Install zplug"
-    export ZPLUG_HOME=$HOME/.dotfiles/.zplug
     git clone https://github.com/zplug/zplug $ZPLUG_HOME
+else
+    pushd $ZPLUG_HOME
+    git pull
+    popd
 fi
-
 
 # install zprezto and setup zsh dotfiles
 if [ ! -e $HOME/.dotfiles/.zprezto ]; then
@@ -218,6 +220,10 @@ if [ ! -e $HOME/.dotfiles/.zprezto ]; then
             ln -s "$HOME/.dotfiles/.zprezto/runcoms/.$rcfile_name" "$HOME/.$rcfile_name" 
         fi
     done
+else
+    pushd ~/.dotfiles/.zprezto
+    git pull
+    popd
 fi
 
 # download color schema for vim
@@ -261,6 +267,20 @@ if [ ! -e ~/.dotfiles/tmux/tmux-mem-cpu-load ]; then
 	sudo make install
     fi
     popd
+else
+    pushd ~/.dotfiles/tmux/tmux-mem-cpu-load
+    result=0
+    output=$(git pull | grep -q "Already up to date") || result=$?
+    if [ $result -ne 0 ]; then
+        cmake .
+        make
+        if type sw_vers >/dev/null 2>&1; then
+            make install
+        else
+	    sudo make install
+        fi
+    fi
+    popd
 fi
 
 # install go
@@ -287,6 +307,14 @@ fi
 if [ ! -e ~/.dotfiles/fzf ]; then
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.dotfiles/fzf
     ~/.dotfiles/fzf/install --key-bindings --completion --no-update-rc
+else
+    pushd ~/.dotfiles/fzf
+    result=0
+    output=$(git pull | grep -q "Already up to date") || result=$?
+    if [ $result -ne 0 ]; then
+        ~/.dotfiles/fzf/install --key-bindings --completion --no-update-rc
+    fi
+    popd
 fi
     
 # NOTE: Commented out because it is not currently in use
@@ -305,31 +333,27 @@ fi
 #fi
 
 # setup symbolic links
-if [ ! -L ~/.zshrc ]; then
-  ln -s ~/.dotfiles/.zshrc ~/.zshrc
-fi 
-if [ ! -L ~/.vim ]; then
-  ln -s ~/.dotfiles/vim ~/.vim
+target_paths=("$HOME/.zshrc" "$HOME/.vim" "$HOME/.vimrc" "$HOME/.config/nvim/init.vim" "$HOME/.config/nvim/coc-settings.json")
+link_paths=("$HOME/.dotfiles/.zshrc" "$HOME/.dotfiles/vim" "$HOME/.dotfiles/.vimrc" "$HOME/.dotfiles/.vimrc" "$HOME/.dotfiles/coc-settings.json")
+target_paths+=("$HOME/.tmux.conf")
+if [ $TARGET = "remote" ]; then
+    link_paths+=("$HOME/.dotfiles/.tmux.remote.conf")
+elif [ $TARGET = "local" ]; then
+    link_paths+=("$HOME/.dotfiles/.tmux.local.conf")
+else
+    echo "target argument must be 'remote' or 'local', but given value was $TARGET."
+    exit 1
 fi
-if [ ! -L ~/.vimrc ]; then
-  ln -s ~/.dotfiles/.vimrc ~/.vimrc
-fi
-if [ ! -L ~/.config/nvim/init.vim ]; then
-  mkdir -p ~/.config/nvim 
-  ln -s ~/.vimrc ~/.config/nvim/init.vim
-fi
-if [ ! -L ~/.tmux.conf ]; then
-  if [ $TARGET = "remote" ]; then
-      ln -s ~/.dotfiles/remote.tmux.conf ~/.tmux.conf
-  elif [ $TARGET = "local" ]; then
-      ln -s ~/.dotfiles/local.tmux.conf ~/.tmux.conf
-  else
-      echo "target argument must be 'remote' or 'local', but given value was $TARGET."
-      exit 1
-  fi
-fi
-if [ ! -L ~/.config/nvim/coc-settings.json ]; then
-  ln -s ~/.dotfiles/coc-settings.json ~/.config/nvim/coc-settings.json
-fi
-
+mkdir -p ~/.config/nvim 
+for i in "${!target_paths[@]}"; do
+    if [ -e "${target_paths[i]}" ]; then
+        if [ ! -L "${target_paths[i]}" ]; then
+            echo "File already exists at ${target_paths[i]}, so skip creating symbolic link"
+            continue
+        else
+            unlink "${target_paths[i]}"
+        fi
+    fi
+    ln -s "${link_paths[i]}" "${target_paths[i]}"
+done
 echo "[INFO] Finished"

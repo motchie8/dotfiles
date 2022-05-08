@@ -255,6 +255,10 @@ hook_add = '''
     " Formatting selected code.
     xmap <Space>F  <Plug>(coc-format-selected)
     nmap <Space>F  <Plug>(coc-format-selected)
+
+    " keymappings for coc-snippets
+    let g:coc_snippet_next = '<c-n>'
+    let g:coc_snippet_prev = '<c-p>'
     
     augroup mygroup
       autocmd!

@@ -55,3 +55,65 @@ endsnippet
 snippet assert "Assert Dict Equals"
 unittest.TestCase().assertDictEqual(${1:expected}, ${2:actual})
 endsnippet
+
+snippet assert "Assert List Equals"
+unittest.TestCase().assertListEqual(${1:expected}, ${2:actual})
+endsnippet
+
+snippet unionfind "UnionFind"
+from dataclasses import dataclass, field
+from typing import List
+@dataclass
+class UnionFind:
+	node_size: int
+	parent_indices: List[int] = field(init=False)
+
+	def __post_init__(self) -> None:
+		self.parent_indices = [-1] * self.node_size
+
+	def root(self, idx: int) -> int:
+		if self.parent_indices[idx] < 0:
+			return idx
+		root_idx = self.root(idx=self.parent_indices[idx])
+		self.parent_indices[idx] = root_idx
+		return root_idx
+
+	def size(self, idx: int) -> int:
+		root_idx = self.root(idx=idx)
+		group_size = abs(self.parent_indices[root_idx])
+		return group_size
+
+	def merge(self, idx_a: int, idx_b: int) -> None:
+		a_root = self.root(idx=idx_a)
+		b_root = self.root(idx=idx_b)
+		if a_root == b_root >= 0:
+			return
+		if self.parent_indices[a_root] > self.parent_indices[b_root]:
+			a_root, b_root = b_root, a_root
+		self.parent_indices[a_root] += self.parent_indices[b_root]
+		self.parent_indices[b_root] = a_root
+
+	def issame(self, idx_a: int, idx_b: int) -> bool:
+		a_root = self.root(idx=idx_a)
+		b_root = self.root(idx=idx_b)
+		return a_root == b_root
+endsnippet
+
+snippet binary_search "Binary Search"
+from typing import List, Optional
+
+def binary_search(sorted_array: List[int], value: int, start_idx: Optional[int]=None, end_idx: Optional[int]=None) -> Optional[int]:
+	if start_idx is None:
+		start_idx = 0
+	if end_idx is None:
+		end_idx = len(sorted_array)
+	pivot = start_idx + int((end_idx - start_idx) / 2)
+	if sorted_array[pivot] == value: 
+		return pivot
+	elif end_idx - start_idx == 1:
+		return None
+	elif sorted_array[pivot] > value:
+		return binary_search(sorted_array=sorted_array, value=value, start_idx=start_idx, end_idx=pivot)
+	else:
+		return binary_search(sorted_array=sorted_array, value=value, start_idx=pivot+1, end_idx=end_idx)
+endsnippet
