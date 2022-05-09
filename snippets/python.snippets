@@ -99,21 +99,40 @@ class UnionFind:
 		return a_root == b_root
 endsnippet
 
-snippet binary_search "Binary Search"
+snippet binary_search "Binary Search to get index or None"
 from typing import List, Optional
 
-def binary_search(sorted_array: List[int], value: int, start_idx: Optional[int]=None, end_idx: Optional[int]=None) -> Optional[int]:
-	if start_idx is None:
-		start_idx = 0
-	if end_idx is None:
-		end_idx = len(sorted_array)
-	pivot = start_idx + int((end_idx - start_idx) / 2)
+def binary_search(sorted_array: List[int], value: int, left: Optional[int]=None, right: Optional[int]=None) -> Optional[int]:
+	if left is None:
+		left = 0
+	if right is None:
+		right = len(sorted_array)
+	pivot = left + int((right - left) / 2)
 	if sorted_array[pivot] == value: 
 		return pivot
-	elif end_idx - start_idx == 1:
+	elif right - left == 1:
 		return None
 	elif sorted_array[pivot] > value:
-		return binary_search(sorted_array=sorted_array, value=value, start_idx=start_idx, end_idx=pivot)
+		return binary_search(sorted_array=sorted_array, value=value, left=left, right=pivot)
 	else:
-		return binary_search(sorted_array=sorted_array, value=value, start_idx=pivot+1, end_idx=end_idx)
+		return binary_search(sorted_array=sorted_array, value=value, left=pivot+1, right=right)
+endsnippet
+
+snippet binary_search "Binary Search to get lower bound index"
+from typing import List
+
+def binary_search(sorted_array: List[int], value: int) -> int:
+	left = 0
+	if sorted_array[left] >= value:
+		return left
+	right = len(sorted_array) - 1
+	if sorted_array[right] < value:
+		raise ValueError(f"given value {value} is greater than all elements of given sorted_array")
+	while right - left != 1:	
+		pivot = left + int((right - left) / 2)
+		if sorted_array[pivot] >= value:
+			right = pivot
+		else:
+			left = pivot
+	return right
 endsnippet
