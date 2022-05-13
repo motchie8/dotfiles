@@ -5,9 +5,8 @@ GPATH
 GRTAGS
 GTAGS
 node_modules/
-vim/sessions/
-candid.vim/
-iceberg.vim/
+.vim/sessions/
+.vim/plugins/
 rigel/
 plastic.vim/
 edge/
@@ -15,10 +14,8 @@ edge/
 .secrets
 .zprezto
 .zplug
-iceberg.tmux.conf
-vimspector-config
+.tmux/colors
+.tmux/plugins
 .globalrc
-vim/selected
-tmux/
-fzf/
-vim/.netrwhist
+.fzf/
+.vim/.netrwhist

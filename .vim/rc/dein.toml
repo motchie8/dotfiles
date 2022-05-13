@@ -21,6 +21,15 @@ hook_add = '''
 [[plugins]]
 repo = 'simeji/winresizer'
 
+# whitespace
+[[plugins]]
+repo = 'ntpeters/vim-better-whitespace'
+hook_add = '''
+    let g:better_whitespace_enabled=1
+    let g:strip_whitespace_on_save=1
+    let g:current_line_whitespace_disabled_soft=1
+'''
+
 ### Finder ###
 # file finder
 [[plugins]]

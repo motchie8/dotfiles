@@ -16,12 +16,12 @@ let s:dein_dir = expand('~/.cache/dein')
 let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 if !isdirectory(s:dein_repo_dir)
   execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
-endif
+endi
 execute 'set runtimepath+=' . s:dein_repo_dir
 
 if dein#load_state(s:dein_dir)
     call dein#begin(s:dein_dir)
-    call dein#add(s:dein_repo_dir) 
+    call dein#add(s:dein_repo_dir)
     let g:rc_dir    = expand('~/.vim/rc')
     let s:toml      = g:rc_dir . '/dein.toml'
     let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
@@ -99,7 +99,7 @@ set showmatch
 set ruler
 
 " file
-set noswapfile
+" set noswapfile
 set autoread
 set nobackup
 set nowritebackup
@@ -118,7 +118,7 @@ set list
 
 " sourd
 set visualbell t_vb=
-set noerrorbells 
+set noerrorbells
 
 " other settings
 set cmdheight=2
@@ -126,16 +126,6 @@ set laststatus=2
 
 " clipboard
 set clipboard+=unnamedplus
-
-" autocomplete
-" inoremap { {}<Left>
-" inoremap {<Enter> {}<Left><CR><ESC><S-o>
-" inoremap ( ()<ESC>i
-" inoremap (<Enter> ()<Left><CR><ESC><S-o>
-" inoremap [ []<ESC>i
-" inoremap [<Enter> []<Left><CR><ESC><S-o>
-" inoremap ' ''<LEFT>
-" inoremap " ""<LEFT>
 
 " color schema
 syntax on

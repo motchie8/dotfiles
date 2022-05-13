@@ -23,12 +23,12 @@ export PATH="$PYENV_PATH/bin:$PATH"
 if which pyenv > /dev/null; then
     eval "$(pyenv init --path)"
     eval "$(pyenv virtualenv-init -)"
-    eval "$(pyenv init -)" 
+    eval "$(pyenv init -)"
 fi
 # for npm
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
- 
+
 # setup zplug
 export ZPLUG_HOME=$HOME/.dotfiles/.zplug
 if [ -e $ZPLUG_HOME ]; then

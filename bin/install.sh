@@ -15,7 +15,7 @@ eval set -- "$OPT"
 while true
 do
     case $1 in
-        --target) TARGET=$2 
+        --target) TARGET=$2
             shift 2
             ;;
         -h | --help) usage_exit
@@ -77,9 +77,9 @@ if [ "$OS" = "centos" ] || [ "$OS" = "amzn" ]; then
         popd
         popd
     fi
-    
+
     # install neovim
-    if ! type nvim >/dev/null 2>&1; then  
+    if ! type nvim >/dev/null 2>&1; then
         echo "[INFO] install neovim for $OS"
         pushd ~/.dotfiles
         git clone https://github.com/neovim/neovim
@@ -88,7 +88,7 @@ if [ "$OS" = "centos" ] || [ "$OS" = "amzn" ]; then
         make clean
         make CMAKE_BUILD_TYPE=RelWithDebInfo
         sudo make install
-        sudo ln -s -T /usr/local/bin/nvim /usr/bin/nvim 
+        sudo ln -s -T /usr/local/bin/nvim /usr/bin/nvim
         popd
     fi
     # update neovim
@@ -103,7 +103,7 @@ if [ "$OS" = "centos" ] || [ "$OS" = "amzn" ]; then
     fi
     popd
     # install homebrew
-    # sudo yum install -y curl file git util-linux-user which ruby  
+    # sudo yum install -y curl file git util-linux-user which ruby
 elif [ "$OS" = "ubuntu" ]; then
     echo "[INFO] Install libraries for $OS"
     if [ $(whoami) = "root" ]; then
@@ -113,7 +113,7 @@ elif [ "$OS" = "ubuntu" ]; then
     TZ=Asia/Tokyo
     sudo ln -snf /usr/share/zoneinfo/$TZ /etc/localtime # && echo $TZ > /etc/timezone
     export DEBIAN_FEND=noninteractive
-    sudo apt update -y && sudo apt install -y build-essential  
+    sudo apt update -y && sudo apt install -y build-essential
     sudo apt-key adv --refresh-keys --keyserver keyserver.ubuntu.com
     sudo apt-get install -y language-pack-ja
     sudo apt-get install -y software-properties-common && sudo apt-get update -y
@@ -137,7 +137,7 @@ elif type sw_vers >/dev/null 2>&1; then
    brew install node yarn wget tmux go zsh source-highlight gcc cmake ripgrep # pyenv pyenv-virtualenv
    # install neovim nightly
    brew install --HEAD luajit
-   brew install --HEAD neovim 
+   brew install --HEAD neovim
    set -e
 else
     echo "[ERROR] '$OS' is not supported"
@@ -171,12 +171,12 @@ PYTHON3_VERSION=3.9.7
 PYTHON_VERSIONS=($PYTHON2_VERSION $PYTHON3_VERSION)
 NEOVIM_VIRTUAL_ENVS=("neovim2" "neovim3")
 i=0
-for PYTHON_VERSION in "${PYTHON_VERSIONS[@]}" 
+for PYTHON_VERSION in "${PYTHON_VERSIONS[@]}"
 do
     NEOVIM_VIRTUAL_ENV=${NEOVIM_VIRTUAL_ENVS[i]}
     result=0
     output=$(pyenv versions | grep -q $NEOVIM_VIRTUAL_ENV) || result=$?
-    if [ $result -ne 0 ]; then 
+    if [ $result -ne 0 ]; then
         pyenv install -s $PYTHON_VERSION
         pyenv virtualenv $PYTHON_VERSION $NEOVIM_VIRTUAL_ENV
         PYTHON_PATH=$PYENV_ROOT/versions/$NEOVIM_VIRTUAL_ENV/bin/python
@@ -217,7 +217,7 @@ if [ ! -e $HOME/.dotfiles/.zprezto ]; then
     git clone --recursive https://github.com/sorin-ionescu/prezto.git ~/.dotfiles/.zprezto
     for rcfile_name in zlogin zlogout zpreztorc zprofile zshenv; do
         if [ ! -e $HOME/$rcfile_name ]; then
-            ln -s "$HOME/.dotfiles/.zprezto/runcoms/.$rcfile_name" "$HOME/.$rcfile_name" 
+            ln -s "$HOME/.dotfiles/.zprezto/runcoms/.$rcfile_name" "$HOME/.$rcfile_name"
         fi
     done
 else
@@ -227,21 +227,23 @@ else
 fi
 
 # download color schema for vim
-if [ ! -e ~/.dotfiles/iceberg.vim ]; then
-  echo "[INFO] Install color schema"
-  pushd ~/.dotfiles
-  git clone https://github.com/cocopon/iceberg.vim
-  mkdir -p ~/.config/nvim/colors
-  ln -s ~/.dotfiles/iceberg.vim/colors/iceberg.vim ~/.config/nvim/colors/iceberg.vim
-  popd
+if [ ! -e ~/.dotfiles/.vim/plugins/iceberg.vim ]; then
+    echo "[INFO] Install color schema"
+    pushd ~/.dotfiles
+    mkdir -p ~/.dotfiles/.vim/plugins/
+    git clone https://github.com/cocopon/iceberg.vim ~/.dotfiles/.vim/plugins/iceberg.vim
+    mkdir -p ~/.config/nvim/colors
+    ln -s ~/.dotfiles/.vim/plugins/iceberg.vim/colors/iceberg.vim ~/.config/nvim/colors/iceberg.vim
+popd
 else
-  pushd ~/.dotfiles/iceberg.vim
-  git pull
-  popd
+    pushd ~/.dotfiles/.vim/plugins/iceberg.vim
+    git pull
+    popd
 fi
 
-if [ ! -e ~/.dotfiles/iceberg.tmux.conf ];then
-    wget -O $HOME/.dotfiles/iceberg.tmux.conf https://raw.githubusercontent.com/gkeep/iceberg-dark/master/.tmux/iceberg.tmux.conf
+if [ ! -e ~/.dotfiles/.tmux/colors/iceberg.tmux.conf ];then
+    mkdir -p ~/.dotfiles/.tmux/colors/
+    wget -O $HOME/.dotfiles/.tmux/colors/iceberg.tmux.conf https://raw.githubusercontent.com/gkeep/iceberg-dark/master/.tmux/iceberg.tmux.conf
 fi
 
 # install or update npm and node for coc-nvim
@@ -256,9 +258,11 @@ if ! type node > /dev/null 2>&1; then
 fi
 
 # install tmux-mem-cpu-load
-if [ ! -e ~/.dotfiles/tmux/tmux-mem-cpu-load ]; then
-    git clone https://github.com/thewtex/tmux-mem-cpu-load.git ~/.dotfiles/tmux/tmux-mem-cpu-load
-    pushd ~/.dotfiles/tmux/tmux-mem-cpu-load
+if [ ! -e ~/.dotfiles/.tmux/plugins/tmux-mem-cpu-load ]; then
+    echo "[INFO] Install tmux-mem-cpu-load"
+    mkdir -p ~/.dotfiles/.tmux/plugins
+    git clone https://github.com/thewtex/tmux-mem-cpu-load.git ~/.dotfiles/.tmux/plugins/tmux-mem-cpu-load
+    pushd ~/.dotfiles/.tmux/plugins/tmux-mem-cpu-load
     cmake .
     make
     if type sw_vers >/dev/null 2>&1; then
@@ -268,7 +272,7 @@ if [ ! -e ~/.dotfiles/tmux/tmux-mem-cpu-load ]; then
     fi
     popd
 else
-    pushd ~/.dotfiles/tmux/tmux-mem-cpu-load
+    pushd ~/.dotfiles/.tmux/plugins/tmux-mem-cpu-load
     result=0
     output=$(git pull | grep -q "Already up to date") || result=$?
     if [ $result -ne 0 ]; then
@@ -285,18 +289,20 @@ fi
 
 # install go
 if ! type go > /dev/null 2>&1; then
+    echo "[INFO] Install go lang"
     if type brew >/dev/null 2>&1; then
         brew install go
     else
         wget https://go.dev/dl/go1.17.6.linux-amd64.tar.gz
         sudo rm -rf /usr/local/go
         sudo tar -C /usr/local -xzf go1.17.6.linux-amd64.tar.gz
-	rm go1.17.6.linux-amd64.tar.gz
-	export PATH=$PATH:/usr/local/go/bin
+	    rm go1.17.6.linux-amd64.tar.gz
+	    export PATH=$PATH:/usr/local/go/bin
     fi
 fi
 
 if [ ! -e ~/go/bin/git-appraise ];then
+    echo "[INFO] Install git-appraise"
     # install git-appraise
     go get github.com/google/git-appraise/git-appraise
     # install act for github actions
@@ -304,19 +310,18 @@ if [ ! -e ~/go/bin/git-appraise ];then
 fi
 
 # install fzf
-if [ ! -e ~/.dotfiles/fzf ]; then
-    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.dotfiles/fzf
-    ~/.dotfiles/fzf/install --key-bindings --completion --no-update-rc
+if [ ! -e ~/.dotfiles/.fzf ]; then
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.dotfiles/.fzf
+    ~/.dotfiles/.fzf/install --key-bindings --completion --no-update-rc
 else
-    pushd ~/.dotfiles/fzf
+    pushd ~/.dotfiles/.fzf
     result=0
     output=$(git pull | grep -q "Already up to date") || result=$?
     if [ $result -ne 0 ]; then
-        ~/.dotfiles/fzf/install --key-bindings --completion --no-update-rc
+        ~/.dotfiles/.fzf/install --key-bindings --completion --no-update-rc
     fi
     popd
 fi
-    
 # NOTE: Commented out because it is not currently in use
 ## install lemonade to copy text from Linux to Windows via SSH
 #if ! type lemonade > /dev/null 2>&1; then
@@ -334,17 +339,17 @@ fi
 
 # setup symbolic links
 target_paths=("$HOME/.zshrc" "$HOME/.vim" "$HOME/.vimrc" "$HOME/.config/nvim/init.vim" "$HOME/.config/nvim/coc-settings.json")
-link_paths=("$HOME/.dotfiles/.zshrc" "$HOME/.dotfiles/vim" "$HOME/.dotfiles/.vimrc" "$HOME/.dotfiles/.vimrc" "$HOME/.dotfiles/coc-settings.json")
+link_paths=("$HOME/.dotfiles/.zshrc" "$HOME/.dotfiles/.vim" "$HOME/.dotfiles/.vimrc" "$HOME/.dotfiles/.vimrc" "$HOME/.dotfiles/coc-settings.json")
 target_paths+=("$HOME/.tmux.conf")
 if [ $TARGET = "remote" ]; then
-    link_paths+=("$HOME/.dotfiles/.tmux.remote.conf")
+    link_paths+=("$HOME/.dotfiles/.tmux/.tmux.remote.conf")
 elif [ $TARGET = "local" ]; then
-    link_paths+=("$HOME/.dotfiles/.tmux.local.conf")
+    link_paths+=("$HOME/.dotfiles/.tmux/.tmux.local.conf")
 else
     echo "target argument must be 'remote' or 'local', but given value was $TARGET."
     exit 1
 fi
-mkdir -p ~/.config/nvim 
+mkdir -p ~/.config/nvim
 for i in "${!target_paths[@]}"; do
     if [ -e "${target_paths[i]}" ]; then
         if [ ! -L "${target_paths[i]}" ]; then
