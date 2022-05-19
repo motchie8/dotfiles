@@ -47,6 +47,23 @@
       "after": [
         "<Esc>"
       ]
+    },
+    // LSP features
+    {
+      "before": [
+        "Ctrl+h"
+      ],
+      "after": [
+        "editor.action.hover"
+      ]
+    },
+    {
+      "before": [
+        "Ctrl+p"
+      ],
+      "after": [
+        "editor.action.triggerParameterHints"
+      ]
     }
   ],
   "vim.normalModeKeyBindings": [
@@ -74,24 +91,7 @@
         "^"
       ]
     },
-    {
-      "before": [
-        "<Space>",
-        "c"
-      ],
-      "commands": [
-        "workbench.action.terminal.new"
-      ]
-    },
-    {
-      "before": [
-        "s",
-        "h"
-      ],
-      "commands": [
-        "workbench.action.navigateEditorGroups"
-      ]
-    },
+    // LSP features
     {
       "before": [
         "g",
@@ -112,23 +112,31 @@
     },
     {
       "before": [
-        "<Space>",
-        "T"
+        "Ctrl+h"
       ],
       "commands": [
-        "workbench.action.focusSideBar"
+        "editor.action.hover"
+      ]
+    },
+    {
+      "before": [
+        "Ctrl+p"
+      ],
+      "commands": [
+        "editor.action.triggerParameterHints"
       ]
     },
     {
       "before": [
         "<Space>",
-        "t"
+        "q",
+        "f"
       ],
       "commands": [
-        "workbench.action.toggleSidebarVisibility"
-        //"workbench.action.focusSideBar"
+        "editor.action.quickFix"
       ]
     },
+    // move focus between panes
     {
       "before": [
         "s",
@@ -150,19 +158,49 @@
     {
       "before": [
         "s",
-        "k"
+        "l"
       ],
       "commands": [
-        "workbench.files.action.focusOpenEditorsView"
+        "workbench.action.navigateEditorGroups"
       ]
     },
     {
       "before": [
         "s",
-        "l"
+        "h"
       ],
       "commands": [
         "workbench.action.navigateEditorGroups"
+      ]
+    },
+    // show and hide file explorer
+    {
+      "before": [
+        "<Space>",
+        "T"
+      ],
+      "commands": [
+        "workbench.action.focusSideBar"
+      ]
+    },
+    {
+      "before": [
+        "<Space>",
+        "t"
+      ],
+      "commands": [
+        "workbench.action.toggleSidebarVisibility"
+        //"workbench.action.focusSideBar"
+      ]
+    },
+    // open terminal
+    {
+      "before": [
+        "<Space>",
+        "c"
+      ],
+      "commands": [
+        "workbench.action.terminal.new"
       ]
     }
   ],
