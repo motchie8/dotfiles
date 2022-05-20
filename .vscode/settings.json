@@ -54,7 +54,7 @@
         "Ctrl+h"
       ],
       "after": [
-        "editor.action.hover"
+        "editor.action.showHover"
       ]
     },
     {
@@ -67,6 +67,22 @@
     }
   ],
   "vim.normalModeKeyBindings": [
+    {
+      "before": [
+        "u"
+      ],
+      "commands": [
+        "undo"
+      ]
+    },
+    {
+      "before": [
+        "<C-r>"
+      ],
+      "commands": [
+        "redo"
+      ]
+    },
     {
       "before": [
         ";"
@@ -115,7 +131,7 @@
         "Ctrl+h"
       ],
       "commands": [
-        "editor.action.hover"
+        "editor.action.showHover"
       ]
     },
     {
