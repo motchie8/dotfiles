@@ -7,8 +7,7 @@ on_event = 'BufRead'
 hook_source = '''
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
-    ensure_installed = "maintained",
-    ignore_install = { "php", "tlaplus" },
+    ensure_installed = "all",
     highlight = {
         enable = true,
         disable = {}
@@ -16,6 +15,58 @@ require'nvim-treesitter.configs'.setup {
     indent = {
         enable = true
     }
+}
+EOF
+'''
+
+### Explorer ###
+[[plugins]]
+repo = 'kyazdani42/nvim-tree.lua'
+depends = ['nvim-web-devicons']
+on_event = 'BufRead'
+hook_add = '''
+    nnoremap <silent><Space>t :NvimTreeToggle<CR>
+    nnoremap <silent><Space>T :NvimTreeRefresh<CR>
+    nnoremap <silent><Space>n :NvimTreeFindFile<CR>
+    " More available functions:
+    " NvimTreeOpen
+    " NvimTreeClose
+    " NvimTreeFocus
+    " NvimTreeFindFileToggle
+    " NvimTreeResize
+    " NvimTreeCollapse
+    " NvimTreeCollapseKeepBuffers
+
+    set termguicolors " this variable must be enabled for colors to be applied properly
+
+    " a list of groups can be found at `:help nvim_tree_highlight`
+    highlight NvimTreeFolderIcon guibg=blue
+'''
+hook_post_source = '''
+lua <<EOF
+require'nvim-tree'.setup {
+  view = {
+    mappings = {
+      custom_only = false,
+      list = {
+        { key = {"<CR>", "o", "<2-LeftMouse>"}, action = "edit" },
+        { key = "<C-v>",                        action = "vsplit" },
+        { key = "<C-x>",                        action = "split" },
+        { key = "<C-t>",                        action = "tabnew" },
+        { key = "<BS>",                         action = "close_node" },
+        { key = "<C-r>",                        action = "refresh" },
+        { key = "a",                            action = "create" },
+        { key = "d",                            action = "remove" },
+        { key = "D",                            action = "trash" },
+        { key = "r",                            action = "rename" },
+        { key = "x",                            action = "cut" },
+        { key = "c",                            action = "copy" },
+        { key = "p",                            action = "paste" },
+        { key = "y",                            action = "copy_name" },
+        { key = "Y",                            action = "copy_absolute_path" },
+      },
+    },
+  },
 }
 EOF
 '''

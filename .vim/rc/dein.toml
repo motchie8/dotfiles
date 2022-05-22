@@ -66,13 +66,15 @@ repo = 'junegunn/fzf'
 build = './install'
 rtp = ''
 
-# tree
+# Explorer
+# [[plugins]]
+# repo = 'scrooloose/nerdtree'
+# hook_add = '''
+#     nnoremap <silent><Space>t :NERDTreeToggle<CR>
+#     nnoremap <silent><Space>T :NERDTree<CR>
+# '''
 [[plugins]]
-repo = 'scrooloose/nerdtree'
-hook_add = '''
-    nnoremap <silent><Space>t :NERDTreeToggle<CR>
-    nnoremap <silent><Space>T :NERDTree<CR>
-'''
+repo = 'kyazdani42/nvim-web-devicons'
 
 ### Viewer ###
 # csv
