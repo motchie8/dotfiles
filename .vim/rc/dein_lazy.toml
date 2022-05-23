@@ -3,7 +3,7 @@
 repo = 'nvim-treesitter/nvim-treesitter'
 hook_post_update = 'TSUpdate'
 merged = '0'
-on_event = 'BufRead'
+on_event = ['BufRead', 'BufNewFile']
 hook_source = '''
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
@@ -22,8 +22,9 @@ EOF
 ### Explorer ###
 [[plugins]]
 repo = 'kyazdani42/nvim-tree.lua'
-depends = ['nvim-web-devicons']
-on_event = 'BufRead'
+# depends = ['nvim-web-devicons']
+# on_event = ['BufRead', 'BufNewFile']
+on_event = ['BufRead', 'BufNewFile']
 hook_add = '''
     nnoremap <silent><Space>t :NvimTreeToggle<CR>
     nnoremap <silent><Space>T :NvimTreeRefresh<CR>
@@ -42,7 +43,7 @@ hook_add = '''
     " a list of groups can be found at `:help nvim_tree_highlight`
     highlight NvimTreeFolderIcon guibg=blue
 '''
-hook_post_source = '''
+hook_source = '''
 lua <<EOF
 require'nvim-tree'.setup {
   view = {
@@ -129,8 +130,8 @@ on_ft = ["sql"]
 
 [[plugins]]
 repo = 'kristijanhusak/vim-dadbod'
-on_ft = ["sql"]
-depends = ['vim-dadbod-ui']
+on_source = ["vim-dadbod-ui"]
+# depends = ['vim-dadbod-ui']
 hook_add = '''
     " specify db connections in .env using the following prefix
     let g:db_ui_dotenv_variable_prefix = 'DB_UI_'
