@@ -19,3 +19,4 @@ RUN sudo chown -R $user /home/$user/.dotfiles
 WORKDIR /home/$user/.dotfiles
 
 RUN ./bin/install.sh --target local
+RUN nvim --headless -c 'call dein#update()' -c 'CocUpdate' -c 'quitall'
