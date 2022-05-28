@@ -226,21 +226,6 @@ else
     popd
 fi
 
-# download color schema for vim
-if [ ! -e ~/.dotfiles/.vim/plugins/iceberg.vim ]; then
-    echo "[INFO] Install color schema"
-    pushd ~/.dotfiles
-    mkdir -p ~/.dotfiles/.vim/plugins/
-    git clone https://github.com/cocopon/iceberg.vim ~/.dotfiles/.vim/plugins/iceberg.vim
-    mkdir -p ~/.config/nvim/colors
-    ln -s ~/.dotfiles/.vim/plugins/iceberg.vim/colors/iceberg.vim ~/.config/nvim/colors/iceberg.vim
-popd
-else
-    pushd ~/.dotfiles/.vim/plugins/iceberg.vim
-    git pull
-    popd
-fi
-
 if [ ! -e ~/.dotfiles/.tmux/colors/iceberg.tmux.conf ];then
     mkdir -p ~/.dotfiles/.tmux/colors/
     wget -O $HOME/.dotfiles/.tmux/colors/iceberg.tmux.conf https://raw.githubusercontent.com/gkeep/iceberg-dark/master/.tmux/iceberg.tmux.conf
@@ -255,6 +240,17 @@ if ! type node > /dev/null 2>&1; then
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
     nvm install node --lts
     # nvm use --lts
+fi
+
+# install nvim package manager
+if [ ! -e $HOME/.local/share/nvim/site/pack/packer/start ]; then
+    echo "[INFO] Install packer.nvim"
+    mkdir -p $HOME/.dotfiles/.vim/plugins
+    git clone --depth 1 https://github.com/wbthomason/packer.nvim $HOME/.local/share/nvim/site/pack/packer/start/packer.nvim
+else
+    pushd $HOME/.local/share/nvim/site/pack/packer/start/packer.nvim
+    git pull
+    popd
 fi
 
 # install tmux-mem-cpu-load
@@ -338,8 +334,8 @@ fi
 #fi
 
 # setup symbolic links
-target_paths=("$HOME/.zshrc" "$HOME/.vim" "$HOME/.vimrc" "$HOME/.config/nvim/init.vim" "$HOME/.config/nvim/coc-settings.json")
-link_paths=("$HOME/.dotfiles/.zshrc" "$HOME/.dotfiles/.vim" "$HOME/.dotfiles/.vimrc" "$HOME/.dotfiles/.vimrc" "$HOME/.dotfiles/coc-settings.json")
+target_paths=("$HOME/.zshrc" "$HOME/.config/nvim" "$HOME/.config/nvim/coc-settings.json", "$HOME/.config/nvim/init.lua")
+link_paths=("$HOME/.dotfiles/.zshrc" "$HOME/.dotfiles/.vim" "$HOME/.dotfiles/coc-settings.json" "$HOME/.dotfiles/init.lua")
 target_paths+=("$HOME/.tmux.conf")
 if [ $TARGET = "remote" ]; then
     link_paths+=("$HOME/.dotfiles/.tmux/.tmux.remote.conf")
@@ -349,7 +345,7 @@ else
     echo "target argument must be 'remote' or 'local', but given value was $TARGET."
     exit 1
 fi
-mkdir -p ~/.config/nvim
+mkdir -p ~/.config
 for i in "${!target_paths[@]}"; do
     if [ -e "${target_paths[i]}" ]; then
         if [ ! -L "${target_paths[i]}" ]; then
