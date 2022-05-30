@@ -14,3 +14,4 @@ pyqt5
 jupyter
 pysen
 mypy
+pytest

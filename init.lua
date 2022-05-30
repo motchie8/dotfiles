@@ -141,15 +141,14 @@ require('packer').startup(function(use)
       ]])
     end
   }
-  -- font
-  use { 'ryanoasis/vim-devicons' }
   -- status/tabline
   use {
     'vim-airline/vim-airline',
-    setup = function()
+    requires = {'vim-airline/vim-airline-themes'},
+    config = function()
       vim.api.nvim_set_var(
         'airline_theme',
-        'icebergDark'
+        'iceberg'
       )
     end
   }
@@ -179,6 +178,9 @@ require('packer').startup(function(use)
     end
   }
   -- command line finder
+  use { 'ibhagwan/fzf-lua',
+    requires = { 'kyazdani42/nvim-web-devicons' }
+  }
   use {
     'junegunn/fzf.vim',
     requires= {{ 'junegunn/fzf' }}
@@ -196,7 +198,7 @@ require('packer').startup(function(use)
             disable = {}
         },
         indent = {
-            enable = true
+            enable = false
         }
       }
     end
@@ -250,9 +252,6 @@ require('packer').startup(function(use)
     tag = 'v1.*',
     setup = function ()
       vim.api.nvim_set_keymap('n', '<Leader>c', '<Cmd>ToggleTerm<CR>', {noremap = true, silent = true})
-      vim.api.nvim_set_keymap('n', '<Leader>c1', '<Cmd>1ToggleTerm<CR>', {noremap = true, silent = true})
-      vim.api.nvim_set_keymap('n', '<Leader>c2', '<Cmd>2ToggleTerm<CR>', {noremap = true, silent = true})
-      vim.api.nvim_set_keymap('n', '<Leader>c3', '<Cmd>3ToggleTerm<CR>', {noremap = true, silent = true})
     end,
     config = function()
       require"toggleterm".setup{
@@ -298,9 +297,9 @@ require('packer').startup(function(use)
   use {
     'sudormrfbin/cheatsheet.nvim',
     requires = {
-      {'nvim-telescope/telescope.nvim'},
-      {'nvim-lua/popup.nvim'},
-      {'nvim-lua/plenary.nvim'}
+      'nvim-telescope/telescope.nvim',
+      'nvim-lua/popup.nvim',
+      'nvim-lua/plenary.nvim'
     },
     config = function()
       require("cheatsheet").setup({
@@ -342,184 +341,204 @@ require('packer').startup(function(use)
     'neoclide/coc.nvim',
     branch = 'release',
     setup = function ()
-      vim.api.nvim_exec(
-        [[
-          nmap <silent> CocAction CocActionAsync
-          " add default extensions
-          let g:coc_global_extensions = ['coc-lists', 'coc-highlight', 'coc-json', 'coc-yaml', 'coc-pyright', 'coc-jedi', 'coc-cfn-lint', 'coc-sh', 'coc-rls', 'coc-rust-analyzer', '@yaegassy/coc-pysen', 'coc-tsserver', 'coc-eslint', 'coc-prettier', 'coc-react-refactor']
-          " TextEdit might fail if hidden is not set.
-          set hidden
-
-          " Some servers have issues with backup files, see #649.
-          set nobackup
-          set nowritebackup
-
-          " Give more space for displaying messages.
-          set cmdheight=2
-
-          " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
-          " delays and poor user experience.
-          set updatetime=50
-
-          " Don't pass messages to |ins-completion-menu|.
-          set shortmess+=c
-
-          " Always show the signcolumn, otherwise it would shift the text each time
-          " diagnostics appear/become resolved.
-          if has("patch-8.1.1564")
-            " Recently vim can merge signcolumn and number column into one
-            set signcolumn=number
-          else
-            set signcolumn=yes
-          endif
-
-          " Use tab for trigger completion with characters ahead and navigate.
-          " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-          " other plugin before putting this into your config.
-          "inoremap <silent><expr> <TAB>
-          "      \ pumvisible() ? "\<C-n>" :
-          "      \ s:check_back_space() ? "\<TAB>" :
-          "      \ coc#refresh()
-          "inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-          "function! s:check_back_space() abort
-          "  let col = col('.') - 1
-          "  return !col || getline('.')[col - 1]  =~# '\s'
-          "endfunction
-
-          " Use <c-space> to trigger completion.
-          if has('nvim')
-            inoremap <silent><expr> <c-space> coc#refresh()
-          else
-            inoremap <silent><expr> <c-@> coc#refresh()
-          endif
-
-          " Make <CR> auto-select the first completion item and notify coc.nvim to
-          " format on enter, <cr> could be remapped by other vim plugin
-          inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                                        \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
-          " Use `[g` and `]g` to navigate diagnostics
-          " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-          nmap <silent> dp <Plug>(coc-diagnostic-prev)
-          nmap <silent> dn <Plug>(coc-diagnostic-next)
-
-          " GoTo code navigation.
-          nmap <silent> gd <Plug>(coc-definition)
-          nmap <silent> gy <Plug>(coc-type-definition)
-          nmap <silent> gi <Plug>(coc-implementation)
-          nmap <silent> gr <Plug>(coc-references)
-
-          function! s:show_documentation()
-            if (index(['vim','help'], &filetype) >= 0)
-              execute 'h '.expand('<cword>')
-            elseif (coc#rpc#ready())
-              call CocActionAsync('doHover')
-            else
-              execute '!' . &keywordprg . " " . expand('<cword>')
-            endif
-          endfunction
-
-          " Highlight the symbol and its references when holding the cursor.
-          autocmd CursorHold * silent call CocActionAsync('highlight')
-
-          " Symbol renaming.
-          nmap <Leader>rn <Plug>(coc-rename)
-
-          " Formatting selected code.
-          xmap <Leader>F  <Plug>(coc-format-selected)
-          nmap <Leader>F  <Plug>(coc-format-selected)
-
-          " keymappings for coc-snippets
-          let g:coc_snippet_next = '<c-n>'
-          let g:coc_snippet_prev = '<c-p>'
-
-          augroup mygroup
-            autocmd!
-            " Setup formatexpr specified filetype(s).
-            autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-            " Update signature help on jump placeholder.
-            autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-          augroup end
-
-          " Applying codeAction to the selected region.
-          " Example: `<Leader>aap` for current paragraph
-          " nnoremap <silent><nowait> <Leader>a  :<C-u>CocAction<cr>
-          " xmap <Leader>a  <Plug>(coc-codeaction-selected)
-          " nmap <Leader>a  <Plug>(coc-codeaction-selected)
-
-          " Remap keys for applying codeAction to the current buffer.
-          nmap <Leader>ac  <Plug>(coc-codeaction)
-          " Apply AutoFix to problem on the current line.
-          nmap <Leader>qf  <Plug>(coc-fix-current)
-
-          " Map function and class text objects
-          " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-          xmap if <Plug>(coc-funcobj-i)
-          omap if <Plug>(coc-funcobj-i)
-          xmap af <Plug>(coc-funcobj-a)
-          omap af <Plug>(coc-funcobj-a)
-          xmap ic <Plug>(coc-classobj-i)
-          omap ic <Plug>(coc-classobj-i)
-          xmap ac <Plug>(coc-classobj-a)
-          omap ac <Plug>(coc-classobj-a)
-
-          " Remap <C-f> and <C-b> for scroll float windows/popups.
-          if has('nvim-0.4.0') || has('patch-8.2.0750')
-            nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-            nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-            inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-            inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-            vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-            vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-          endif
-
-          " Use CTRL-S for selections ranges.
-          " Requires 'textDocument/selectionRange' support of language server.
-          nmap <silent> <C-s> <Plug>(coc-range-select)
-          xmap <silent> <C-s> <Plug>(coc-range-select)
-
-          " Add `:Format` command to format current buffer.
-          command! -nargs=0 Format :call CocAction('format')
-
-          " Add `:Fold` command to fold current buffer.
-          command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
-          " Add `:OR` command for organize imports of the current buffer.
-          command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
-
-          " Add (Neo)Vim's native statusline support.
-          " NOTE: Please see `:h coc-status` for integrations with external plugins that
-          " provide custom statusline: lightline.vim, vim-airline.
-          set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
-          " Mappings for CoCList
-          " " Show all diagnostics.
-          nnoremap <silent><nowait> <Leader>da  :<C-u>CocList diagnostics<cr>
-          " " Manage extensions.
-          " nnoremap <silent><nowait> <Leader>e  :<C-u>CocList extensions<cr>
-          " " Show commands.
-          " nnoremap <silent><nowait> <Leader>c  :<C-u>CocList commands<cr>
-          " " Find symbol of current document.
-          " nnoremap <silent><nowait> <Leader>o  :<C-u>CocList outline<cr>
-          " " Search workspace symbols.
-          " nnoremap <silent><nowait> <Leader>s  :<C-u>CocList -I symbols<cr>
-          " Do default action for next item.
-          " nnoremap sh<silent><nowait> <Leader>j  :<C-u>CocNext<CR>
-          " " Do default action for previous item.
-          " nnoremap <silent><nowait> <Leader>k  :<C-u>CocPrev<CR>
-          " " Resume latest coc list.
-          " nnoremap <silent><nowait> <Leader>p  :<C-u>CocListResume<CR>
-
-          " Use Ctrl-h to show documentation in preview window.
-          nnoremap <silent> <C-h> :call s:show_documentation()<CR>
-          inoremap <silent> <C-h> :call s:show_documentation()<CR>
-          " Use Ctrl-p to show parameter hint
-          nnoremap <silent> <C-p> :call CocActionAsync('showSignatureHelp')<CR>
-          inoremap <silent> <C-p> :call CocActionAsync('showSignatureHelp')<CR>
-        ]],
-        false
+      -- add default extensions
+      vim.api.nvim_set_var(
+        'coc_global_extensions',
+        {
+          'coc-lists',
+          'coc-highlight',
+          'coc-json',
+          'coc-yaml',
+          'coc-pyright',
+          'coc-jedi',
+          'coc-cfn-lint',
+          'coc-sh',
+          'coc-rls',
+          'coc-rust-analyzer',
+          '@yaegassy/coc-pysen',
+          'coc-tsserver',
+          'coc-eslint',
+          'coc-prettier',
+          'coc-react-refactor'
+        }
       )
+      vim.cmd([[
+        " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
+        " unicode characters in the file autoload/float.vim
+        set encoding=utf-8
+
+        " TextEdit might fail if hidden is not set.
+        set hidden
+
+        " Some servers have issues with backup files, see #649.
+        set nobackup
+        set nowritebackup
+
+        " Give more space for displaying messages.
+        set cmdheight=2
+
+        " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+        " delays and poor user experience.
+        set updatetime=50
+
+        " Don't pass messages to |ins-completion-menu|.
+        set shortmess+=c
+
+        " Always show the signcolumn, otherwise it would shift the text each time
+        " diagnostics appear/become resolved.
+        if has("nvim-0.5.0") || has("patch-8.1.1564")
+          " Recently vim can merge signcolumn and number column into one
+          set signcolumn=number
+        else
+          set signcolumn=yes
+        endif
+
+        " Use tab for trigger completion with characters ahead and navigate.
+        " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+        " other plugin before putting this into your config.
+        inoremap <silent><expr> <TAB>
+              \ pumvisible() ? "\<C-n>" :
+              \ CheckBackspace() ? "\<TAB>" :
+              \ coc#refresh()
+        inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+        function! CheckBackspace() abort
+          let col = col('.') - 1
+          return !col || getline('.')[col - 1]  =~# '\s'
+        endfunction
+
+        " Use <c-space> to trigger completion.
+        if has('nvim')
+          inoremap <silent><expr> <c-space> coc#refresh()
+        else
+          inoremap <silent><expr> <c-@> coc#refresh()
+        endif
+
+        " Make <CR> auto-select the first completion item and notify coc.nvim to
+        " format on enter, <cr> could be remapped by other vim plugin
+        inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                                      \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+        " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+        nmap <silent> <Space>G <Plug>(coc-diagnostic-prev)
+        nmap <silent> <Space>g <Plug>(coc-diagnostic-next)
+
+        " GoTo code navigation.
+        nmap <silent> gd <Plug>(coc-definition)
+        nmap <silent> gy <Plug>(coc-type-definition)
+        nmap <silent> gi <Plug>(coc-implementation)
+        nmap <silent> gr <Plug>(coc-references)
+
+        " Use K to show documentation in preview window.
+        nnoremap <silent> K :call ShowDocumentation()<CR>
+
+        function! ShowDocumentation()
+          if CocAction('hasProvider', 'hover')
+            call CocActionAsync('doHover')
+          else
+            call feedkeys('K', 'in')
+          endif
+        endfunction
+
+        " Highlight the symbol and its references when holding the cursor.
+        autocmd CursorHold * silent call CocActionAsync('highlight')
+
+        " Symbol renaming.
+        nmap <Space>rn <Plug>(coc-rename)
+
+        " Formatting selected code.
+        xmap <Space>fo <Plug>(coc-format-selected)
+        nmap <Space>fo  <Plug>(coc-format-selected)
+
+        augroup mygroup
+          autocmd!
+          " Setup formatexpr specified filetype(s).
+          autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+          " Update signature help on jump placeholder.
+          autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+        augroup end
+
+        " Applying codeAction to the selected region.
+        " Example: `<Space>aap` for current paragraph
+        xmap <Space>a  <Plug>(coc-codeaction-selected)
+        nmap <Space>a  <Plug>(coc-codeaction-selected)
+
+        " Remap keys for applying codeAction to the current buffer.
+        nmap <Space>ac  <Plug>(coc-codeaction)
+        " Apply AutoFix to problem on the current line.
+        nmap <Space>qf  <Plug>(coc-fix-current)
+
+        " Run the Code Lens action on the current line.
+        nmap <Space>cl  <Plug>(coc-codelens-action)
+
+        " Map function and class text objects
+        " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+        xmap if <Plug>(coc-funcobj-i)
+        omap if <Plug>(coc-funcobj-i)
+        xmap af <Plug>(coc-funcobj-a)
+        omap af <Plug>(coc-funcobj-a)
+        xmap ic <Plug>(coc-classobj-i)
+        omap ic <Plug>(coc-classobj-i)
+        xmap ac <Plug>(coc-classobj-a)
+        omap ac <Plug>(coc-classobj-a)
+
+        " Remap <C-f> and <C-b> for scroll float windows/popups.
+        if has('nvim-0.4.0') || has('patch-8.2.0750')
+          nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+          nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+          inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+          inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+          vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+          vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+        endif
+
+        " Use CTRL-S for selections ranges.
+        " Requires 'textDocument/selectionRange' support of language server.
+        nmap <silent> <C-s> <Plug>(coc-range-select)
+        xmap <silent> <C-s> <Plug>(coc-range-select)
+
+        " Add `:Format` command to format current buffer.
+        command! -nargs=0 Format :call CocActionAsync('format')
+
+        " Add `:Fold` command to fold current buffer.
+        command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+        " Add `:OR` command for organize imports of the current buffer.
+        command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
+
+        " Add (Neo)Vim's native statusline support.
+        " NOTE: Please see `:h coc-status` for integrations with external plugins that
+        " provide custom statusline: lightline.vim, vim-airline.
+        set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+        " Mappings for CoCList
+        " Show all diagnostics.
+        nnoremap <silent><nowait> <Space>da  :<C-u>CocList diagnostics<cr>
+        " Manage extensions.
+        "nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
+        "" Show commands.
+        "nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+        "" Find symbol of current document.
+        "nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+        "" Search workspace symbols.
+        "nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+        "" Do default action for next item.
+        "nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+        "" Do default action for previous item.
+        "nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+        "" Resume latest coc list.
+        "nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+
+        " Use Ctrl-h to show documentation in preview window.
+        " nnoremap <silent> <C-h> :call s:show_documentation()<CR>
+        nnoremap <silent> <C-h> :call CocActionAsync('doHover')<CR>
+        " inoremap <silent> <C-h> :call s:show_documentation()<CR>
+        inoremap <silent> <C-h> :call CocActionAsync('doHover')<CR>
+
+        " Use Ctrl-p to show parameter hint
+        nnoremap <silent> <C-p> :call CocActionAsync('showSignatureHelp')<CR>
+        inoremap <silent> <C-p> :call CocActionAsync('showSignatureHelp')<CR>
+      ]])
     end
   }
   -- # Lazy loading plugins #
@@ -547,8 +566,8 @@ require('packer').startup(function(use)
     'goerz/jupytext.vim',
     ft = {'python', 'ipynb'},
     setup = function ()
-      vim.api.nvim_exec([[
-        execute 'source' '~/.cache/dein/repos/github.com/goerz/jupytext.vim/plugin/jupytext.vim'
+      vim.cmd([[
+        execute 'source' '~/.local/share/nvim/site/pack/packer/opt/jupytext.vim/plugin/jupytext.vim'
       ]])
       vim.api.nvim_set_var('jupytext_enable', 1)
       vim.api.nvim_set_var('jupytext_fmt', 'py:percent')
@@ -568,22 +587,72 @@ require('packer').startup(function(use)
       vim.api.nvim_set_var('db_ui_dotenv_variable_prefix', 'DB_UI_')
     end
   }
-  -- debugger
+  -- debugger for python
   use {
-    'puremourning/vimspector',
-    ft = {'python', 'rust'},
-    run = function ()
-      vim.cmd([[
-        execute './install_gadget.py', '--basedir', '$HOME/.dotfiles/vimspector-config', '--enable-python', '--enable-rust'
-      ]])
-    end,
-    setup = function ()
-      vim.api.nvim_set_var('vimspector_enable_mappings', 'HUMAN')
-      vim.api.nvim_set_keymap('n', '<Leader>db', '<Cmd>call vimspector#Launch()<CR>', {noremap = true})
-      vim.api.nvim_set_keymap('n', '<Leader>di', '<Cmd>VimspectorBalloonEval<CR>', {noremap = false})
-      vim.api.nvim_set_keymap('x', '<Leader>di', '<Cmd>VimspectorBalloonEval<CR>', {noremap = false})
+    "rcarriga/nvim-dap-ui",
+    requires = {
+      'mfussenegger/nvim-dap-python',
+      'mfussenegger/nvim-dap',
+      'theHamsta/nvim-dap-virtual-text',
+      'nvim-telescope/telescope.nvim'
+    },
+    ft = {'python'},
+    config = function ()
+      -- require('telescope').setup()
+      -- require('telescope').load_extension('dap')
+      require('dap-python').setup(string.format('%s/.pyenv/versions/neovim3/bin/python', vim.api.nvim_eval('$HOME')))
+      require('dap-python').test_runner = 'pytest'
+      require('dap').adapters.python = {
+        type = 'executable';
+        command = string.format('%s/.pyenv/versions/neovim3/bin/python', vim.api.nvim_eval('$HOME'));
+        args = { '-m', 'debugpy.adapter' };
+      }
+      require('dap').configurations.python = {
+        {
+          type = 'python';
+          request = 'launch';
+          name = 'Python launch configurations';
+          program = '${file}';
+        }
+      }
+      vim.api.nvim_set_keymap('n', '<Leader>db', require('dapui').toggle(), { noremap = true })
+      vim.api.nvim_set_keymap('n', '<Leader>dm', require('dap-python').test_method(), { noremap = true })
+      vim.api.nvim_set_keymap('n', '<Leader>dc', '<Cmd>Telescope dap commands', { noremap = true })
+      vim.api.nvim_set_keymap('n', '<Leader>df', '<Cmd>Telescope dap configurations', { noremap = true })
+      -- vim.api.nvim_set_keymap('n', '<Leader>db', '<Cmd>Telescope dap list_breakpoints', { noremap = true })
+      vim.api.nvim_set_keymap('n', '<Leader>dv', '<Cmd>Telescope dap variables', { noremap = true })
+      vim.api.nvim_set_keymap('n', '<Leader>dF', '<Cmd>Telescope dap frames', { noremap = true })
+      vim.api.nvim_set_keymap('n', '<F5>', require('dap').continue(), { noremap = true })
+      vim.api.nvim_set_keymap('n', '<F3>', require('dap').repl.close(), { noremap = true })
+      vim.api.nvim_set_keymap('n', '<F9>', require('dap').toggle_breakpoint(), { noremap = true })
+      vim.api.nvim_set_keymap('n', '<F10>', require('dap').step_over(), { noremap = true })
+      vim.api.nvim_set_keymap('n', '<F11>', require('dap').step_into(), { noremap = true })
+      vim.api.nvim_set_keymap('n', '<F12>', require('dap').step_out(), { noremap = true })
     end
   }
+  -- debugger for python
+  use {
+    'scalameta/nvim-metals',
+    requires = { 'nvim-lua/plenary.nvim', 'mfussenegger/nvim-dap', 'theHamsta/nvim-dap-virtual-text' },
+    ft = {'rust'},
+    config = function ()
+    end
+  }
+  -- use {
+  --   'puremourning/vimspector',
+  --   ft = {'python', 'rust'},
+  --   run = function ()
+  --     vim.cmd([[
+  --       execute './install_gadget.py', '--basedir', '$HOME/.dotfiles/vimspector-config', '--enable-python', '--enable-rust'
+  --     ]])
+  --   end,
+  --   setup = function ()
+  --     vim.api.nvim_set_var('vimspector_enable_mappings', 'HUMAN')
+  --     vim.api.nvim_set_keymap('n', '<Leader>db', '<Cmd>call vimspector#Launch()<CR>', {noremap = true})
+  --     vim.api.nvim_set_keymap('n', '<Leader>di', '<Cmd>VimspectorBalloonEval<CR>', {noremap = false})
+  --     vim.api.nvim_set_keymap('x', '<Leader>di', '<Cmd>VimspectorBalloonEval<CR>', {noremap = false})
+  --   end
+  -- }
   if packer_bootstrap then
     require('packer').sync()
   end
