@@ -108,7 +108,7 @@ def binary_search(sorted_array: List[int], value: int, left: Optional[int]=None,
 	if right is None:
 		right = len(sorted_array)
 	pivot = left + int((right - left) / 2)
-	if sorted_array[pivot] == value: 
+	if sorted_array[pivot] == value:
 		return pivot
 	elif right - left == 1:
 		return None
@@ -128,11 +128,22 @@ def binary_search(sorted_array: List[int], value: int) -> int:
 	right = len(sorted_array) - 1
 	if sorted_array[right] < value:
 		raise ValueError(f"given value {value} is greater than all elements of given sorted_array")
-	while right - left != 1:	
+	while right - left != 1:
 		pivot = left + int((right - left) / 2)
 		if sorted_array[pivot] >= value:
 			right = pivot
 		else:
 			left = pivot
 	return right
+endsnippet
+
+snippet spark "Initialize Spark Session"
+from pyspark.sql import SparkSession
+
+spark = (SparkSession
+    .builder
+    .master("local")
+    .appName("MyApp")
+    .getOrCreate()
+)
 endsnippet
