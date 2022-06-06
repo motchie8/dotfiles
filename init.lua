@@ -587,27 +587,44 @@ require('packer').startup(function(use)
       vim.api.nvim_set_var('db_ui_dotenv_variable_prefix', 'DB_UI_')
     end
   }
-  -- debugger for python
+  -- debugger
   use {
     "rcarriga/nvim-dap-ui",
     requires = {
-      'mfussenegger/nvim-dap-python',
-      'mfussenegger/nvim-dap',
-      'theHamsta/nvim-dap-virtual-text',
-      'nvim-telescope/telescope.nvim'
+        'mfussenegger/nvim-dap',
+        'mfussenegger/nvim-dap-python',
+        'theHamsta/nvim-dap-virtual-text'
     },
-    ft = {'python'},
+    ft = { 'python' },
     config = function ()
-      -- require('telescope').setup()
-      -- require('telescope').load_extension('dap')
-      require('dap-python').setup(string.format('%s/.pyenv/versions/neovim3/bin/python', vim.api.nvim_eval('$HOME')))
-      require('dap-python').test_runner = 'pytest'
-      require('dap').adapters.python = {
+      local dap = require('dap')
+      local dapui = require('dapui')
+      local dappython = require('dap-python')
+      dapui.setup()
+      -- key mappings
+      vim.api.nvim_set_keymap('n', '<F12>', ":lua require('dapui').toggle()<CR>", { noremap = true, silent = true })
+      -- icons
+      vim.fn.sign_define('DapBreakpoint', {text='⛔', texthl='', linehl='', numhl=''})
+      vim.fn.sign_define('DapStopped', {text='👉', texthl='', linehl='', numhl=''})
+      -- open and close windows automatically
+      dap.listeners.after.event_initialized["dapui_config"] = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated["dapui_config"] = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited["dapui_config"] = function()
+        dapui.close()
+      end
+      -- NOTE: tmp copied from nvim-dap-python
+      dappython.setup(string.format('%s/.pyenv/versions/neovim3/bin/python', vim.api.nvim_eval('$HOME')))
+      dappython.test_runner = 'pytest'
+      dap.adapters.python = {
         type = 'executable';
         command = string.format('%s/.pyenv/versions/neovim3/bin/python', vim.api.nvim_eval('$HOME'));
         args = { '-m', 'debugpy.adapter' };
       }
-      require('dap').configurations.python = {
+      dap.configurations.python = {
         {
           type = 'python';
           request = 'launch';
@@ -615,27 +632,29 @@ require('packer').startup(function(use)
           program = '${file}';
         }
       }
-      vim.api.nvim_set_keymap('n', '<Leader>db', require('dapui').toggle(), { noremap = true })
-      vim.api.nvim_set_keymap('n', '<Leader>dm', require('dap-python').test_method(), { noremap = true })
-      vim.api.nvim_set_keymap('n', '<Leader>dc', '<Cmd>Telescope dap commands', { noremap = true })
-      vim.api.nvim_set_keymap('n', '<Leader>df', '<Cmd>Telescope dap configurations', { noremap = true })
-      -- vim.api.nvim_set_keymap('n', '<Leader>db', '<Cmd>Telescope dap list_breakpoints', { noremap = true })
-      vim.api.nvim_set_keymap('n', '<Leader>dv', '<Cmd>Telescope dap variables', { noremap = true })
-      vim.api.nvim_set_keymap('n', '<Leader>dF', '<Cmd>Telescope dap frames', { noremap = true })
-      vim.api.nvim_set_keymap('n', '<F5>', require('dap').continue(), { noremap = true })
-      vim.api.nvim_set_keymap('n', '<F3>', require('dap').repl.close(), { noremap = true })
-      vim.api.nvim_set_keymap('n', '<F9>', require('dap').toggle_breakpoint(), { noremap = true })
-      vim.api.nvim_set_keymap('n', '<F10>', require('dap').step_over(), { noremap = true })
-      vim.api.nvim_set_keymap('n', '<F11>', require('dap').step_into(), { noremap = true })
-      vim.api.nvim_set_keymap('n', '<F12>', require('dap').step_out(), { noremap = true })
+      -- key mappings
+      vim.api.nvim_set_keymap('n', '<Leader>tm', ":lua require('dap-python').test_method()<CR>", { noremap = true, silent = true })
+      -- NOTE: tmp coppied from nvim-dap
+      vim.api.nvim_set_keymap('n', '<F5>', ":lua require('dap').continue()<CR>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', '<S-F5>', ":lua require('dap').repl.close()<CR>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', '<F9>', ":lua require('dap').toggle_breakpoint()<CR>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', '<F10>', ":lua require('dap').step_over()<CR>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', '<F11>', ":lua require('dap').step_into()<CR>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', '<S-F11>', ":lua require('dap').step_out()<CR>", { noremap = true, silent = true })
     end
   }
-  -- debugger for python
   use {
-    'scalameta/nvim-metals',
-    requires = { 'nvim-lua/plenary.nvim', 'mfussenegger/nvim-dap', 'theHamsta/nvim-dap-virtual-text' },
-    ft = {'rust'},
+    'nvim-telescope/telescope.nvim',
+    requires = {{'mfussenegger/nvim-dap', opt = true}},
+    ft = {'python', 'rust'},
     config = function ()
+      vim.api.nvim_set_keymap('n', '<F3>', '<Cmd>Telescope dap variables', { noremap = true })
+      -- require('telescope').setup()
+      -- require('telescope').load_extension('dap')
+      -- vim.api.nvim_set_keymap('n', '<Leader>df', '<Cmd>Telescope dap configurations', { noremap = true })
+      -- vim.api.nvim_set_keymap('n', '<Leader>db', '<Cmd>Telescope dap list_breakpoints', { noremap = true })
+      -- vim.api.nvim_set_keymap('n', '<Leader>dv', '<Cmd>Telescope dap variables', { noremap = true })
+      -- vim.api.nvim_set_keymap('n', '<Leader>dF', '<Cmd>Telescope dap frames', { noremap = true })
     end
   }
   -- use {
