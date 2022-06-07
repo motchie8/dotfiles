@@ -49,6 +49,7 @@ api.nvim_set_keymap('n', '<Leader>bd', '<Cmd>bdelete<CR>', { noremap = true })
 api.nvim_set_keymap('n', '<Leader>f', [["zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>]], { noremap = true })
 api.nvim_set_keymap('n', '<Leader>r', [[<Leader>f:%s/<C-r>///g<Left><Left>]], {noremap = false})
 api.nvim_set_keymap('n', '<Esc><Esc>', '<Cmd>set nohlsearch!<CR>', { noremap = true })
+api.nvim_set_keymap('n', '/', '/\\v', { noremap = false })
 -- ## visual mode ##
 -- move cursor
 api.nvim_set_keymap('x', '<S-h>', '^', { noremap = true })
@@ -89,7 +90,7 @@ opt.showmatch = true
 opt.ruler = true
 
 -- file
-opt.swapfile = true
+opt.swapfile = false
 opt.autoread = true
 opt.backup = false
 opt.writebackup = false
@@ -601,8 +602,7 @@ require('packer').startup(function(use)
       local dapui = require('dapui')
       local dappython = require('dap-python')
       dapui.setup()
-      -- key mappings
-      vim.api.nvim_set_keymap('n', '<F12>', ":lua require('dapui').toggle()<CR>", { noremap = true, silent = true })
+      require("nvim-dap-virtual-text").setup()
       -- icons
       vim.fn.sign_define('DapBreakpoint', {text='⛔', texthl='', linehl='', numhl=''})
       vim.fn.sign_define('DapStopped', {text='👉', texthl='', linehl='', numhl=''})
@@ -632,15 +632,22 @@ require('packer').startup(function(use)
           program = '${file}';
         }
       }
-      -- key mappings
+      -- Toggle debugger Shift-F12 -> d
+      vim.api.nvim_set_keymap('n', '<S-F12>', ":lua require('dapui').toggle()<CR>", { noremap = true, silent = true })
+      -- Test method -> <Leader>tm
       vim.api.nvim_set_keymap('n', '<Leader>tm', ":lua require('dap-python').test_method()<CR>", { noremap = true, silent = true })
-      -- NOTE: tmp coppied from nvim-dap
-      vim.api.nvim_set_keymap('n', '<F5>', ":lua require('dap').continue()<CR>", { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<S-F5>', ":lua require('dap').repl.close()<CR>", { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<F9>', ":lua require('dap').toggle_breakpoint()<CR>", { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<F10>', ":lua require('dap').step_over()<CR>", { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<F11>', ":lua require('dap').step_into()<CR>", { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<S-F11>', ":lua require('dap').step_out()<CR>", { noremap = true, silent = true })
+      -- ContinShift-F5 -> c
+      vim.api.nvim_set_keymap('n', '<S-F5>', ":lua require('dap').continue()<CR>", { noremap = true, silent = true })
+      -- Stop(Quit): Shift-F4 -> q
+      vim.api.nvim_set_keymap('n', '<S-F4>', ":lua require('dap').terminate()<CR>", { noremap = true, silent = true })
+      -- BreakpoiShift-F9 -> b
+      vim.api.nvim_set_keymap('n', '<S-F9>', ":lua require('dap').toggle_breakpoint()<CR>", { noremap = true, silent = true })
+      -- StepOver(Next): Shift-F10 -> n
+      vim.api.nvim_set_keymap('n', '<S-F10>', ":lua require('dap').step_over()<CR>", { noremap = true, silent = true })
+      -- StepIn(Step): Shift-F11 -> i/s
+      vim.api.nvim_set_keymap('n', '<S-F11>', ":lua require('dap').step_into()<CR>", { noremap = true, silent = true })
+      -- StepOut(Return): Shift-F2 -> o/r
+      vim.api.nvim_set_keymap('n', '<S-F2>', ":lua require('dap').step_out()<CR>", { noremap = true, silent = true })
     end
   }
   use {
@@ -648,7 +655,8 @@ require('packer').startup(function(use)
     requires = {{'mfussenegger/nvim-dap', opt = true}},
     ft = {'python', 'rust'},
     config = function ()
-      vim.api.nvim_set_keymap('n', '<F3>', '<Cmd>Telescope dap variables', { noremap = true })
+      -- List variable: Shift-F3 -> l
+      vim.api.nvim_set_keymap('n', '<S-F3>', '<Cmd>Telescope dap variables', { noremap = true })
       -- require('telescope').setup()
       -- require('telescope').load_extension('dap')
       -- vim.api.nvim_set_keymap('n', '<Leader>df', '<Cmd>Telescope dap configurations', { noremap = true })
