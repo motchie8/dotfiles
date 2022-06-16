@@ -20,7 +20,7 @@ export PYENV_PATH=$HOME/.pyenv
 export PYENV_ROOT=$HOME/.pyenv
 export PATH="$PYENV_ROOT/shims:$PATH"
 export PATH="$PYENV_PATH/bin:$PATH"
-if which pyenv > /dev/null; then
+if which pyenv >/dev/null; then
     eval "$(pyenv init --path)"
     eval "$(pyenv virtualenv-init -)"
     eval "$(pyenv init -)"
@@ -32,7 +32,7 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 # setup zplug
 export ZPLUG_HOME=$HOME/.dotfiles/.zplug
 if [ -e $ZPLUG_HOME ]; then
-  source $ZPLUG_HOME/init.zsh
+    source $ZPLUG_HOME/init.zsh
 fi
 
 zplug "zsh-users/zsh-completions"
@@ -45,6 +45,7 @@ source $HOME/.dotfiles/.zprezto/init.zsh
 # setup alias
 alias ll='ls -l'
 alias diff='diff -U1'
+alias nf='nvim $(fzf)'
 
 LESS=' -R '
 LESSOPEN='| src-hilite-lesspipe.sh %s'
@@ -68,20 +69,20 @@ fi
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # fh - repeat history
 fh() {
-  print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed -E 's/ *[0-9]*\*? *//' | sed -E 's/\\/\\\\/g')
+    print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed -E 's/ *[0-9]*\*? *//' | sed -E 's/\\/\\\\/g')
 }
 # fbr - checkout git branch (including remote branches), sorted by most recent commit, limit 30 last branches
 fbr() {
-  local branches branch
-  branches=$(git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)") &&
-  branch=$(echo "$branches" |
-           fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
-  git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+    local branches branch
+    branches=$(git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)") &&
+        branch=$(echo "$branches" |
+            fzf-tmux -d $((2 + $(wc -l <<<"$branches"))) +m) &&
+        git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
 }
 
 # setup DISPLAY for X11 clipboard sharing for WSL
 if [ -e /mnt/wsl ]; then
-  export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
+    export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
 fi
 
 # -----------------------------
@@ -98,7 +99,8 @@ export LANGUAGE="ja_JP:ja"
 setopt interactivecomments
 
 # 色を使用
-autoload -Uz colors ; colors
+autoload -Uz colors
+colors
 
 # エディタをvimに設定
 export EDITOR=vim
@@ -165,7 +167,7 @@ setopt no_clobber
 
 # sudo の後ろでコマンド名を補完する
 zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin \
-                   /usr/sbin /usr/bin /sbin /bin /usr/X11R6/bin
+    /usr/sbin /usr/bin /sbin /bin /usr/X11R6/bin
 
 # ps コマンドのプロセス名補完
 zstyle ':completion:*:processes' command 'ps x -o pid,s,args'
@@ -233,7 +235,9 @@ export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30
 zstyle ':completion::complete:*' use-cache true
 
 # 補完候補に色つける
-autoload -U colors ; colors ; zstyle ':completion:*' list-colors "${LS_COLORS}"
+autoload -U colors
+colors
+zstyle ':completion:*' list-colors "${LS_COLORS}"
 #zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
 # 大文字・小文字を区別しない(大文字を入力した場合は区別する)

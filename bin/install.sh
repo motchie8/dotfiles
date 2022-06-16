@@ -12,25 +12,27 @@ if [ $? != 0 ]; then
     usage_exit
 fi
 eval set -- "$OPT"
-while true
-do
+while true; do
     case $1 in
-        --target) TARGET=$2
-            shift 2
-            ;;
-        -h | --help) usage_exit
-            ;;
-        --) shift
-            break
-            ;;
-        *)
-            echo "Unexpected behavior" 1>&2
-            exit 1
-            ;;
+    --target)
+        TARGET=$2
+        shift 2
+        ;;
+    -h | --help)
+        usage_exit
+        ;;
+    --)
+        shift
+        break
+        ;;
+    *)
+        echo "Unexpected behavior" 1>&2
+        exit 1
+        ;;
     esac
 done
 
-if [ "${TARGET:-}" = "" ];then
+if [ "${TARGET:-}" = "" ]; then
     usage_exit
 elif [ $TARGET != "remote" ] && [ $TARGET != "local" ]; then
     echo "target argument must be 'remote' or 'local', but given value was $TARGET."
@@ -49,10 +51,10 @@ if [ "$OS" = "centos" ] || [ "$OS" = "amzn" ]; then
     # uninstall openssl10 for openssl11
     sudo yum remove openssl -y
     sudo yum install -y git xsel zlib-devel bzip2 bzip2-devel \
-      readline-devel sqlite sqlite-devel openssl11-devel xz \
-      xz-devel libffi-devel make libtool autoconf automake \
-      cmake gcc gcc-c++ make pkgconfig unzip xclip gettext \
-      patch ctags zsh wget util-linux-user which
+        readline-devel sqlite sqlite-devel openssl11-devel xz \
+        xz-devel libffi-devel make libtool autoconf automake \
+        cmake gcc gcc-c++ make pkgconfig unzip xclip gettext \
+        patch ctags zsh wget util-linux-user which
     # install xclip
     sudo amazon-linux-extras install epel -y
     sudo yum-config-manager --enable epel
@@ -65,8 +67,8 @@ if [ "$OS" = "centos" ] || [ "$OS" = "amzn" ]; then
         gcc gcc-c++ make pkgconfig unzip patch gettext curl
     # install cmake v3 for nvim
     if [ ! -e ~/.dotfiles/cmake-3.22.1 ]; then
-	# uninstall cmake v2
-	sudo yum remove cmake -y
+        # uninstall cmake v2
+        sudo yum remove cmake -y
         pushd ~/.dotfiles
         wget https://cmake.org/files/v3.22/cmake-3.22.1.tar.gz
         tar -xvzf cmake-3.22.1.tar.gz
@@ -120,25 +122,25 @@ elif [ "$OS" = "ubuntu" ]; then
     sudo update-locale LANG=ja_JP.UTF-8
     # install zsh, pyenv and vim plugin dependencies
     sudo apt install -y curl git file zlib1g-dev libssl-dev \
-      libreadline-dev libbz2-dev libsqlite3-dev wget cmake \
-      pkg-config unzip libtool libtool-bin m4 automake gettext \
-      zsh x11-apps libffi-dev yarn
+        libreadline-dev libbz2-dev libsqlite3-dev wget cmake \
+        pkg-config unzip libtool libtool-bin m4 automake gettext \
+        zsh x11-apps libffi-dev yarn
     # install ripgrep for telescope
     sudo apt-get install ripgrep -y
     # install neovim nightly
     # NOTE: nvim-treesitter needs Neovim nightly
-    sudo add-apt-repository -y ppa:neovim-ppa/unstable  # ppa:neovim-ppa/stable
+    sudo add-apt-repository -y ppa:neovim-ppa/unstable # ppa:neovim-ppa/stable
     sudo apt-get update -y && sudo apt-get install -y neovim
 elif type sw_vers >/dev/null 2>&1; then
-   echo "[INFO] Install libraries for macOS"
-   brew update
-   set +e
-   # install pyenv, vim plugins and zsh
-   brew install node yarn wget tmux go zsh source-highlight gcc cmake ripgrep # pyenv pyenv-virtualenv
-   # install neovim nightly
-   brew install --HEAD luajit
-   brew install --HEAD neovim
-   set -e
+    echo "[INFO] Install libraries for macOS"
+    brew update
+    set +e
+    # install pyenv, vim plugins and zsh
+    brew install node yarn wget tmux go zsh source-highlight gcc cmake ripgrep # pyenv pyenv-virtualenv
+    # install neovim nightly
+    brew install --HEAD luajit
+    brew install --HEAD neovim
+    set -e
 else
     echo "[ERROR] '$OS' is not supported"
     exit 1
@@ -171,8 +173,7 @@ PYTHON3_VERSION=3.9.7
 PYTHON_VERSIONS=($PYTHON2_VERSION $PYTHON3_VERSION)
 NEOVIM_VIRTUAL_ENVS=("neovim2" "neovim3")
 i=0
-for PYTHON_VERSION in "${PYTHON_VERSIONS[@]}"
-do
+for PYTHON_VERSION in "${PYTHON_VERSIONS[@]}"; do
     NEOVIM_VIRTUAL_ENV=${NEOVIM_VIRTUAL_ENVS[i]}
     result=0
     output=$(pyenv versions | grep -q $NEOVIM_VIRTUAL_ENV) || result=$?
@@ -195,7 +196,7 @@ if [ "$DEFAULT_SHELL" != "zsh" ]; then
     result=$(cat /etc/shells | grep -q "zsh")
     echo "[INFO] Change default shell to zsh"
     if [ $? -ne 0 ]; then
-        echo $(which zsh) >> /etc/shells
+        echo $(which zsh) >>/etc/shells
     fi
     sudo chsh -s $(which zsh) $(whoami)
 fi
@@ -226,18 +227,18 @@ else
     popd
 fi
 
-if [ ! -e ~/.dotfiles/.tmux/colors/iceberg.tmux.conf ];then
+if [ ! -e ~/.dotfiles/.tmux/colors/iceberg.tmux.conf ]; then
     mkdir -p ~/.dotfiles/.tmux/colors/
     wget -O $HOME/.dotfiles/.tmux/colors/iceberg.tmux.conf https://raw.githubusercontent.com/gkeep/iceberg-dark/master/.tmux/iceberg.tmux.conf
 fi
 
 # install or update npm and node for coc-nvim
-if ! type node > /dev/null 2>&1; then
+if ! type node >/dev/null 2>&1; then
     echo "[INFO] Install node"
     # curl -sL install-node.now.sh/lts | bash
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
     export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
     nvm install node --lts
     # nvm use --lts
 fi
@@ -264,7 +265,7 @@ if [ ! -e ~/.dotfiles/.tmux/plugins/tmux-mem-cpu-load ]; then
     if type sw_vers >/dev/null 2>&1; then
         make install
     else
-	sudo make install
+        sudo make install
     fi
     popd
 else
@@ -277,14 +278,14 @@ else
         if type sw_vers >/dev/null 2>&1; then
             make install
         else
-	    sudo make install
+            sudo make install
         fi
     fi
     popd
 fi
 
 # install go
-if ! type go > /dev/null 2>&1; then
+if ! type go >/dev/null 2>&1; then
     echo "[INFO] Install go lang"
     if type brew >/dev/null 2>&1; then
         brew install go
@@ -292,17 +293,43 @@ if ! type go > /dev/null 2>&1; then
         wget https://go.dev/dl/go1.17.6.linux-amd64.tar.gz
         sudo rm -rf /usr/local/go
         sudo tar -C /usr/local -xzf go1.17.6.linux-amd64.tar.gz
-	    rm go1.17.6.linux-amd64.tar.gz
-	    export PATH=$PATH:/usr/local/go/bin
+        rm go1.17.6.linux-amd64.tar.gz
+        export PATH=$PATH:/usr/local/go/bin
     fi
 fi
 
-if [ ! -e ~/go/bin/git-appraise ];then
+if [ ! -e ~/go/bin/git-appraise ]; then
     echo "[INFO] Install git-appraise"
     # install git-appraise
     go get github.com/google/git-appraise/git-appraise
     # install act for github actions
     go install github.com/nektos/act@latest
+fi
+
+# install rust
+if ! type cargo >/dev/null 2>&1; then
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs >install_rust.sh
+    sh install_rust.sh -y
+    rm install_rust.sh
+fi
+
+# install sh formatter
+if ! type shfmt >/dev/null 2>&1; then
+    go install mvdan.cc/sh/v3/cmd/shfmt@latest
+fi
+
+# install rust formatter
+if ! type stylua >/dev/null 2>&1; then
+    cargo install stylua
+fi
+# install toml formatter
+if ! type taplo >/dev/null 2>&1; then
+    cargo install taplo-cli
+fi
+
+# install formatter for various filetypes
+if ! type prettier >/dev/null 2>&1; then
+    npm -g install prettier
 fi
 
 # install fzf
