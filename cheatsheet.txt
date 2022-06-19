@@ -1,0 +1,64 @@
+## cheetsheet
+Open cheatsheet(<leader>s) | :Cheatsheet
+Edit cheatsheet | :CheatsheetEdit
+
+## vimwiki
+Generate or open today's diary | :VimwikiMakeDiaryNote
+Generate or open yesterday's diary | :VimwikiMakeYesterdayDiaryNote
+Navigate to index page | :VimwikiDiaryIndex
+Generate links for each diary | :VimwikiDiaryGenerateLinks
+List vimwiki files | :Telescope find_files cwd=$HOME/vimwiki
+
+
+## glow.nvim
+Preview markdown text (<leader>p) | :Glow
+
+## vim-markdown
+Reduce fold level (zr) | zr
+Open all folds (zR) | zR
+Increase fold level (zm) | zm
+Fold everything (zM) | zM
+Open a fold (za) | za
+Close a fold (zc) | zc
+
+## telescope
+List files editted recently (sp) | sp
+List files opened recently (so) | :Telescope oldfiles
+List files by file name in current working directory (sf) | :Telescope find_files
+List files by file name in targeted directory | :Telescope find_files cwd={path}
+List files tracked by git (sg) | :Telescope git_files
+List files by file content in current working directory (sc) | :Telescope live_grep
+List files by file content in targeted directory | :Telescope live_grep cwd={path}
+List vim commands recenlty executed | :Telescope command_history
+List current changes for git per file | :Telescope git_status
+
+
+## linediff
+Show diff of two separate blocks | :Linediff
+
+## coc.nvim
+Fix issues by code action (<leader>q) | :call CocActionAsync('doQuickfix')
+Execute code action (<leader>a) | :call CocActionAsync('codeAction', '')
+Show all diagnostics (<leader>da) | :CocList diagnostics
+
+## telescope-coc
+Find coc.nvim and preview its results(tc) | :Telescope coc {subcommand}
+
+## nvim-bqf
+Grep files | :vim {pattern} {file}
+Grep current buffer | :vim {pattern} %
+Show current directory | :pwd
+Change current directory | :cd {path}
+Grep git indexed files | :vim {pattern} `git ls-files`
+Go to next matched line | :cn
+Go to previous matched line | :cp
+
+## auto-session
+Save current session | :SaveSession
+Restore previously saved session | :RestoreSession
+Delete previously saved session | :DeleteSession
+
+## diffview
+Show diff against HEAD of current git branch | :DiffviewOpen
+
+

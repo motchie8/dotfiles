@@ -362,8 +362,8 @@ fi
 #fi
 
 # setup symbolic links
-target_paths=("$HOME/.zshrc" "$HOME/.config/nvim" "$HOME/.config/nvim/coc-settings.json", "$HOME/.config/nvim/init.lua")
-link_paths=("$HOME/.dotfiles/.zshrc" "$HOME/.dotfiles/.vim" "$HOME/.dotfiles/coc-settings.json" "$HOME/.dotfiles/init.lua")
+target_paths=("$HOME/.zshrc" "$HOME/.config/nvim" "$HOME/.config/nvim/coc-settings.json" "$HOME/.config/nvim/init.lua" "$HOME/.config/nvim/cheatsheet.txt")
+link_paths=("$HOME/.dotfiles/.zshrc" "$HOME/.dotfiles/.vim" "$HOME/.dotfiles/coc-settings.json" "$HOME/.dotfiles/init.lua" "$HOME/.dotfiles/cheatsheet.txt")
 target_paths+=("$HOME/.tmux.conf")
 if [ $TARGET = "remote" ]; then
     link_paths+=("$HOME/.dotfiles/.tmux/.tmux.remote.conf")
