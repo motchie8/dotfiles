@@ -14,21 +14,21 @@ fi
 eval set -- "$OPT"
 while true; do
     case $1 in
-    --target)
-        TARGET=$2
-        shift 2
-        ;;
-    -h | --help)
-        usage_exit
-        ;;
-    --)
-        shift
-        break
-        ;;
-    *)
-        echo "Unexpected behavior" 1>&2
-        exit 1
-        ;;
+        --target)
+            TARGET=$2
+            shift 2
+            ;;
+        -h | --help)
+            usage_exit
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            echo "Unexpected behavior" 1>&2
+            exit 1
+            ;;
     esac
 done
 
@@ -311,6 +311,7 @@ if ! type cargo >/dev/null 2>&1; then
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs >install_rust.sh
     sh install_rust.sh -y
     rm install_rust.sh
+    export PATH="$HOME/bin:$HOME/.cargo/bin:$PATH"
 fi
 
 # install sh formatter
