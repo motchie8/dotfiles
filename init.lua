@@ -45,8 +45,8 @@ api.nvim_set_keymap("n", "sJ", "<C-w>J", { noremap = true })
 api.nvim_set_keymap("n", "sK", "<C-w>K", { noremap = true })
 api.nvim_set_keymap("n", "sH", "<C-w>H", { noremap = true })
 api.nvim_set_keymap("n", "sL", "<C-w>L", { noremap = true })
-api.nvim_set_keymap("n", "sw", "<C-w>_<C-w>|", { noremap = true })
-api.nvim_set_keymap("n", "sW", "<C-w>", { noremap = true })
+-- api.nvim_set_keymap("n", "sw", "<C-w>_<C-w>|", { noremap = true })
+-- api.nvim_set_keymap("n", "sW", "<C-w>", { noremap = true })
 -- buffer operations
 api.nvim_set_keymap("n", "<Leader>bp", "<Cmd>bprevious<CR>", { noremap = true })
 api.nvim_set_keymap("n", "<Leader>bn", "<Cmd>bnext<CR>", { noremap = true })
@@ -132,6 +132,8 @@ opt.syntax = "on"
 opt.sh = "zsh"
 
 -- # autocmd # --
+-- open quickfix
+-- vim.cmd("autocmd QuickFixCmdPost *grep* cwindow")
 -- vim.cmd('autocmd BufWritePost *.py ')
 -- vim.cmd('autocmd!')
 -- vim.cmd('autocmd!')
@@ -165,14 +167,14 @@ require("packer").startup(function(use)
 	-- resize window
 	use({ "simeji/winresizer" })
 	-- whitespace
-	use({
-		"ntpeters/vim-better-whitespace",
-		setup = function()
-			vim.api.nvim_set_var("better_whitespace_enabled", 0)
-			vim.api.nvim_set_var("strip_whitespace_on_save", 1)
-			vim.api.nvim_set_var("current_line_whitespace_disabled_soft", 1)
-		end,
-	})
+	-- use({
+	-- 	"ntpeters/vim-better-whitespace",
+	-- 	setup = function()
+	-- 		vim.api.nvim_set_var("better_whitespace_enabled", 0)
+	-- 		vim.api.nvim_set_var("strip_whitespace_on_save", 1)
+	-- 		vim.api.nvim_set_var("current_line_whitespace_disabled_soft", 1)
+	-- 	end,
+	-- })
 	-- indent
 	use("lukas-reineke/indent-blankline.nvim")
 	-- ### Finder ###
@@ -183,15 +185,49 @@ require("packer").startup(function(use)
 		setup = function()
 			vim.api.nvim_set_keymap("n", "sd", "<Cmd>Telescope buffers<CR>", { noremap = true })
 			vim.api.nvim_set_keymap("n", "sf", "<Cmd>Telescope find_files<CR>", { noremap = true })
-			vim.api.nvim_set_keymap("n", "sg", "<Cmd>Telescope live_grep<CR>", { noremap = true })
-			vim.api.nvim_set_keymap("n", "st", "<Cmd>Telescope help_tags<CR>", { noremap = true })
+			vim.api.nvim_set_keymap("n", "sg", "<Cmd>Telescope git_files<CR>", { noremap = true })
+			vim.api.nvim_set_keymap("n", "sc", "<Cmd>Telescope live_grep<CR>", { noremap = true })
+			vim.api.nvim_set_keymap("n", "so", "<Cmd>Telescope oldfiles<CR>", { noremap = true })
+			-- list vimwiki files
+			vim.api.nvim_set_keymap(
+				"n",
+				"sw",
+				"<Cmd>Telescope find_files cwd=$HOME/vimwiki<CR>",
+				{ noremap = true, silent = true }
+			)
+		end,
+	})
+	-- calculating matching score for telescope
+	use({
+		"nvim-telescope/telescope-fzf-native.nvim",
+		requires = { "nvim-telescope/telescope.nvim" },
+		run = "make",
+		config = function()
+			require("telescope").setup({})
+			require("telescope").load_extension("fzf")
+		end,
+	})
+	-- intelligent prioritization for telescope
+	use({
+		"nvim-telescope/telescope-frecency.nvim",
+		requires = { "tami5/sqlite.lua" },
+		config = function()
+			require("telescope").load_extension("frecency")
+			vim.api.nvim_set_keymap(
+				"n",
+				"sp",
+				"<Cmd>lua require('telescope').extensions.frecency.frecency()<CR>",
+				{ noremap = true, silent = true }
+			)
 		end,
 	})
 	-- command line finder
 	use({ "ibhagwan/fzf-lua", requires = { "kyazdani42/nvim-web-devicons" } })
 	use({
 		"junegunn/fzf.vim",
-		requires = { { "junegunn/fzf" } },
+		run = function()
+			vim.fn["fzf#install"]()
+		end,
 	})
 
 	-- ### Viewer ###
@@ -267,21 +303,6 @@ require("packer").startup(function(use)
 			})
 		end,
 	})
-	-- use {
-	--   'kassio/neoterm',
-	--   setup = function()
-	--     vim.api.nvim_set_var('neoterm_shell', '&shell')
-	--     vim.api.nvim_set_var('neoterm_size', 8)
-	--     vim.api.nvim_set_var('neoterm_autoscroll', 1)
-	--     vim.api.nvim_set_var('neoterm_repl_python', '&shell')
-	--     vim.api.nvim_set_keymap('n', '<Leader>C', '<Cmd>botright Tnew<CR>:T source venv/bin/activate<CR>', {noremap = true})
-	--     vim.api.nvim_set_keymap('n', '<Leader>c', '<Cmd>botright Tnew<CR>', {noremap = true, silent = true})
-	--     vim.api.nvim_set_keymap('n', '<Leader>e', '<Cmd>TREPLSendLine<CR>', {noremap = true})
-	--     vim.api.nvim_set_keymap('t', '<ESC>', '<C-\\><C-n>', {noremap = true})
-	--     vim.api.nvim_set_keymap('t', 'jj', '<C-\\><C-n>', {noremap = true})
-	--     vim.api.nvim_set_keymap('v', '<Leader>e', 'V:TREPLSendSelection<CR>', {noremap = true})
-	--   end
-	-- }
 	-- git
 	use({ "airblade/vim-gitgutter" })
 	use({ "tpope/vim-fugitive" })
@@ -294,7 +315,52 @@ require("packer").startup(function(use)
 			vim.api.nvim_set_keymap("n", "f", "<Plug>(easymotion-overwin-f2)", { noremap = false })
 		end,
 	})
+	-- greeter to edit most recently used files
+	use({
+		"goolord/alpha-nvim",
+		requires = { "kyazdani42/nvim-web-devicons" },
+		config = function()
+			require("alpha").setup(require("alpha.themes.startify").config)
+		end,
+	})
+	-- scroll bar
+	use({
+		"petertriho/nvim-scrollbar",
+		-- requires = { "kevinhwang91/nvim-hlslens" },
+		-- config = function()
+		-- 	require("scrollbar.handlers.search").setup()
+		-- end,
+	})
+	-- show matched information
+	-- use({
+	-- 	"kevinhwang91/nvim-hlslens",
+	-- 	config = function()
+	-- 		local kopts = { noremap = true, silent = true }
 
+	-- 		vim.api.nvim_set_keymap(
+	-- 			"n",
+	-- 			"n",
+	-- 			[[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]],
+	-- 			kopts
+	-- 		)
+	-- 		vim.api.nvim_set_keymap(
+	-- 			"n",
+	-- 			"N",
+	-- 			[[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]],
+	-- 			kopts
+	-- 		)
+	-- 		vim.api.nvim_set_keymap("n", "*", [[*<Cmd>lua require('hlslens').start()<CR>]], kopts)
+	-- 		vim.api.nvim_set_keymap("n", "#", [[#<Cmd>lua require('hlslens').start()<CR>]], kopts)
+	-- 		vim.api.nvim_set_keymap("n", "g*", [[g*<Cmd>lua require('hlslens').start()<CR>]], kopts)
+	-- 		vim.api.nvim_set_keymap("n", "g#", [[g#<Cmd>lua require('hlslens').start()<CR>]], kopts)
+
+	-- 		vim.api.nvim_set_keymap("n", "<Leader>l", ":noh<CR>", kopts)
+	-- 	end,
+	-- })
+	-- show line diff
+	use({ "AndrewRadev/linediff.vim" })
+	-- show git diff
+	use({ "sindrets/diffview.nvim", requires = "nvim-lua/plenary.nvim" })
 	-- dotenv
 	use({ "tpope/vim-dotenv" })
 
@@ -310,6 +376,7 @@ require("packer").startup(function(use)
 			"nvim-lua/plenary.nvim",
 		},
 		config = function()
+			vim.api.nvim_set_keymap("n", "<leader>s", "<Cmd>Cheatsheet<CR>", { noremap = true, silent = true })
 			require("cheatsheet").setup({
 				-- Whether to show bundled cheatsheets
 				-- For generic cheatsheets like default, unicode, nerd-fonts, etc
@@ -317,7 +384,7 @@ require("packer").startup(function(use)
 				--     enabled = {},
 				--     disabled = {},
 				-- },
-				bundled_cheatsheets = true,
+				bundled_cheatsheets = false,
 
 				-- For plugin specific cheatsheets
 				-- bundled_plugin_cheatsheets = {
@@ -483,9 +550,9 @@ require("packer").startup(function(use)
         nmap <Space>a  <Plug>(coc-codeaction-selected)
 
         " Remap keys for applying codeAction to the current buffer.
-        nmap <Space>ac  <Plug>(coc-codeaction)
+        nmap <Space>a  <Plug>(coc-codeaction)
         " Apply AutoFix to problem on the current line.
-        nmap <Space>qf  <Plug>(coc-fix-current)
+        nmap <Space>q  <Plug>(coc-fix-current)
 
         " Run the Code Lens action on the current line.
         nmap <Space>cl  <Plug>(coc-codelens-action)
@@ -560,13 +627,94 @@ require("packer").startup(function(use)
       ]])
 		end,
 	})
+	-- preview results from coc.nvim
+	use({
+		"fannheyward/telescope-coc.nvim",
+		requires = { "neoclide/coc.nvim", "nvim-telescope/telescope.nvim" },
+		config = function()
+			require("telescope").load_extension("coc")
+			vim.api.nvim_set_keymap("n", "tc", "<Cmd>Telescope coc", { noremap = true })
+		end,
+	})
+	-- wiki
+	use({
+		"vimwiki/vimwiki",
+		setup = function()
+			vim.cmd([[
+                set nocompatible
+                filetype plugin on
+                syntax on
+            ]])
+			vim.api.nvim_set_var("vimwiki_list", {
+				{
+					path = "~/vimwiki",
+					syntax = "markdown",
+					ext = "md",
+					auto_tags = 1,
+					auto_diary_index = 1,
+					auto_generate_tags = 1,
+					auto_toc = 1,
+				},
+			})
+			vim.api.nvim_set_var("vimwiki_global_ext", 1)
+			vim.api.nvim_set_var("vimwiki_markdown_link_ext", 1)
+			vim.api.nvim_set_var("taskwiki_markup_syntax", "markdown")
+			vim.api.nvim_set_var("markdown_folding", 1)
+
+			-- register markdown files to vimwiki
+			vim.api.nvim_set_var("vimwiki_filetypes", { "markdown" })
+			-- disable key mappings
+			vim.api.nvim_set_var("vimwiki_key_mappings", { all_maps = 0 })
+		end,
+	})
+	-- task management
+	use({
+		"tools-life/taskwiki",
+		requires = { "vimwiki/vimwiki" },
+		config = function()
+			vim.api.nvim_set_keymap("n", "tw", ":e ~/vimwiki/task.md<CR>", { noremap = true, silent = true })
+		end,
+	})
+	-- save and restore vim session
+	use({
+		"rmagatti/auto-session",
+		config = function()
+			require("auto-session").setup({
+				log_level = "info",
+				auto_session_enabled = true,
+				auto_session_allowed_dirs = { "~/vimwiki/" },
+			})
+		end,
+	})
 	-- # Lazy loading plugins #
+	-- quickfix
+	use({
+		"kevinhwang91/nvim-bqf",
+		ft = "qf",
+		requires = { "junegunn/fzf.vim", "nvim-treesitter/nvim-treesitter" },
+	})
+	-- markdown mappings for folding
+	use({
+		"preservim/vim-markdown",
+		requires = { "godlygeek/tabular" },
+		setup = function()
+			vim.api.nvim_set_var("vim_markdown_folding_disabled", 1)
+		end,
+	})
+
 	-- markdown preview
 	use({
 		"ellisonleao/glow.nvim",
 		branch = "main",
 		ft = { "markdown" },
+		config = function()
+			vim.api.nvim_set_keymap("n", "<leader>p", "<Cmd>Glow<CR>", { noremap = true, silent = true })
+		end,
 	})
+	-- taskwiki plugins
+	use({ "powerman/vim-plugin-AnsiEsc" })
+	use({ "preservim/tagbar" })
+	use({ "blindFS/vim-taskwarrior" })
 	-- python
 	use({
 		"lambdalisue/vim-pyenv",
@@ -594,7 +742,9 @@ require("packer").startup(function(use)
 			vim.api.nvim_set_var("jupytext_command", "~/.pyenv/versions/neovim3/bin/jupytext")
 		end,
 	})
-	-- sql
+	-- convert sql keywords to upper case
+	use({ "jsborjesson/vim-uppercase-sql", ft = { "sql" } })
+	-- sql workspace
 	use({
 		"kristijanhusak/vim-dadbod-ui",
 		requires = { "kristijanhusak/vim-dadbod" },
@@ -706,21 +856,8 @@ require("packer").startup(function(use)
 				":lua require('dap').step_out()<CR>",
 				{ noremap = true, silent = true }
 			)
-		end,
-	})
-	use({
-		"nvim-telescope/telescope.nvim",
-		requires = { { "mfussenegger/nvim-dap", opt = true } },
-		ft = { "python", "rust" },
-		config = function()
-			-- List variable: Shift-F3 -> l
-			vim.api.nvim_set_keymap("n", "<S-F3>", "<Cmd>Telescope dap variables", { noremap = true })
-			-- require('telescope').setup()
-			-- require('telescope').load_extension('dap')
-			-- vim.api.nvim_set_keymap('n', '<Leader>df', '<Cmd>Telescope dap configurations', { noremap = true })
-			-- vim.api.nvim_set_keymap('n', '<Leader>db', '<Cmd>Telescope dap list_breakpoints', { noremap = true })
-			-- vim.api.nvim_set_keymap('n', '<Leader>dv', '<Cmd>Telescope dap variables', { noremap = true })
-			-- vim.api.nvim_set_keymap('n', '<Leader>dF', '<Cmd>Telescope dap frames', { noremap = true })
+			-- list variables: Shift-F3
+			vim.api.nvim_set_keymap("n", "<S-F3>", "<Cmd>Telescope dap variables<CR>", { noremap = true })
 		end,
 	})
 	-- use {

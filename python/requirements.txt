@@ -15,3 +15,4 @@ jupyter
 pysen
 mypy
 pytest
+tasklib
