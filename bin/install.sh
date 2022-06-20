@@ -137,6 +137,8 @@ elif type sw_vers >/dev/null 2>&1; then
     set +e
     # install pyenv, vim plugins and zsh
     brew install node yarn wget tmux go zsh source-highlight gcc cmake ripgrep # pyenv pyenv-virtualenv
+    # install taskwarrior
+    brew install task ctags
     # install neovim nightly
     brew install --HEAD luajit
     brew install --HEAD neovim
@@ -239,7 +241,7 @@ if ! type node >/dev/null 2>&1; then
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
     export NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-    nvm install node --lts
+    nvm install 16.15.1
     # nvm use --lts
 fi
 
@@ -324,9 +326,10 @@ if ! type stylua >/dev/null 2>&1; then
     cargo install stylua
 fi
 # install toml formatter
-if ! type taplo >/dev/null 2>&1; then
-    cargo install taplo-cli
-fi
+#if ! type taplo >/dev/null 2>&1; then
+#    export OPENSSL_DIR=/usr/include/openssl
+#    cargo install taplo-cli
+#fi
 
 # install formatter for various filetypes
 if ! type prettier >/dev/null 2>&1; then
@@ -385,4 +388,6 @@ for i in "${!target_paths[@]}"; do
     fi
     ln -s "${link_paths[i]}" "${target_paths[i]}"
 done
+# make vimwiki directories
+mkdir -p ~/vimwiki/todo
 echo "[INFO] Finished"
