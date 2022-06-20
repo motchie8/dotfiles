@@ -61,4 +61,15 @@ Delete previously saved session | :DeleteSession
 ## diffview
 Show diff against HEAD of current git branch | :DiffviewOpen
 
+## tagbar
+Show class outline | :TagbarToggle
 
+## taskwiki
+Complete task (td) | :TaskWikiDone
+Delete task (tD) | :TaskWikiDelete
+Start or stop task (tt) | :TaskWikiToggle
+Edit task (te) | :TaskWikiEdit
+Annotate task (ta) | :TaskWikiAnnotate
+
+## vim-tw
+Show task grid | :TW {filter}

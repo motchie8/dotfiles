@@ -672,7 +672,11 @@ require("packer").startup(function(use)
 		"tools-life/taskwiki",
 		requires = { "vimwiki/vimwiki" },
 		config = function()
-			vim.api.nvim_set_keymap("n", "tw", ":e ~/vimwiki/task.md<CR>", { noremap = true, silent = true })
+			vim.api.nvim_set_keymap("n", "td", "<Cmd>TaskWikiDone<CR>", { noremap = true, silent = true })
+			vim.api.nvim_set_keymap("n", "tdd", "<Cmd>TaskWikiDelete<CR>", { noremap = true, silent = true })
+			vim.api.nvim_set_keymap("n", "tt", "<Cmd>TaskWikiToggle<CR>", { noremap = true, silent = true })
+			vim.api.nvim_set_keymap("n", "te", "<Cmd>TaskWikiEdit<CR>", { noremap = true, silent = true })
+			vim.api.nvim_set_keymap("n", "ta", "<Cmd>TaskWikiAnnotate<CR>", { noremap = true, silent = true })
 		end,
 	})
 	-- save and restore vim session
@@ -714,7 +718,12 @@ require("packer").startup(function(use)
 	-- taskwiki plugins
 	use({ "powerman/vim-plugin-AnsiEsc" })
 	use({ "preservim/tagbar" })
-	use({ "blindFS/vim-taskwarrior" })
+	use({
+		"blindFS/vim-taskwarrior",
+		config = function()
+			vim.api.nvim_set_keymap("n", "tw", "<Cmd>TW<CR>", { noremap = true, silent = true })
+		end,
+	})
 	-- python
 	use({
 		"lambdalisue/vim-pyenv",
