@@ -55,6 +55,8 @@ if [ "$OS" = "centos" ] || [ "$OS" = "amzn" ]; then
         xz-devel libffi-devel make libtool autoconf automake \
         cmake gcc gcc-c++ make pkgconfig unzip xclip gettext \
         patch ctags zsh wget util-linux-user which
+    # install taskwarrior
+    sudo yum install task -y
     # install xclip
     sudo amazon-linux-extras install epel -y
     sudo yum-config-manager --enable epel
@@ -125,6 +127,8 @@ elif [ "$OS" = "ubuntu" ]; then
         libreadline-dev libbz2-dev libsqlite3-dev wget cmake \
         pkg-config unzip libtool libtool-bin m4 automake gettext \
         zsh x11-apps libffi-dev yarn
+    # install taskwarrior
+    sudo apt-get install taskwarrior -y
     # install ripgrep for telescope
     sudo apt-get install ripgrep -y
     # install neovim nightly
