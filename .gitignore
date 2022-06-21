@@ -13,3 +13,4 @@ GTAGS
 .fzf
 vimspector-config
 .zplug
+.python-version
