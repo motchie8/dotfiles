@@ -676,7 +676,14 @@ require("packer").startup(function(use)
 			vim.api.nvim_set_keymap("n", "tdd", "<Cmd>TaskWikiDelete<CR>", { noremap = true, silent = true })
 			vim.api.nvim_set_keymap("n", "tt", "<Cmd>TaskWikiToggle<CR>", { noremap = true, silent = true })
 			vim.api.nvim_set_keymap("n", "te", "<Cmd>TaskWikiEdit<CR>", { noremap = true, silent = true })
-			vim.api.nvim_set_keymap("n", "ta", "<Cmd>TaskWikiAnnotate<CR>", { noremap = true, silent = true })
+			vim.api.nvim_set_keymap("n", "tm", "<Cmd>TaskWikiMod<CR>", { noremap = true, silent = true })
+			-- TODO: add shell script to sync TW task to Google Calendar
+			vim.api.nvim_set_keymap(
+				"n",
+				"ts",
+				"<Cmd>silent !$HOME/vimwiki/todo/sync_task_with_calendar.sh<CR>",
+				{ noremap = true, silent = true }
+			)
 		end,
 	})
 	-- save and restore vim session
