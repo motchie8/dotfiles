@@ -261,7 +261,16 @@ require("packer").startup(function(use)
 		end,
 		config = function()
 			require("nvim-tree").setup({
+				update_cwd = false,
+				update_focused_file = {
+					enable = true,
+					update_root = true,
+				},
+				git = {
+					ignore = false,
+				},
 				view = {
+					width = 40,
 					mappings = {
 						custom_only = true,
 						list = {
