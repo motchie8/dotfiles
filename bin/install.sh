@@ -56,6 +56,7 @@ if [ "$OS" = "centos" ] || [ "$OS" = "amzn" ]; then
         cmake gcc gcc-c++ make pkgconfig unzip xclip gettext \
         patch ctags zsh wget util-linux-user which
     # install taskwarrior
+    sudo amazon-linux-extras install epel -y
     sudo yum install task -y
     # install xclip
     sudo amazon-linux-extras install epel -y
@@ -304,16 +305,14 @@ if ! type go >/dev/null 2>&1; then
     fi
 fi
 
-if [ ! -e ~/go/bin/git-appraise ]; then
-    echo "[INFO] Install git-appraise"
-    # install git-appraise
-    go get github.com/google/git-appraise/git-appraise
-    # install act for github actions
-    go install github.com/nektos/act@latest
+if [ ! -e ~/go/bin/act ]; then
+    echo "[INFO] Install act"
+    curl https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
 fi
 
 # install rust
 if ! type cargo >/dev/null 2>&1; then
+    echo "[INFO] Install rust"
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs >install_rust.sh
     sh install_rust.sh -y
     rm install_rust.sh
@@ -322,11 +321,13 @@ fi
 
 # install sh formatter
 if ! type shfmt >/dev/null 2>&1; then
+    echo "[INFO] Install shfmt"
     go install mvdan.cc/sh/v3/cmd/shfmt@latest
 fi
 
 # install rust formatter
 if ! type stylua >/dev/null 2>&1; then
+    echo "[INFO] Install stylua"
     cargo install stylua
 fi
 # install toml formatter
