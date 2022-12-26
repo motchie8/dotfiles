@@ -14,3 +14,7 @@ GTAGS
 vimspector-config
 .zplug
 .python-version
+.tmux/.tmux.user.conf
+tmux/
+iceberg.vim/
+node_modules/

@@ -2,11 +2,13 @@
 set -eu
 
 usage_exit() {
-    echo -e "Usage: $0\n    --target [remote|local]" 1>&2
+    echo -e "Usage: $0 --tmux-prefix-key b" 1>&2
+    echo -e "\t--tmux-prefix-key" 1>&2
+    echo -e "\t\tCharacter to use as tmux prefix key" 1>&2
     exit 1
 }
 
-OPT=$(getopt -o h -l target:,help -- "$@")
+OPT=$(getopt -o h -l tmux-prefix-key:,help -- "$@")
 
 if [ $? != 0 ]; then
     usage_exit
@@ -14,8 +16,8 @@ fi
 eval set -- "$OPT"
 while true; do
     case $1 in
-        --target)
-            TARGET=$2
+        --tmux-prefix-key)
+            TMUX_PREFIX_KEY=$2
             shift 2
             ;;
         -h | --help)
@@ -32,12 +34,16 @@ while true; do
     esac
 done
 
-if [ "${TARGET:-}" = "" ]; then
+if [ "${TMUX_PREFIX_KEY:-}" = "" ]; then
     usage_exit
-elif [ $TARGET != "remote" ] && [ $TARGET != "local" ]; then
-    echo "target argument must be 'remote' or 'local', but given value was $TARGET."
-    exit 1
 fi
+
+# create .tmux.user.conf for custom prefix key
+cat <<EOL >$HOME/.dotfiles/.tmux/.tmux.user.conf
+unbind C-b
+set-option -g prefix C-${TMUX_PREFIX_KEY}
+bind-key C-${TMUX_PREFIX_KEY} send-prefix
+EOL
 
 OS=$(cat /etc/os-release | grep -E '^ID="?[^"]*"?$' | tr -d '"' | awk -F '[=]' '{print $NF}')
 
@@ -192,6 +198,7 @@ for PYTHON_VERSION in "${PYTHON_VERSIONS[@]}"; do
         eval "$PYTHON_PATH -m pip install pynvim neovim"
         if [ "$NEOVIM_VIRTUAL_ENV" = "neovim3" ]; then
             eval "$PYTHON_PATH -m pip install -r ~/.dotfiles/python/requirements.txt"
+            pyenv global $NEOVIM_VIRTUAL_ENV
         fi
     fi
     i=$(expr $i + 1)
@@ -234,6 +241,7 @@ else
     popd
 fi
 
+# download iceberg.tmux.conf
 if [ ! -e ~/.dotfiles/.tmux/colors/iceberg.tmux.conf ]; then
     mkdir -p ~/.dotfiles/.tmux/colors/
     wget -O $HOME/.dotfiles/.tmux/colors/iceberg.tmux.conf https://raw.githubusercontent.com/gkeep/iceberg-dark/master/.tmux/iceberg.tmux.conf
@@ -370,17 +378,8 @@ fi
 #fi
 
 # setup symbolic links
-target_paths=("$HOME/.zshrc" "$HOME/.config/nvim" "$HOME/.config/nvim/coc-settings.json" "$HOME/.config/nvim/init.lua" "$HOME/.config/nvim/cheatsheet.txt")
-link_paths=("$HOME/.dotfiles/.zshrc" "$HOME/.dotfiles/.vim" "$HOME/.dotfiles/coc-settings.json" "$HOME/.dotfiles/init.lua" "$HOME/.dotfiles/cheatsheet.txt")
-target_paths+=("$HOME/.tmux.conf")
-if [ $TARGET = "remote" ]; then
-    link_paths+=("$HOME/.dotfiles/.tmux/.tmux.remote.conf")
-elif [ $TARGET = "local" ]; then
-    link_paths+=("$HOME/.dotfiles/.tmux/.tmux.local.conf")
-else
-    echo "target argument must be 'remote' or 'local', but given value was $TARGET."
-    exit 1
-fi
+target_paths=("$HOME/.zshrc" "$HOME/.config/nvim" "$HOME/.config/nvim/coc-settings.json" "$HOME/.config/nvim/init.lua" "$HOME/.config/nvim/cheatsheet.txt" "$HOME/.tmux.conf")
+link_paths=("$HOME/.dotfiles/.zshrc" "$HOME/.dotfiles/.vim" "$HOME/.dotfiles/coc-settings.json" "$HOME/.dotfiles/init.lua" "$HOME/.dotfiles/cheatsheet.txt" "$HOME/.dotfiles/.tmux/.tmux.common.conf")
 mkdir -p ~/.config
 for i in "${!target_paths[@]}"; do
     if [ -e "${target_paths[i]}" ]; then

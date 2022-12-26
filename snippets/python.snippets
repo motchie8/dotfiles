@@ -147,3 +147,17 @@ spark = (SparkSession
     .getOrCreate()
 )
 endsnippet
+
+snippet dummy_input "Dummy input function for programing contest"
+from collections import deque
+from pathlib import Path
+input_queue = deque()
+
+def input(n: int = 1) -> str:
+	if len(input_queue) == 0:
+		test_input_path = Path(__file__).parent / 'test' / f'sample-{n}.in'
+		lines = test_input_path.read_text().split('\n')
+		for l in lines:
+			input_queue.append(l)
+	return input_queue.popleft()
+endsnippet

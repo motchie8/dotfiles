@@ -5,6 +5,7 @@ Edit cheatsheet | :CheatsheetEdit
 ## vimwiki
 Generate or open today's diary | :VimwikiMakeDiaryNote
 Generate or open yesterday's diary | :VimwikiMakeYesterdayDiaryNote
+Generate or open tomorrow's diary | :VimwikiMakeTomorrowDiaryNote
 Navigate to index page | :VimwikiDiaryIndex
 Generate links for each diary | :VimwikiDiaryGenerateLinks
 List vimwiki files | :Telescope find_files cwd=$HOME/vimwiki
@@ -70,6 +71,7 @@ Delete task (tD) | :TaskWikiDelete
 Start or stop task (tt) | :TaskWikiToggle
 Edit task (te) | :TaskWikiEdit
 Annotate task (ta) | :TaskWikiAnnotate
+Synchronize Google cadendar with Taskwarrior(ts) | :!$HOME/vimwiki/todo/sync_task_with_calendar.sh
 
 ## vim-tw
 Show task grid | :TW {filter}
