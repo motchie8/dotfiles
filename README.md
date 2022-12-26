@@ -1,15 +1,30 @@
-# .dotfiles
-Setup script and dotfiles for development environment with neovim, zsh and pyenv.
+# motchie8's dotfiles
+
+![Screenshot Image](docs/screenshot.png)
+
+This is my personal collection of configuration files.
+
+* Shell: zsh
+* Editor: Neovim
 
 ## Install
-Install development tools and create symbolic links for dotfiles.  
-Intented for use with Ubuntu, MacOS or AmazonLinux.
-```
-$ ./bin/install.sh
+
+Install on local machine on MacOS, Ubuntu or Amazon Linux 2.
+
+```sh
+$ ./bin/install.sh --tmux-prefix-key b
 ```
 
-## Docker
-The installed environment can be used as a Docker container.
-```
+Or launch a Docker container from a public docker image.
+
+Docker image for ubuntu.
+
+```sh
 $ docker run -it --rm motchie8/dotfiles:ubuntu zsh
+```
+
+Docker image for Amazon Linux 2.
+
+```sh
+$ docker run -it --rm motchie8/dotfiles:amzn2 zsh
 ```

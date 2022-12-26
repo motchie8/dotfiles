@@ -18,5 +18,5 @@ RUN sudo chown -R $user /home/$user/.dotfiles
 
 WORKDIR /home/$user/.dotfiles
 
-RUN ./bin/install.sh --target local
+RUN ./bin/install.sh --tmux-prefix-key b
 RUN nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
