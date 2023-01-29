@@ -161,3 +161,8 @@ def input(n: int = 1) -> str:
 			input_queue.append(l)
 	return input_queue.popleft()
 endsnippet
+
+snippet recursion_limit "Increase the maximum number of recursions"
+import sys
+sys.setrecursionlimit(100000)
+endsnippet

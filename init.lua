@@ -417,7 +417,7 @@ require("packer").startup(function(use)
 				-- Key mappings bound inside the telescope window
 				telescope_mappings = {
 					["<CR>"] = require("cheatsheet.telescope.actions").select_or_fill_commandline,
-					["<A-CR>"] = require("cheatsheet.telescope.actions").select_or_execute,
+					["<C-CR>"] = require("cheatsheet.telescope.actions").select_or_execute,
 					["<C-Y>"] = require("cheatsheet.telescope.actions").copy_cheat_value,
 					["<C-E>"] = require("cheatsheet.telescope.actions").edit_user_cheatsheet,
 				},
@@ -432,11 +432,12 @@ require("packer").startup(function(use)
 		"sbdchd/neoformat",
 		config = function()
 			vim.cmd([[
-                augroup fmt
-                    autocmd!
-                    autocmd BufWritePre * undojoin | Neoformat
-                augroup END
-            ]])
+			    augroup fmt
+			        autocmd!
+			        autocmd BufWritePre * undojoin | Neoformat
+			    augroup END
+			]])
+
 			-- for zsh
 			vim.api.nvim_set_var("shfmt_opt", "-ci")
 			-- for markdown
@@ -631,11 +632,11 @@ require("packer").startup(function(use)
 				},
 			})
 			require("telescope").load_extension("coc")
-			vim.api.nvim_set_keymap("n", "gd", "<Cmd>Telescope coc definitions", { noremap = true })
-			vim.api.nvim_set_keymap("n", "gt", "<Cmd>Telescope coc type_definitions", { noremap = true })
-			vim.api.nvim_set_keymap("n", "gi", "<Cmd>Telescope coc implementations", { noremap = true })
-			vim.api.nvim_set_keymap("n", "gr", "<Cmd>Telescope coc references", { noremap = true })
-			vim.api.nvim_set_keymap("n", "ge", "<Cmd>Telescope coc diagnostics", { noremap = true })
+			vim.api.nvim_set_keymap("n", "gd", "<Cmd>Telescope coc definitions<CR>", { noremap = true })
+			-- vim.api.nvim_set_keymap("n", "gp", "<Cmd>Telescope coc type_definitions<CR>", { noremap = true })
+			vim.api.nvim_set_keymap("n", "gi", "<Cmd>Telescope coc implementations<CR>", { noremap = true })
+			vim.api.nvim_set_keymap("n", "gr", "<Cmd>Telescope coc references<CR>", { noremap = true })
+			vim.api.nvim_set_keymap("n", "ge", "<Cmd>Telescope coc diagnostics<CR>", { noremap = true })
 		end,
 	})
 	-- wiki
@@ -832,7 +833,7 @@ require("packer").startup(function(use)
 				":lua require('dap-python').test_method()<CR>",
 				{ noremap = true, silent = true }
 			)
-			-- ContinShift-F5 -> c
+			-- Continue: Shift-F5 -> c
 			vim.api.nvim_set_keymap(
 				"n",
 				"<S-F5>",
@@ -878,21 +879,6 @@ require("packer").startup(function(use)
 			vim.api.nvim_set_keymap("n", "<S-F3>", "<Cmd>Telescope dap variables<CR>", { noremap = true })
 		end,
 	})
-	-- use {
-	--   'puremourning/vimspector',
-	--   ft = {'python', 'rust'},
-	--   run = function ()
-	--     vim.cmd([[
-	--       execute './install_gadget.py', '--basedir', '$HOME/.dotfiles/vimspector-config', '--enable-python', '--enable-rust'
-	--     ]])
-	--   end,
-	--   setup = function ()
-	--     vim.api.nvim_set_var('vimspector_enable_mappings', 'HUMAN')
-	--     vim.api.nvim_set_keymap('n', '<Leader>db', '<Cmd>call vimspector#Launch()<CR>', {noremap = true})
-	--     vim.api.nvim_set_keymap('n', '<Leader>di', '<Cmd>VimspectorBalloonEval<CR>', {noremap = false})
-	--     vim.api.nvim_set_keymap('x', '<Leader>di', '<Cmd>VimspectorBalloonEval<CR>', {noremap = false})
-	--   end
-	-- }
 	-- Translator
 	use({
 		"voldikss/vim-translator",

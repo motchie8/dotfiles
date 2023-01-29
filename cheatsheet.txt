@@ -75,3 +75,16 @@ Synchronize Google cadendar with Taskwarrior(ts) | :!$HOME/vimwiki/todo/sync_tas
 
 ## vim-tw
 Show task grid | :TW {filter}
+
+## nvim-dap-ui
+Breakpoint(F9) | :lua require('dap').toggle_breakpoint()
+StepOver/Next(F10) | :lua require('dap').step_over()
+StepIn/Step(F11) | :lua require('dap').step_into()
+StepOut/Return | :lua require('dap').step_out()
+Stop/Quit(F4) | :lua require('dap').terminate()
+Continue(F5) | :lua require('dap').continue()
+
+## vim-translator
+Translate text into english | :TranslateX --engines=google --target_lang=en --source_lang=ja {text}
+Translate text into japanese | :TranslateX --engines=google --target_lang=ja --source_lang=en {text}
+Translate text in the clipboard into english | :TranslateX
