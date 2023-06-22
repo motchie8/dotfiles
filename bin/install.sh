@@ -85,29 +85,29 @@ install_dev_libs_for_amzn() {
     sudo yum -y install ninja-build libtool autoconf automake \
         gcc gcc-c++ make pkgconfig unzip patch gettext curl
     # install or update pyenv
-    if ! type pyenv >/dev/null 2>&1; then
-        curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-        # exec $SHELL -l
-        export PATH="$HOME/.pyenv/bin:$PATH"
-        export PYENV_PATH=$HOME/.pyenv
-        export PROMPT_COMMAND=""
-        export PYENV_VIRTUALENV_DISABLE_PROMPT=1
-        export _OLD_VIRTUAL_PATH=""
-        export _OLD_VIRTUAL_PYTHONHOME=""
-        export _OLD_VIRTUAL_PS1=""
-        eval "$(pyenv init --path)"
-        eval "$(pyenv virtualenv-init -)"
-    else
-        pyenv update
-    fi
+    # if ! type pyenv >/dev/null 2>&1; then
+    #     curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+    #     # exec $SHELL -l
+    #     export PATH="$HOME/.pyenv/bin:$PATH"
+    #     export PYENV_PATH=$HOME/.pyenv
+    #     export PROMPT_COMMAND=""
+    #     export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+    #     export _OLD_VIRTUAL_PATH=""
+    #     export _OLD_VIRTUAL_PYTHONHOME=""
+    #     export _OLD_VIRTUAL_PS1=""
+    #     eval "$(pyenv init --path)"
+    #     eval "$(pyenv virtualenv-init -)"
+    # else
+    #     pyenv update
+    # fi
     # install cmake v3 for nvim
-    if [ ! -e $DOTFILES_DIR/cmake-3.22.1 ]; then
+    if [ ! -e $DOTFILES_DIR/cmake-3.26.4 ]; then
         # uninstall cmake v2
         sudo yum remove cmake -y
         pushd $DOTFILES_DIR
-        wget https://cmake.org/files/v3.22/cmake-3.22.1.tar.gz
-        tar -xvzf cmake-3.22.1.tar.gz
-        pushd cmake-3.22.1
+        wget https://cmake.org/files/v3.26/cmake-3.26.4.tar.gz
+        tar -xvzf cmake-3.26.4.tar.gz
+        pushd cmake-3.26.4
         ./bootstrap --prefix=/usr
         make
         sudo make install
@@ -144,7 +144,7 @@ install_dev_libs_for_ubuntu() {
     if [ $(whoami) = "root" ]; then
         apt update -y && apt install -y sudo
     fi
-    # set timezone
+    	# set timezone
     TZ=Asia/Tokyo
     sudo ln -snf /usr/share/zoneinfo/$TZ /etc/localtime # && echo $TZ > /etc/timezone
     export DEBIAN_FEND=noninteractive
@@ -153,7 +153,7 @@ install_dev_libs_for_ubuntu() {
     sudo apt-get install -y language-pack-ja
     sudo apt-get install -y software-properties-common && sudo apt-get update -y
     sudo update-locale LANG=ja_JP.UTF-8
-    # install zsh, pyenv and vim plugin dependencies
+    # install dev dependencies
     sudo apt install -y curl git file zlib1g-dev libssl-dev \
         libreadline-dev libbz2-dev libsqlite3-dev wget cmake \
         pkg-config unzip libtool libtool-bin m4 automake gettext \
@@ -165,14 +165,35 @@ install_dev_libs_for_ubuntu() {
     # install neovim nightly
     # NOTE: nvim-treesitter needs Neovim nightly
     sudo add-apt-repository -y ppa:neovim-ppa/unstable # ppa:neovim-ppa/stable
-    sudo apt-get update -y && sudo apt-get install -y neovim
+    sudo apt-get update -y && sudo apt-get install -y neovim 
+}
+
+install_anyenv_and_env_libs() {
+    if [ ! -e $HOME/.anyenv ]; then
+    	git clone https://github.com/anyenv/anyenv $HOME/.anyenv
+	export PATH="$HOME/.anyenv/bin:$PATH"
+	eval "$(anyenv init -)"
+	anyenv install --force-init
+	exec $SHELL -l
+    fi
+    if ! type tfenv >/dev/null 2>&1; then
+        anyenv install tfenv
+	exec $SHELL -l
+    fi
+    if ! type pyenv >/dev/null 2>&1; then
+        anyenv install pyenv
+	exec $SHELL -l
+	git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
+	eval "$(pyenv virtualenv-init -)"
+	exec "$SHELL"
+    fi
 }
 
 install_dev_libs_for_mac() {
     brew update
     set +e
     # install pyenv, vim plugins and zsh
-    brew install node yarn wget tmux go zsh source-highlight gcc cmake ripgrep pyenv pyenv-virtualenv
+    brew install node yarn wget tmux go zsh source-highlight gcc cmake ripgrep  # pyenv pyenv-virtualenv
     # install taskwarrior
     brew install task ctags
     # install neovim nightly
@@ -183,9 +204,8 @@ install_dev_libs_for_mac() {
 
 install_python() {
     # create envs and install python versions for neovim by pyenv-virtualenv
-    PYENV_ROOT="$HOME/.pyenv"
     PYTHON2_VERSION=2.7.18
-    PYTHON3_VERSION=3.9.7
+    PYTHON3_VERSION=3.10.11
     PYTHON_VERSIONS=($PYTHON2_VERSION $PYTHON3_VERSION)
     NEOVIM_VIRTUAL_ENVS=("neovim2" "neovim3")
     i=0
@@ -196,7 +216,7 @@ install_python() {
         if [ $result -ne 0 ]; then
             pyenv install -s $PYTHON_VERSION
             pyenv virtualenv $PYTHON_VERSION $NEOVIM_VIRTUAL_ENV
-            PYTHON_PATH=$PYENV_ROOT/versions/$NEOVIM_VIRTUAL_ENV/bin/python
+	    PYTHON_PATH=$(pyenv root)/versions/$NEOVIM_VIRTUAL_ENV/bin/python
             eval "$PYTHON_PATH -m pip install --upgrade pip"
             eval "$PYTHON_PATH -m pip install pynvim neovim"
             if [ "$NEOVIM_VIRTUAL_ENV" = "neovim3" ]; then
@@ -349,8 +369,17 @@ install_rust() {
 install_formatter() {
     # install sh formatter
     if ! type shfmt >/dev/null 2>&1; then
-        echo "[INFO] Install shfmt"
-        go install mvdan.cc/sh/v3/cmd/shfmt@latest
+	echo "[INFO] Install shfmt"
+	if [ "$OS" = "amzn" ]; then
+	    sudo yum install shfmt -y
+	elif [ "$OS" = "ubuntu" ]; then
+	    sudo apt install shfmt
+	elif type sw_vers >/dev/null 2>&1; then
+	    brew install shfmt
+	else
+	    echo "[ERROR] '$OS' is not supported"
+	    exit 1
+	fi
     fi
 
     # install rust formatter
@@ -439,6 +468,8 @@ else
     echo "[ERROR] '$OS' is not supported"
     exit 1
 fi
+
+install_anyenv_and_env_libs
 
 install_python
 
