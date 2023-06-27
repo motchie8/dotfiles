@@ -9,7 +9,7 @@ This is my personal collection of configuration files.
 
 ## Install
 
-Install on local machine on MacOS, Ubuntu or Amazon Linux 2.
+Install on local machine on MacOS or Ubuntu.
 
 ```sh
 $ ./bin/install.sh --tmux-prefix-key b
@@ -21,10 +21,4 @@ Docker image for ubuntu.
 
 ```sh
 $ docker run -it --rm motchie8/dotfiles:ubuntu zsh
-```
-
-Docker image for Amazon Linux 2.
-
-```sh
-$ docker run -it --rm motchie8/dotfiles:amzn2 zsh
 ```
