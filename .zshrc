@@ -15,6 +15,14 @@ if [ -e /home/linuxbrew/.linuxbrew/bin ]; then
     export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
     eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 fi
+
+# export PATH="/usr/bin:$PATH"
+# export BROWSER=wslview
+
+# for deno
+export DENO_INSTALL="$HOME/.deno"
+export PATH="$DENO_INSTALL/bin:$PATH"
+
 ## for pyenv
 export PYENV_PATH=$HOME/.pyenv
 export PYENV_ROOT=$HOME/.pyenv
@@ -33,6 +41,9 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 export ZPLUG_HOME=$HOME/.dotfiles/.zplug
 if [ -e $ZPLUG_HOME ]; then
     source $ZPLUG_HOME/init.zsh
+fi
+if [ -e $HOME/.env ]; then
+    source $HOME/.env
 fi
 
 zplug "zsh-users/zsh-completions"

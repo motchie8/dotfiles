@@ -176,6 +176,8 @@ install_dev_libs_for_mac() {
     # install taskwarrior
     brew install task ctags
     # install neovim nightly
+    brew unlink luajit
+    brew unlink neovim
     brew install --HEAD luajit
     brew install --HEAD neovim
     set -e
@@ -386,6 +388,13 @@ install_fzf() {
     fi
 }
 
+install_deno() {
+    if ! type deno >/dev/null 2>&1; then
+        echo "[INFO] Install Deno"
+        curl -fsSL https://deno.land/x/install/install.sh | sh
+    fi
+}
+
 # NOTE: Commented out because it is not currently in use
 ## install lemonade to copy text from Linux to Windows via SSH
 #if ! type lemonade > /dev/null 2>&1; then
@@ -414,7 +423,7 @@ setup_symbolic_links() {
 
 setup_dir() {
     # make vimwiki directories
-    mkdir -p ~/vimwiki/todo
+    mkdir -p ~/vimwiki/data/todo
 }
 
 cat /dev/null <<EOF
@@ -463,6 +472,8 @@ install_rust
 install_formatter
 
 install_fzf
+
+install_deno
 
 create_tmux_user_conf
 

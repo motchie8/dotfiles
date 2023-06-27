@@ -7,14 +7,14 @@ on:
       - master
 jobs:
   build_and_push_docker_image_for_ubuntu:
-    uses: motchie8/.dotfiles/.github/workflows/build_and_push_docker_image.yml@master
+    uses: ./.github/workflows/build_and_push_docker_image.yml@master
     with:
       os: ubuntu
     secrets:
       docker_username: ${{ secrets.DOCKER_USERNAME }}
       docker_password: ${{ secrets.DOCKER_PASSWORD }}
   build_and_push_docker_image_for_amzn2:
-    uses: motchie8/.dotfiles/.github/workflows/build_and_push_docker_image.yml@master
+    uses: ./.github/workflows/build_and_push_docker_image.yml@master
     with:
       os: amzn2
     secrets:

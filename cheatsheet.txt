@@ -8,7 +8,7 @@ Generate or open yesterday's diary | :VimwikiMakeYesterdayDiaryNote
 Generate or open tomorrow's diary | :VimwikiMakeTomorrowDiaryNote
 Navigate to index page | :VimwikiDiaryIndex
 Generate links for each diary | :VimwikiDiaryGenerateLinks
-List vimwiki files | :Telescope find_files cwd=$HOME/vimwiki
+List vimwiki files | :Telescope find_files cwd=$HOME/vimwiki/data
 
 
 ## glow.nvim
@@ -88,3 +88,13 @@ Continue(F5) | :lua require('dap').continue()
 Translate text into english | :TranslateX --engines=google --target_lang=en --source_lang=ja {text}
 Translate text into japanese | :TranslateX --engines=google --target_lang=ja --source_lang=en {text}
 Translate text in the clipboard into english | :TranslateX
+
+## vim-ai
+Complete the selection using the instruction by ChatGPT | :AI {instruction}
+Edit the selection using the instruction by ChatGPT | :AIEdit {instruction}
+Continue or start a new conversation by ChatGPT | :AIChat
+Start a new conversation | :AINewChat
+
+## copilot.vim
+First, configure GitHub Copilot | :Copilot setup
+Second, enable GitHub Copilot | :Copilot enable

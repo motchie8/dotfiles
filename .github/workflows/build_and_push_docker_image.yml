@@ -1,4 +1,5 @@
-# test locally: $ act --secret-file .secrets
+# test locally
+# $ act push -j build_job --eventpath ubuntu.event
 name: Build and push docker image
 on:
   workflow_call:
