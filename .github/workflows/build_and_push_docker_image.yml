@@ -15,7 +15,7 @@ on:
 jobs:
   build_job:
     name: Job to build and push docker image of development environment
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     environment:
       name: prod
     steps:
