@@ -925,10 +925,6 @@ require("packer").startup(function(use)
 			vim.api.nvim_set_keymap("n", "<S-F3>", "<Cmd>Telescope dap variables<CR>", { noremap = true })
 		end,
 	})
-	-- ChatGPT
-	use({"madox2/vim-ai"})
-	-- GitHub Copilot
-	use({"github/copilot.vim"})
 	-- Translator
 	use({
 		"voldikss/vim-translator",

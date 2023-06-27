@@ -16,13 +16,6 @@ if [ -e /home/linuxbrew/.linuxbrew/bin ]; then
     eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 fi
 
-# export PATH="/usr/bin:$PATH"
-# export BROWSER=wslview
-
-# for deno
-export DENO_INSTALL="$HOME/.deno"
-export PATH="$DENO_INSTALL/bin:$PATH"
-
 ## for pyenv
 export PYENV_PATH=$HOME/.pyenv
 export PYENV_ROOT=$HOME/.pyenv

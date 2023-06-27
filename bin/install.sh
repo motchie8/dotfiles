@@ -144,7 +144,7 @@ install_dev_libs_for_ubuntu() {
     if [ $(whoami) = "root" ]; then
         apt update -y && apt install -y sudo
     fi
-    	# set timezone
+    # set timezone
     TZ=Asia/Tokyo
     sudo ln -snf /usr/share/zoneinfo/$TZ /etc/localtime # && echo $TZ > /etc/timezone
     export DEBIAN_FEND=noninteractive
@@ -165,27 +165,27 @@ install_dev_libs_for_ubuntu() {
     # install neovim nightly
     # NOTE: nvim-treesitter needs Neovim nightly
     sudo add-apt-repository -y ppa:neovim-ppa/unstable # ppa:neovim-ppa/stable
-    sudo apt-get update -y && sudo apt-get install -y neovim 
+    sudo apt-get update -y && sudo apt-get install -y neovim
 }
 
 install_anyenv_and_env_libs() {
     if [ ! -e $HOME/.anyenv ]; then
-    	git clone https://github.com/anyenv/anyenv $HOME/.anyenv
-	export PATH="$HOME/.anyenv/bin:$PATH"
-	eval "$(anyenv init -)"
-	anyenv install --force-init
-	exec $SHELL -l
+        git clone https://github.com/anyenv/anyenv $HOME/.anyenv
+        export PATH="$HOME/.anyenv/bin:$PATH"
+        eval "$(anyenv init -)"
+        anyenv install --force-init
+        exec $SHELL -l
     fi
     if ! type tfenv >/dev/null 2>&1; then
         anyenv install tfenv
-	exec $SHELL -l
+        exec $SHELL -l
     fi
     if ! type pyenv >/dev/null 2>&1; then
         anyenv install pyenv
-	exec $SHELL -l
-	git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
-	eval "$(pyenv virtualenv-init -)"
-	exec "$SHELL"
+        exec $SHELL -l
+        git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
+        eval "$(pyenv virtualenv-init -)"
+        exec "$SHELL"
     fi
 }
 
@@ -193,7 +193,7 @@ install_dev_libs_for_mac() {
     brew update
     set +e
     # install pyenv, vim plugins and zsh
-    brew install node yarn wget tmux go zsh source-highlight gcc cmake ripgrep  # pyenv pyenv-virtualenv
+    brew install node yarn wget tmux go zsh source-highlight gcc cmake ripgrep # pyenv pyenv-virtualenv
     # install taskwarrior
     brew install task ctags
     # install neovim nightly
@@ -218,7 +218,7 @@ install_python() {
         if [ $result -ne 0 ]; then
             pyenv install -s $PYTHON_VERSION
             pyenv virtualenv $PYTHON_VERSION $NEOVIM_VIRTUAL_ENV
-	    PYTHON_PATH=$(pyenv root)/versions/$NEOVIM_VIRTUAL_ENV/bin/python
+            PYTHON_PATH=$(pyenv root)/versions/$NEOVIM_VIRTUAL_ENV/bin/python
             eval "$PYTHON_PATH -m pip install --upgrade pip"
             eval "$PYTHON_PATH -m pip install pynvim neovim"
             if [ "$NEOVIM_VIRTUAL_ENV" = "neovim3" ]; then
@@ -371,17 +371,17 @@ install_rust() {
 install_formatter() {
     # install sh formatter
     if ! type shfmt >/dev/null 2>&1; then
-	echo "[INFO] Install shfmt"
-	if [ "$OS" = "amzn" ]; then
-	    sudo yum install shfmt -y
-	elif [ "$OS" = "ubuntu" ]; then
-	    sudo apt install shfmt
-	elif type sw_vers >/dev/null 2>&1; then
-	    brew install shfmt
-	else
-	    echo "[ERROR] '$OS' is not supported"
-	    exit 1
-	fi
+        echo "[INFO] Install shfmt"
+        if [ "$OS" = "amzn" ]; then
+            sudo yum install shfmt -y
+        elif [ "$OS" = "ubuntu" ]; then
+            sudo apt install shfmt
+        elif type sw_vers >/dev/null 2>&1; then
+            brew install shfmt
+        else
+            echo "[ERROR] '$OS' is not supported"
+            exit 1
+        fi
     fi
 
     # install rust formatter
@@ -414,13 +414,6 @@ install_fzf() {
             $DOTFILES_DIR/.fzf/install --key-bindings --completion --no-update-rc
         fi
         popd
-    fi
-}
-
-install_deno() {
-    if ! type deno >/dev/null 2>&1; then
-        echo "[INFO] Install Deno"
-        curl -fsSL https://deno.land/x/install/install.sh | sh
     fi
 }
 
@@ -503,8 +496,6 @@ install_rust
 install_formatter
 
 install_fzf
-
-install_deno
 
 create_tmux_user_conf
 
