@@ -7,18 +7,6 @@ local home_dir = api.nvim_eval("$HOME")
 api.nvim_set_var("python3_host_prog", string.format("%s/.pyenv/versions/neovim3/bin/python", home_dir))
 api.nvim_set_var("python_host_prog", string.format("%s/.pyenv/versions/neovim2/bin/python", home_dir))
 
-local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-if fn.empty(fn.glob(install_path)) > 0 then
-	packer_bootstrap = fn.system({
-		"git",
-		"clone",
-		"--depth",
-		"1",
-		"https://github.com/wbthomason/packer.nvim",
-		install_path,
-	})
-end
-
 -- # keymapping #
 vim.g.mapleader = " "
 -- ## insert mode ##
@@ -136,7 +124,19 @@ opt.sh = "zsh"
 -- vim.cmd('autocmd!')
 -- vim.cmd('autocmd!')
 
--- vim.cmd [[packadd packer.nvim]]
+-- Bootstrapping for packer.nvim
+local ensure_packer = function()
+	local fn = vim.fn
+	local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
+	if fn.empty(fn.glob(install_path)) > 0 then
+		fn.system({ "git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim", install_path })
+		vim.cmd([[packadd packer.nvim]])
+		return true
+	end
+	return false
+end
+
+local packer_bootstrap = ensure_packer()
 
 require("packer").startup(function(use)
 	-- ### Package Manager ###
@@ -643,6 +643,7 @@ require("packer").startup(function(use)
 
 			-- Additional settings
 			vim.opt.updatetime = 50
+			vim.api.nvim_set_var("coc_node_path", 1)
 			local keyset = vim.keymap.set
 			-- Use Ctrl-h (or K) to show documentation in preview window.
 			keyset("n", "<C-h>", ":<C-u>CocActionAsync('doHover')<CR>", { silent = true })

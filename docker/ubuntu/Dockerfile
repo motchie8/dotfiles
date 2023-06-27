@@ -1,5 +1,5 @@
 # docker build . -f docker/ubuntu/Dockerfile -t motchie8/dotfiles:ubuntu
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 ARG user=ubuntu
 ARG sudogroup=sudo
@@ -19,4 +19,5 @@ RUN sudo chown -R $user /home/$user/.dotfiles
 WORKDIR /home/$user/.dotfiles
 
 RUN ./bin/install.sh --tmux-prefix-key b
-# RUN nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+
+RUN nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'

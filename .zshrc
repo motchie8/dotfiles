@@ -1,4 +1,3 @@
-# source ~/.bashrc
 # -----------------------------
 # Custom settings
 # -----------------------------
@@ -7,16 +6,23 @@
 ## for rust
 export PATH="$HOME/bin:$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin:$PATH"
+
 ## for go
 export PATH=$PATH:/usr/local/go/bin
 export PATH=$PATH:$HOME/go/bin
+
 ## for homebrew in non macOS envs
 if [ -e /home/linuxbrew/.linuxbrew/bin ]; then
     export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
     eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 fi
 
+## for anyenv
+export PATH="$HOME/.anyenv/bin:$PATH"
+eval "$(anyenv init -)"
+
 ## for pyenv
+eval "$(pyenv virtualenv-init -)"
 export PYENV_PATH=$HOME/.pyenv
 export PYENV_ROOT=$HOME/.pyenv
 export PATH="$PYENV_ROOT/shims:$PATH"

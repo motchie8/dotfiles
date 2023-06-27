@@ -157,7 +157,7 @@ install_dev_libs_for_ubuntu() {
     sudo apt install -y curl git file zlib1g-dev libssl-dev \
         libreadline-dev libbz2-dev libsqlite3-dev wget cmake \
         pkg-config unzip libtool libtool-bin m4 automake gettext \
-        zsh x11-apps libffi-dev yarn
+        zsh x11-apps libffi-dev yarn liblzma-dev
     # install taskwarrior
     sudo apt-get install taskwarrior -y
     # install ripgrep for telescope
@@ -165,7 +165,7 @@ install_dev_libs_for_ubuntu() {
     # install neovim nightly
     # NOTE: nvim-treesitter needs Neovim nightly
     sudo add-apt-repository -y ppa:neovim-ppa/unstable # ppa:neovim-ppa/stable
-    sudo apt-get update -y && sudo apt-get install -y neovim
+    sudo apt-get update -y && sudo apt-get install -y neovim python3-neovim
 }
 
 install_anyenv_and_env_libs() {
@@ -174,18 +174,23 @@ install_anyenv_and_env_libs() {
         export PATH="$HOME/.anyenv/bin:$PATH"
         eval "$(anyenv init -)"
         anyenv install --force-init
-        exec $SHELL -l
+    else
+        # setup PATH if already installed
+        export PATH="$HOME/.anyenv/bin:$PATH"
+        eval "$(anyenv init -)"
     fi
     if ! type tfenv >/dev/null 2>&1; then
         anyenv install tfenv
-        exec $SHELL -l
+        eval "$(anyenv init -)"
     fi
     if ! type pyenv >/dev/null 2>&1; then
         anyenv install pyenv
-        exec $SHELL -l
+        eval "$(anyenv init -)"
         git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
         eval "$(pyenv virtualenv-init -)"
-        exec "$SHELL"
+    else
+        # setup PATH if already installed
+        eval "$(pyenv virtualenv-init -)"
     fi
 }
 
@@ -342,13 +347,13 @@ install_go() {
         if type brew >/dev/null 2>&1; then
             brew install go
         else
-            wget https://go.dev/dl/go1.17.6.linux-amd64.tar.gz
+            wget https://go.dev/dl/go1.20.5.linux-amd64.tar.gz
             sudo rm -rf /usr/local/go
-            sudo tar -C /usr/local -xzf go1.17.6.linux-amd64.tar.gz
-            rm go1.17.6.linux-amd64.tar.gz
-            export PATH=$PATH:/usr/local/go/bin
+            sudo tar -C /usr/local -xzf go1.20.5.linux-amd64.tar.gz
+            rm go1.20.5.linux-amd64.tar.gz
         fi
     fi
+    export PATH=$PATH:/usr/local/go/bin
 }
 
 install_act() {
@@ -375,7 +380,7 @@ install_formatter() {
         if [ "$OS" = "amzn" ]; then
             sudo yum install shfmt -y
         elif [ "$OS" = "ubuntu" ]; then
-            sudo apt install shfmt
+            go install mvdan.cc/sh/v3/cmd/shfmt@latest
         elif type sw_vers >/dev/null 2>&1; then
             brew install shfmt
         else
