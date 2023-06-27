@@ -12,6 +12,14 @@ EOF
     exit 1
 }
 
+info_echo() {
+    echo -e "\033[32m$1\033[0m"
+}
+
+err_echo() {
+    echo -e "\033[31m$1\033[0m"
+}
+
 parse_args() {
     OPT=$(getopt -o h -l tmux-prefix-key:,help -- "$@")
     if [ $? != 0 ]; then
@@ -32,7 +40,7 @@ parse_args() {
                 break
                 ;;
             *)
-                echo "Unexpected behavior" 1>&2
+                err_echo "Unexpected behavior" 1>&2
                 exit 1
                 ;;
         esac
@@ -58,89 +66,8 @@ get_os() {
     OS=$(cat /etc/os-release | grep -E '^ID="?[^"]*"?$' | tr -d '"' | awk -F '[=]' '{print $NF}')
 }
 
-install_dev_libs_for_amzn() {
-    if [ $(whoami) = "root" ]; then
-        yum update -y && yum install -y sudo
-    fi
-    sudo yum update -y && sudo yum groupinstall "Development Tools" -y
-    # install zsh, pyenv and vim plugin dependencies
-    # uninstall openssl10 for openssl11
-    sudo yum remove openssl -y
-    sudo yum install -y git xsel zlib-devel bzip2 bzip2-devel \
-        readline-devel sqlite sqlite-devel openssl11-devel xz \
-        xz-devel libffi-devel make libtool autoconf automake \
-        cmake gcc gcc-c++ make pkgconfig unzip xclip gettext \
-        patch ctags zsh wget util-linux-user which
-    # install taskwarrior
-    sudo amazon-linux-extras install epel -y
-    sudo yum install task -y
-    # install xclip
-    sudo amazon-linux-extras install epel -y
-    sudo yum-config-manager --enable epel
-    sudo yum install xclip -y
-    # install ripgrep for telescope
-    sudo yum-config-manager --add-repo=https://copr.fedorainfracloud.org/coprs/carlwgeorge/ripgrep/repo/epel-7/carlwgeorge-ripgrep-epel-7.repo
-    sudo yum install ripgrep -y
-    # install neovim prerequisites
-    sudo yum -y install ninja-build libtool autoconf automake \
-        gcc gcc-c++ make pkgconfig unzip patch gettext curl
-    # install or update pyenv
-    # if ! type pyenv >/dev/null 2>&1; then
-    #     curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-    #     # exec $SHELL -l
-    #     export PATH="$HOME/.pyenv/bin:$PATH"
-    #     export PYENV_PATH=$HOME/.pyenv
-    #     export PROMPT_COMMAND=""
-    #     export PYENV_VIRTUALENV_DISABLE_PROMPT=1
-    #     export _OLD_VIRTUAL_PATH=""
-    #     export _OLD_VIRTUAL_PYTHONHOME=""
-    #     export _OLD_VIRTUAL_PS1=""
-    #     eval "$(pyenv init --path)"
-    #     eval "$(pyenv virtualenv-init -)"
-    # else
-    #     pyenv update
-    # fi
-    # install cmake v3 for nvim
-    if [ ! -e $DOTFILES_DIR/cmake-3.26.4 ]; then
-        # uninstall cmake v2
-        sudo yum remove cmake -y
-        pushd $DOTFILES_DIR
-        wget https://cmake.org/files/v3.26/cmake-3.26.4.tar.gz
-        tar -xvzf cmake-3.26.4.tar.gz
-        pushd cmake-3.26.4
-        ./bootstrap --prefix=/usr
-        make
-        sudo make install
-        popd
-        popd
-    fi
-    # install neovim
-    if ! type nvim >/dev/null 2>&1; then
-        echo "[INFO] install neovim for $OS"
-        pushd $DOTFILES_DIR
-        git clone https://github.com/neovim/neovim
-        popd
-        pushd $DOTFILES_DIR/neovim
-        make clean
-        make CMAKE_BUILD_TYPE=RelWithDebInfo
-        sudo make install
-        sudo ln -s -T /usr/local/bin/nvim /usr/bin/nvim
-        popd
-    fi
-    # update neovim
-    pushd $DOTFILES_DIR/neovim
-    result=0
-    output=$(git pull | grep -q "Already up to date") || result=$?
-    if [ $result -ne 0 ]; then
-        echo "[INFO] update neovim"
-        sudo make distclean
-        make CMAKE_BUILD_TYPE=RelWithDebInfo
-        sudo make install
-    fi
-    popd
-}
-
 install_dev_libs_for_ubuntu() {
+    info_echo "**** Install dev libs for Ubuntu ****"
     if [ $(whoami) = "root" ]; then
         apt update -y && apt install -y sudo
     fi
@@ -165,36 +92,11 @@ install_dev_libs_for_ubuntu() {
     # install neovim nightly
     # NOTE: nvim-treesitter needs Neovim nightly
     sudo add-apt-repository -y ppa:neovim-ppa/unstable # ppa:neovim-ppa/stable
-    sudo apt-get update -y && sudo apt-get install -y neovim python3-neovim
-}
-
-install_anyenv_and_env_libs() {
-    if [ ! -e $HOME/.anyenv ]; then
-        git clone https://github.com/anyenv/anyenv $HOME/.anyenv
-        export PATH="$HOME/.anyenv/bin:$PATH"
-        eval "$(anyenv init -)"
-        anyenv install --force-init
-    else
-        # setup PATH if already installed
-        export PATH="$HOME/.anyenv/bin:$PATH"
-        eval "$(anyenv init -)"
-    fi
-    if ! type tfenv >/dev/null 2>&1; then
-        anyenv install tfenv
-        eval "$(anyenv init -)"
-    fi
-    if ! type pyenv >/dev/null 2>&1; then
-        anyenv install pyenv
-        eval "$(anyenv init -)"
-        git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
-        eval "$(pyenv virtualenv-init -)"
-    else
-        # setup PATH if already installed
-        eval "$(pyenv virtualenv-init -)"
-    fi
+    sudo apt-get update -y && sudo apt-get install -y neovim
 }
 
 install_dev_libs_for_mac() {
+    info_echo "**** Install dev libs for macOS ****"
     brew update
     set +e
     # install pyenv, vim plugins and zsh
@@ -209,6 +111,32 @@ install_dev_libs_for_mac() {
     set -e
 }
 
+install_anyenv_and_env_libs() {
+    if ! type anyenv >/dev/null 2>&1; then
+        info_echo "**** Install anyenv ****"
+        git clone https://github.com/anyenv/anyenv $HOME/.anyenv
+        export PATH="$HOME/.anyenv/bin:$PATH"
+        eval "$(anyenv init -)"
+        anyenv install --force-init
+    fi
+    if ! type tfenv >/dev/null 2>&1; then
+        info_echo "**** Install tfenv ****"
+        anyenv install tfenv
+        eval "$(anyenv init -)"
+        tfenv install latest
+    fi
+    if ! type pyenv >/dev/null 2>&1; then
+        info_echo "**** Install pyenv ****"
+        anyenv install pyenv
+        eval "$(anyenv init -)"
+        git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
+        eval "$(pyenv virtualenv-init -)"
+    else
+        # setup PATH if already installed
+        eval "$(pyenv virtualenv-init -)"
+    fi
+}
+
 install_python() {
     # create envs and install python versions for neovim by pyenv-virtualenv
     PYTHON2_VERSION=2.7.18
@@ -221,7 +149,9 @@ install_python() {
         result=0
         output=$(pyenv versions | grep -q $NEOVIM_VIRTUAL_ENV) || result=$?
         if [ $result -ne 0 ]; then
+            info_echo "**** Install python ${PYTHON_VERSION} ****"
             pyenv install -s $PYTHON_VERSION
+            info_echo "**** Setup python virtualenv ${NEOVIM_VIRTUAL_ENV} ****"
             pyenv virtualenv $PYTHON_VERSION $NEOVIM_VIRTUAL_ENV
             PYTHON_PATH=$(pyenv root)/versions/$NEOVIM_VIRTUAL_ENV/bin/python
             eval "$PYTHON_PATH -m pip install --upgrade pip"
@@ -238,8 +168,8 @@ install_python() {
 install_zsh_and_set_as_default_shell() {
     DEFAULT_SHELL=$(echo $SHELL | awk -F '[/]' '{print $NF}')
     if [ "$DEFAULT_SHELL" != "zsh" ]; then
+        info_echo "**** Change default shell from ${DEFAULT_SHELL} to zsh ****"
         result=$(cat /etc/shells | grep -q "zsh")
-        echo "[INFO] Change default shell to zsh"
         if [ $? -ne 0 ]; then
             echo $(which zsh) >>/etc/shells
         fi
@@ -251,16 +181,17 @@ setup_zsh() {
     # install zplug
     export ZPLUG_HOME=$DOTFILES_DIR/.zplug
     if [ ! -e $ZPLUG_HOME ]; then
-        echo "[INFO] Install zplug"
+        info_echo "**** Install zplug ****"
         git clone https://github.com/zplug/zplug $ZPLUG_HOME
     else
+        info_echo "**** Update zplug ****"
         pushd $ZPLUG_HOME
         git pull
         popd
     fi
     # install zprezto and setup zsh dotfiles
     if [ ! -e $DOTFILES_DIR/.zprezto ]; then
-        echo "[INFO] Install zprezto"
+        info_echo "**** Install zprezto ****"
         git clone --recursive https://github.com/sorin-ionescu/prezto.git $DOTFILES_DIR/.zprezto
         for rcfile_name in zlogin zlogout zpreztorc zprofile zshenv; do
             if [ ! -e $HOME/$rcfile_name ]; then
@@ -268,6 +199,7 @@ setup_zsh() {
             fi
         done
     else
+        info_echo "**** Update zprezto ****"
         pushd $DOTFILES_DIR/.zprezto
         git pull
         popd
@@ -277,6 +209,7 @@ setup_zsh() {
 install_iceberg_tmux_conf() {
     # download iceberg.tmux.conf
     if [ ! -e $DOTFILES_DIR/.tmux/colors/iceberg.tmux.conf ]; then
+        info_echo "**** Install tmux color schema ****"
         mkdir -p $DOTFILES_DIR/.tmux/colors/
         wget -O $DOTFILES_DIR/.tmux/colors/iceberg.tmux.conf https://raw.githubusercontent.com/gkeep/iceberg-dark/master/.tmux/iceberg.tmux.conf
     fi
@@ -284,12 +217,14 @@ install_iceberg_tmux_conf() {
 
 install_node() {
     # install or update npm and node for coc-nvim
-    if ! type node >/dev/null 2>&1; then
-        echo "[INFO] Install node"
-        # curl -sL install-node.now.sh/lts | bash
-        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+    if ! type nvm >/dev/null 2>&1; then
+        info_echo "**** Install nvm ****"
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
         export NVM_DIR="$HOME/.nvm"
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+    fi
+    if ! type node >/dev/null 2>&1; then
+        info_echo "**** Install node ****"
         nvm install 16.15.1
         # nvm use --lts
     fi
@@ -298,10 +233,11 @@ install_node() {
 install_packer_nvim() {
     # install nvim package manager
     if [ ! -e $HOME/.local/share/nvim/site/pack/packer/start ]; then
-        echo "[INFO] Install packer.nvim"
+        info_echo "**** Install packer.nvim ****"
         mkdir -p $DOTFILES_DIR/.vim/plugins
         git clone --depth 1 https://github.com/wbthomason/packer.nvim $HOME/.local/share/nvim/site/pack/packer/start/packer.nvim
     else
+        info_echo "**** Update packer.nvim ****"
         pushd $HOME/.local/share/nvim/site/pack/packer/start/packer.nvim
         git pull
         popd
@@ -311,7 +247,7 @@ install_packer_nvim() {
 install_tmux_mem_cpu_load() {
     # install tmux-mem-cpu-load
     if [ ! -e $DOTFILES_DIR/.tmux/plugins/tmux-mem-cpu-load ]; then
-        echo "[INFO] Install tmux-mem-cpu-load"
+        info_echo "**** Install tmux-mem-cpu-load ****"
         mkdir -p $DOTFILES_DIR/.tmux/plugins
         git clone https://github.com/thewtex/tmux-mem-cpu-load.git $DOTFILES_DIR/.tmux/plugins/tmux-mem-cpu-load
         pushd $DOTFILES_DIR/.tmux/plugins/tmux-mem-cpu-load
@@ -328,6 +264,7 @@ install_tmux_mem_cpu_load() {
         result=0
         output=$(git pull | grep -q "Already up to date") || result=$?
         if [ $result -ne 0 ]; then
+            info_echo "**** Update tmux-mem-cpu-load ****"
             cmake .
             make
             if type sw_vers >/dev/null 2>&1; then
@@ -341,9 +278,8 @@ install_tmux_mem_cpu_load() {
 }
 
 install_go() {
-    # install go
     if ! type go >/dev/null 2>&1; then
-        echo "[INFO] Install go lang"
+        info_echo "**** Install go****"
         if type brew >/dev/null 2>&1; then
             brew install go
         else
@@ -352,20 +288,21 @@ install_go() {
             sudo tar -C /usr/local -xzf go1.20.5.linux-amd64.tar.gz
             rm go1.20.5.linux-amd64.tar.gz
         fi
+        # setup PATH to use go lang to install modules in the following steps
+        export PATH=$PATH:/usr/local/go/bin
     fi
-    export PATH=$PATH:/usr/local/go/bin
 }
 
 install_act() {
     if [ ! -e ~/go/bin/act ]; then
-        echo "[INFO] Install act"
+        info_echo "**** Install act ****"
         curl https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
     fi
 }
 
 install_rust() {
     if ! type cargo >/dev/null 2>&1; then
-        echo "[INFO] Install rust"
+        info_echo "**** Install rust ****"
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs >install_rust.sh
         sh install_rust.sh -y
         rm install_rust.sh
@@ -376,10 +313,8 @@ install_rust() {
 install_formatter() {
     # install sh formatter
     if ! type shfmt >/dev/null 2>&1; then
-        echo "[INFO] Install shfmt"
-        if [ "$OS" = "amzn" ]; then
-            sudo yum install shfmt -y
-        elif [ "$OS" = "ubuntu" ]; then
+        info_echo "**** Install shfmt for sh formatter ****"
+        if [ "$OS" = "ubuntu" ]; then
             go install mvdan.cc/sh/v3/cmd/shfmt@latest
         elif type sw_vers >/dev/null 2>&1; then
             brew install shfmt
@@ -391,7 +326,7 @@ install_formatter() {
 
     # install rust formatter
     if ! type stylua >/dev/null 2>&1; then
-        echo "[INFO] Install stylua"
+        info_echo "**** Install stylua for rust formatter ***"
         cargo install stylua
     fi
     # install toml formatter
@@ -402,6 +337,7 @@ install_formatter() {
 
     # install formatter for various filetypes
     if ! type prettier >/dev/null 2>&1; then
+        info_echo "**** Install prettier for formatter for various filetypes ***"
         npm -g install prettier
     fi
 }
@@ -409,6 +345,7 @@ install_formatter() {
 install_fzf() {
     # install fzf
     if [ ! -e $DOTFILES_DIR/.fzf ]; then
+        info_echo "**** Install fzf ***"
         git clone --depth 1 https://github.com/junegunn/fzf.git $DOTFILES_DIR/.fzf
         $DOTFILES_DIR/.fzf/install --key-bindings --completion --no-update-rc
     else
@@ -416,29 +353,22 @@ install_fzf() {
         result=0
         output=$(git pull | grep -q "Already up to date") || result=$?
         if [ $result -ne 0 ]; then
+            info_echo "**** Update fzf ***"
             $DOTFILES_DIR/.fzf/install --key-bindings --completion --no-update-rc
         fi
         popd
     fi
 }
 
-# NOTE: Commented out because it is not currently in use
-## install lemonade to copy text from Linux to Windows via SSH
-#if ! type lemonade > /dev/null 2>&1; then
-#  go get github.com/pocke/lemonade
-#  cd ~/go/src/github.com/lemonade-command/lemonade/
-#  make install
-#  sudo ln -s -T ~/go/bin/lemonade /usr/local/bin/lemonade
-#fi
-
 setup_symbolic_links() {
+    info_echo "**** Setup symbolic links ****"
     target_paths=("$HOME/.zshrc" "$HOME/.config/nvim" "$HOME/.config/nvim/coc-settings.json" "$HOME/.config/nvim/init.lua" "$HOME/.config/nvim/cheatsheet.txt" "$HOME/.tmux.conf")
     link_paths=("$HOME/.dotfiles/.zshrc" "$HOME/.dotfiles/.vim" "$HOME/.dotfiles/coc-settings.json" "$HOME/.dotfiles/init.lua" "$HOME/.dotfiles/cheatsheet.txt" "$HOME/.dotfiles/.tmux/.tmux.common.conf")
     mkdir -p ~/.config
     for i in "${!target_paths[@]}"; do
         if [ -e "${target_paths[i]}" ]; then
             if [ ! -L "${target_paths[i]}" ]; then
-                echo "File already exists at ${target_paths[i]}, so skip creating symbolic link"
+                info_echo "File already exists at ${target_paths[i]}, so skip creating symbolic link"
                 continue
             else
                 unlink "${target_paths[i]}"
@@ -449,6 +379,7 @@ setup_symbolic_links() {
 }
 
 setup_dir() {
+    info_echo "**** Setup directory for vimwiki ****"
     # make vimwiki directories
     mkdir -p ~/vimwiki/data/todo
 }
@@ -465,14 +396,12 @@ check_args
 
 get_os
 
-if [ "$OS" = "amzn" ]; then
-    install_dev_libs_for_amzn
-elif [ "$OS" = "ubuntu" ]; then
+if [ "$OS" = "ubuntu" ]; then
     install_dev_libs_for_ubuntu
 elif type sw_vers >/dev/null 2>&1; then
     install_dev_libs_for_mac
 else
-    echo "[ERROR] '$OS' is not supported"
+    err_echo "${OS} is not supported. Please use Ubuntu or macOS."
     exit 1
 fi
 
@@ -508,4 +437,4 @@ setup_symbolic_links
 
 setup_dir
 
-echo "Installation completed"
+info_echo "**** Installation succeeded ****"

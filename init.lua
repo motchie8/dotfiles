@@ -1,11 +1,10 @@
 local api = vim.api
-local fn = vim.fn
 local opt = vim.opt
 
-local home_dir = api.nvim_eval("$HOME")
+local pyenv_root = api.nvim_eval("$PYENV_ROOT")
 
-api.nvim_set_var("python3_host_prog", string.format("%s/.pyenv/versions/neovim3/bin/python", home_dir))
-api.nvim_set_var("python_host_prog", string.format("%s/.pyenv/versions/neovim2/bin/python", home_dir))
+api.nvim_set_var("python3_host_prog", string.format("%s/versions/neovim3/bin/python", pyenv_root))
+api.nvim_set_var("python_host_prog", string.format("%s/versions/neovim2/bin/python", pyenv_root))
 
 -- # keymapping #
 vim.g.mapleader = " "

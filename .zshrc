@@ -1,48 +1,51 @@
 # -----------------------------
-# Custom settings
+# PATH
 # -----------------------------
-
-# setup PATH
-## for rust
+# rust
 export PATH="$HOME/bin:$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin:$PATH"
 
-## for go
+# go
 export PATH=$PATH:/usr/local/go/bin
 export PATH=$PATH:$HOME/go/bin
 
-## for homebrew in non macOS envs
-if [ -e /home/linuxbrew/.linuxbrew/bin ]; then
-    export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
-    eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-fi
-
-## for anyenv
+# anyenv
 export PATH="$HOME/.anyenv/bin:$PATH"
 eval "$(anyenv init -)"
 
-## for pyenv
+# pyenv-virtualenv
 eval "$(pyenv virtualenv-init -)"
-export PYENV_PATH=$HOME/.pyenv
-export PYENV_ROOT=$HOME/.pyenv
-export PATH="$PYENV_ROOT/shims:$PATH"
-export PATH="$PYENV_PATH/bin:$PATH"
-if which pyenv >/dev/null; then
-    eval "$(pyenv init --path)"
-    eval "$(pyenv virtualenv-init -)"
-    eval "$(pyenv init -)"
-fi
-# for npm
+
+# npm
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
-# setup zplug
+# -----------------------------
+# Environment Variables
+# -----------------------------
+
+if [ -e $HOME/.env ]; then
+    source $HOME/.env
+fi
+
+export LESS=' -R '
+export LESSOPEN='| src-hilite-lesspipe.sh %s'
+
+# -----------------------------
+# Alias
+# -----------------------------
+
+alias ll='ls -l'
+alias diff='diff -U1'
+alias nf='nvim $(fzf)'
+
+# -----------------------------
+# zsh settings
+# -----------------------------
+
 export ZPLUG_HOME=$HOME/.dotfiles/.zplug
 if [ -e $ZPLUG_HOME ]; then
     source $ZPLUG_HOME/init.zsh
-fi
-if [ -e $HOME/.env ]; then
-    source $HOME/.env
 fi
 
 zplug "zsh-users/zsh-completions"
@@ -52,30 +55,64 @@ zplug "b4b4r07/enhancd", use:init.sh
 
 source $HOME/.dotfiles/.zprezto/init.zsh
 
-# setup alias
-alias ll='ls -l'
-alias diff='diff -U1'
-alias nf='nvim $(fzf)'
-
-LESS=' -R '
-LESSOPEN='| src-hilite-lesspipe.sh %s'
-
+# -----------------------------
 # Completion
-## Bash互換モードの有効化
+# -----------------------------
+
+# 単語の入力途中でもTab補完を有効化
+setopt complete_in_word
+
+# 補完の選択を楽にする
+zstyle ':completion:*' menu select
+
+# 補完候補をできるだけ詰めて表示する
+setopt list_packed
+
+# 補完候補にファイルの種類も表示する
+setopt list_types
+
+# 色の設定
+export LSCOLORS=Exfxcxdxbxegedabagacad
+
+# 補完時の色設定
+export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
+
+# キャッシュの利用による補完の高速化
+zstyle ':completion::complete:*' use-cache true
+
+# 補完候補に色つける
+autoload -U colors
+colors
+zstyle ':completion:*' list-colors "${LS_COLORS}"
+#zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+# 大文字・小文字を区別しない(大文字を入力した場合は区別する)
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+
+# manの補完をセクション番号別に表示させる
+zstyle ':completion:*:manuals' separate-sections true
+
+# --prefix=/usr などの = 以降でも補完
+setopt magic_equal_subst
+
+# Bash互換モードの有効化
 autoload bashcompinit && bashcompinit
 
 autoload -Uz compinit && compinit
-## AWS CLI
+# AWS CLI
 if [ -e /usr/local/bin/aws_completer ]; then
     complete -C '/usr/local/bin/aws_completer' aws
 fi
-## Terraform
+# Terraform
 if [ -e /usr/bin/terraform ]; then
     # terraform -install-autocomplete
     complete -o nospace -C /usr/bin/terraform terraform
 fi
 
-# for fzf
+# -----------------------------
+# fzf
+# -----------------------------
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # fh - repeat history
 fh() {
@@ -90,6 +127,9 @@ fbr() {
         git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
 }
 
+# -----------------------------
+# WSL
+# -----------------------------
 # setup DISPLAY for X11 clipboard sharing for WSL
 if [ -e /mnt/wsl ]; then
     export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
@@ -218,46 +258,6 @@ PROMPT='%F{cyan}%n@%m%f:%~# '
 # promptテーマ設定
 # prompt skwp
 zstyle ':prezto:module:prompt' theme 'skwp'
-
-# -----------------------------
-# Completion
-# -----------------------------
-
-# 単語の入力途中でもTab補完を有効化
-setopt complete_in_word
-
-# 補完の選択を楽にする
-zstyle ':completion:*' menu select
-
-# 補完候補をできるだけ詰めて表示する
-setopt list_packed
-
-# 補完候補にファイルの種類も表示する
-setopt list_types
-
-# 色の設定
-export LSCOLORS=Exfxcxdxbxegedabagacad
-
-# 補完時の色設定
-export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-
-# キャッシュの利用による補完の高速化
-zstyle ':completion::complete:*' use-cache true
-
-# 補完候補に色つける
-autoload -U colors
-colors
-zstyle ':completion:*' list-colors "${LS_COLORS}"
-#zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-
-# 大文字・小文字を区別しない(大文字を入力した場合は区別する)
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-
-# manの補完をセクション番号別に表示させる
-zstyle ':completion:*:manuals' separate-sections true
-
-# --prefix=/usr などの = 以降でも補完
-setopt magic_equal_subst
 
 # -----------------------------
 # History
