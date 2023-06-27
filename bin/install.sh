@@ -112,6 +112,7 @@ install_dev_libs_for_mac() {
 }
 
 install_anyenv_and_env_libs() {
+    info_echo "**** Setup *envs ****"
     if ! type anyenv >/dev/null 2>&1; then
         info_echo "**** Install anyenv ****"
         git clone https://github.com/anyenv/anyenv $HOME/.anyenv
@@ -129,10 +130,10 @@ install_anyenv_and_env_libs() {
         info_echo "**** Install pyenv ****"
         anyenv install pyenv
         eval "$(anyenv init -)"
+    fi
+    if [ ! -e $(pyenv root)/plugins/pyenv-virtualenv ]; then
+	info_echo "**** Install pyenv virtualenv****"
         git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
-        eval "$(pyenv virtualenv-init -)"
-    else
-        # setup PATH if already installed
         eval "$(pyenv virtualenv-init -)"
     fi
 }

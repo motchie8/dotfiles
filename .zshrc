@@ -287,3 +287,4 @@ setopt inc_append_history
 
 # ヒストリを呼び出してから実行する間に一旦編集できる状態になる
 setopt hist_verify
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
