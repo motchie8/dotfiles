@@ -642,7 +642,6 @@ require("packer").startup(function(use)
 
 			-- Additional settings
 			vim.opt.updatetime = 50
-			vim.api.nvim_set_var("coc_node_path", 1)
 			local keyset = vim.keymap.set
 			-- Use Ctrl-h (or K) to show documentation in preview window.
 			keyset("n", "<C-h>", ":<C-u>CocActionAsync('doHover')<CR>", { silent = true })
