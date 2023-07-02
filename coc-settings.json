@@ -22,7 +22,7 @@
   },
   "snippets.ultisnips.directories": [
     "~/.local/share/nvim/site/pack/packer/start/vim-snippets/UltiSnips",
-    "~/.dotfiles/snippets"
+    "~/dotfiles/snippets"
   ],
   "suggest.noselect": false,
   "coc.preferences.formatOnSaveFiletypes": []

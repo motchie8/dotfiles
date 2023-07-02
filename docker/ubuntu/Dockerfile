@@ -12,11 +12,11 @@ RUN apt update -y && apt install -y sudo
 
 USER $user
 
-COPY . /home/$user/.dotfiles
+COPY . /home/$user/dotfiles
 
-RUN sudo chown -R $user /home/$user/.dotfiles
+RUN sudo chown -R $user /home/$user/dotfiles
 
-WORKDIR /home/$user/.dotfiles
+WORKDIR /home/$user/dotfiles
 
 RUN ./bin/install.sh --tmux-prefix-key b
 

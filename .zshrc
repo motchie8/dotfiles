@@ -43,7 +43,7 @@ alias nf='nvim $(fzf)'
 # zsh settings
 # -----------------------------
 
-export ZPLUG_HOME=$HOME/.dotfiles/.zplug
+export ZPLUG_HOME=$HOME/dotfiles/.zplug
 if [ -e $ZPLUG_HOME ]; then
     source $ZPLUG_HOME/init.zsh
 fi
@@ -53,7 +53,7 @@ zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "b4b4r07/enhancd", use:init.sh
 
-source $HOME/.dotfiles/.zprezto/init.zsh
+source $HOME/dotfiles/.zprezto/init.zsh
 
 # -----------------------------
 # Completion

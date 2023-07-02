@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -eu
 
-DOTFILES_DIR=$HOME/.dotfiles
+DOTFILES_DIR=$(pwd)
 
 usage_exit() {
     cat <<EOF
@@ -55,7 +55,7 @@ check_args() {
 
 create_tmux_user_conf() {
     # create .tmux.user.conf for custom prefix key
-    cat <<EOL >$DOTFILES_DIR/.tmux/.tmux.user.conf
+    cat <<EOL >$DOTFILES_DIR/tmux/tmux.user.conf
 unbind C-b
 set-option -g prefix C-${TMUX_PREFIX_KEY}
 bind-key C-${TMUX_PREFIX_KEY} send-prefix
@@ -209,10 +209,10 @@ setup_zsh() {
 
 install_iceberg_tmux_conf() {
     # download iceberg.tmux.conf
-    if [ ! -e $DOTFILES_DIR/.tmux/colors/iceberg.tmux.conf ]; then
+    if [ ! -e $DOTFILES_DIR/tmux/colors/iceberg.tmux.conf ]; then
         info_echo "**** Install tmux color schema ****"
-        mkdir -p $DOTFILES_DIR/.tmux/colors/
-        wget -O $DOTFILES_DIR/.tmux/colors/iceberg.tmux.conf https://raw.githubusercontent.com/gkeep/iceberg-dark/master/.tmux/iceberg.tmux.conf
+        mkdir -p $DOTFILES_DIR/tmux/colors/
+        wget -O $DOTFILES_DIR/tmux/colors/iceberg.tmux.conf https://raw.githubusercontent.com/gkeep/iceberg-dark/master/.tmux/iceberg.tmux.conf
     fi
 }
 
@@ -247,11 +247,11 @@ install_packer_nvim() {
 
 install_tmux_mem_cpu_load() {
     # install tmux-mem-cpu-load
-    if [ ! -e $DOTFILES_DIR/.tmux/plugins/tmux-mem-cpu-load ]; then
+    if [ ! -e $DOTFILES_DIR/tmux/plugins/tmux-mem-cpu-load ]; then
         info_echo "**** Install tmux-mem-cpu-load ****"
-        mkdir -p $DOTFILES_DIR/.tmux/plugins
-        git clone https://github.com/thewtex/tmux-mem-cpu-load.git $DOTFILES_DIR/.tmux/plugins/tmux-mem-cpu-load
-        pushd $DOTFILES_DIR/.tmux/plugins/tmux-mem-cpu-load
+        mkdir -p $DOTFILES_DIR/tmux/plugins
+        git clone https://github.com/thewtex/tmux-mem-cpu-load.git $DOTFILES_DIR/tmux/plugins/tmux-mem-cpu-load
+        pushd $DOTFILES_DIR/tmux/plugins/tmux-mem-cpu-load
         cmake .
         make
         if type sw_vers >/dev/null 2>&1; then
@@ -261,7 +261,7 @@ install_tmux_mem_cpu_load() {
         fi
         popd
     else
-        pushd $DOTFILES_DIR/.tmux/plugins/tmux-mem-cpu-load
+        pushd $DOTFILES_DIR/tmux/plugins/tmux-mem-cpu-load
         result=0
         output=$(git pull | grep -q "Already up to date") || result=$?
         if [ $result -ne 0 ]; then
@@ -364,7 +364,7 @@ install_fzf() {
 setup_symbolic_links() {
     info_echo "**** Setup symbolic links ****"
     target_paths=("$HOME/.zshrc" "$HOME/.config/nvim" "$HOME/.config/nvim/coc-settings.json" "$HOME/.config/nvim/init.lua" "$HOME/.config/nvim/cheatsheet.txt" "$HOME/.tmux.conf")
-    link_paths=("$HOME/.dotfiles/.zshrc" "$HOME/.dotfiles/.vim" "$HOME/.dotfiles/coc-settings.json" "$HOME/.dotfiles/init.lua" "$HOME/.dotfiles/cheatsheet.txt" "$HOME/.dotfiles/.tmux/.tmux.common.conf")
+    link_paths=("$DOTFILES_DIR/.zshrc" "$DOTFILES_DIR/.vim" "$DOTFILES_DIR/coc-settings.json" "$DOTFILES_DIR/init.lua" "$DOTFILES_DIR/cheatsheet.txt" "$DOTFILES_DIR/tmux/tmux.common.conf")
     mkdir -p ~/.config
     for i in "${!target_paths[@]}"; do
         if [ -e "${target_paths[i]}" ]; then

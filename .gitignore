@@ -6,8 +6,9 @@ GTAGS
 .env
 .secrets
 .zprezto
-.tmux/colors
-.tmux/plugins
+tmux/colors
+tmux/plugins
+tmux/tmux.user.conf
 .globalrc
 .vim/.netrwhist
 .fzf

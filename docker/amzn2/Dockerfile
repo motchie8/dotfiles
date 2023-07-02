@@ -12,11 +12,11 @@ RUN mkdir -p /etc/sudoers.d && echo "$user ALL=(ALL:ALL) NOPASSWD: ALL" | tee /e
 
 USER $user
 
-COPY . /home/$user/.dotfiles
+COPY . /home/$user/dotfiles
 
-RUN sudo chown -R $user /home/$user/.dotfiles
+RUN sudo chown -R $user /home/$user/dotfiles
 
-WORKDIR /home/$user/.dotfiles
+WORKDIR /home/$user/dotfiles
 
 RUN ./bin/install.sh --tmux-prefix-key b
 # RUN nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
