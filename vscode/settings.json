@@ -11,7 +11,6 @@
   "files.autoGuessEncoding": true,
   "files.trimFinalNewlines": true,
   "files.trimTrailingWhitespace": true,
-  "scm.alwaysShowProviders": true,
   "workbench.editor.labelFormat": "short",
   "workbench.editor.revealIfOpen": false,
   "workbench.editor.showIcons": true,
@@ -20,7 +19,6 @@
   "workbench.editor.tabCloseButton": "off",
   "workbench.startupEditor": "none",
   "workbench.editor.openPositioning": "first",
-  "workbench.list.automaticKeyboardNavigation": false,
   "explorer.openEditors.visible": 0,
   "workbench.editor.showTabs": true,
   "workbench.editor.enablePreview": true,
@@ -34,7 +32,6 @@
   "vim.easymotion": true,
   "vim.visualstar": true,
   "vim.useCtrlKeys": true,
-  "vim.cmdLineInitialColon": true,
   "vim.ignorecase": true,
   "vim.incsearch": true,
   "vim.sneak": true,
@@ -239,7 +236,6 @@
     }
   ],
   "git.autofetch": true,
-  "python.jediEnabled": false,
   "[json]": {
     "editor.quickSuggestions": {
       "strings": true
@@ -248,4 +244,5 @@
   },
   "security.workspace.trust.untrustedFiles": "open",
   "workbench.colorTheme": "Iceberg",
+  "editor.inlineSuggest.enabled": true,
 }
