@@ -1,9 +1,13 @@
 # -----------------------------
 # PATH
 # -----------------------------
+# homebrew
+if [ -e /opt/homebrew/bin/brew ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
 # rust
-export PATH="$HOME/bin:$HOME/.cargo/bin:$PATH"
-export PATH="$HOME/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
 
 # go
 export PATH=$PATH:/usr/local/go/bin
@@ -287,4 +291,4 @@ setopt inc_append_history
 
 # ヒストリを呼び出してから実行する間に一旦編集できる状態になる
 setopt hist_verify
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion

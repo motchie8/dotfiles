@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -eu
 
 DOTFILES_DIR=$(pwd)
@@ -132,7 +132,7 @@ install_anyenv_and_env_libs() {
         eval "$(anyenv init -)"
     fi
     if [ ! -e $(pyenv root)/plugins/pyenv-virtualenv ]; then
-	info_echo "**** Install pyenv virtualenv****"
+        info_echo "**** Install pyenv virtualenv****"
         git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
         eval "$(pyenv virtualenv-init -)"
     fi
