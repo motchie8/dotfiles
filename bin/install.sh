@@ -1,16 +1,40 @@
 #!/bin/bash
 set -eu
 
-DOTFILES_DIR=$(pwd)
-
-usage_exit() {
-    cat <<EOF
-Usage: $0 --tmux-prefix-key b" 1>&2
-    --tmux-prefix-key
-        Character to use as tmux prefix key
+cat /dev/null <<EOF
+------------------------------------------------------------------------
+Parameters that can be overridden by environment variable.
+------------------------------------------------------------------------
 EOF
-    exit 1
-}
+
+TMUX_PREFIX_KEY=${TMUX_PREFIX_KEY:=b}
+
+cat /dev/null <<EOF
+------------------------------------------------------------------------
+Validate operation system.
+------------------------------------------------------------------------
+EOF
+
+MAC_OS="macOS"
+UBUNTU="ubuntu"
+
+if type sw_vers >/dev/null 2>&1; then
+    OS=$MAC
+else
+    OS=$(cat /etc/os-release | grep -E '^ID="?[^"]*"?$' | tr -d '"' | awk -F '[=]' '{print $NF}')
+    if [ "$OS" != $UBUNTU ]; then
+        echo "[ERROR] Operation System '$OS' is not supported"
+        exit 1
+    fi
+fi
+
+cat /dev/null <<EOF
+------------------------------------------------------------------------
+Utility functions.
+------------------------------------------------------------------------
+EOF
+
+DOTFILES_DIR=$(pwd)
 
 info_echo() {
     echo -e "\033[32m$1\033[0m"
@@ -20,51 +44,11 @@ err_echo() {
     echo -e "\033[31m$1\033[0m"
 }
 
-parse_args() {
-    OPT=$(getopt -o h -l tmux-prefix-key:,help -- "$@")
-    if [ $? != 0 ]; then
-        usage_exit
-    fi
-    eval set -- "$OPT"
-    while true; do
-        case $1 in
-            --tmux-prefix-key)
-                TMUX_PREFIX_KEY=$2
-                shift 2
-                ;;
-            -h | --help)
-                usage_exit
-                ;;
-            --)
-                shift
-                break
-                ;;
-            *)
-                err_echo "Unexpected behavior" 1>&2
-                exit 1
-                ;;
-        esac
-    done
-}
-
-check_args() {
-    if [ "${TMUX_PREFIX_KEY:-}" = "" ]; then
-        usage_exit
-    fi
-}
-
-create_tmux_user_conf() {
-    # create .tmux.user.conf for custom prefix key
-    cat <<EOL >$DOTFILES_DIR/tmux/tmux.user.conf
-unbind C-b
-set-option -g prefix C-${TMUX_PREFIX_KEY}
-bind-key C-${TMUX_PREFIX_KEY} send-prefix
-EOL
-}
-
-get_os() {
-    OS=$(cat /etc/os-release | grep -E '^ID="?[^"]*"?$' | tr -d '"' | awk -F '[=]' '{print $NF}')
-}
+cat /dev/null <<EOF
+------------------------------------------------------------------------
+Functions for installation.
+------------------------------------------------------------------------
+EOF
 
 install_dev_libs_for_ubuntu() {
     info_echo "**** Install dev libs for Ubuntu ****"
@@ -109,6 +93,17 @@ install_dev_libs_for_mac() {
     brew install --HEAD luajit
     brew install --HEAD neovim
     set -e
+}
+
+install_dev_libs() {
+    if [ "$OS" = $UBUNTU ]; then
+        install_dev_libs_for_ubuntu
+    elif [ "$OS" = $MAC_OS ]; then
+        install_dev_libs_for_mac
+    else
+        err_echo "${OS} is not supported. Please use Ubuntu or macOS."
+        exit 1
+    fi
 }
 
 install_anyenv_and_env_libs() {
@@ -245,6 +240,15 @@ install_packer_nvim() {
     fi
 }
 
+create_tmux_user_conf() {
+    # create .tmux.user.conf for custom prefix key
+    cat <<EOL >$DOTFILES_DIR/tmux/tmux.user.conf
+unbind C-b
+set-option -g prefix C-${TMUX_PREFIX_KEY}
+bind-key C-${TMUX_PREFIX_KEY} send-prefix
+EOL
+}
+
 install_tmux_mem_cpu_load() {
     # install tmux-mem-cpu-load
     if [ ! -e $DOTFILES_DIR/tmux/plugins/tmux-mem-cpu-load ]; then
@@ -254,11 +258,7 @@ install_tmux_mem_cpu_load() {
         pushd $DOTFILES_DIR/tmux/plugins/tmux-mem-cpu-load
         cmake .
         make
-        if type sw_vers >/dev/null 2>&1; then
-            make install
-        else
-            sudo make install
-        fi
+        sudo make install
         popd
     else
         pushd $DOTFILES_DIR/tmux/plugins/tmux-mem-cpu-load
@@ -268,11 +268,7 @@ install_tmux_mem_cpu_load() {
             info_echo "**** Update tmux-mem-cpu-load ****"
             cmake .
             make
-            if type sw_vers >/dev/null 2>&1; then
-                make install
-            else
-                sudo make install
-            fi
+            sudo make install
         fi
         popd
     fi
@@ -315,12 +311,12 @@ install_formatter() {
     # install sh formatter
     if ! type shfmt >/dev/null 2>&1; then
         info_echo "**** Install shfmt for sh formatter ****"
-        if [ "$OS" = "ubuntu" ]; then
+        if [ "$OS" = $UBUNTU ]; then
             go install mvdan.cc/sh/v3/cmd/shfmt@latest
-        elif type sw_vers >/dev/null 2>&1; then
+        elif [ "$OS" = $MAC_OS ]; then
             brew install shfmt
         else
-            echo "[ERROR] '$OS' is not supported"
+            echo "[ERROR] Operation System '$OS' is not supported"
             exit 1
         fi
     fi
@@ -385,26 +381,25 @@ setup_dir() {
     mkdir -p ~/vimwiki/data/todo
 }
 
+install_nerd_fonts() {
+    info_echo "**** Install nerd fonts ****"
+    if [ $OS = $MAC_OS ]; then
+        result=$(brew tap | grep -q "homebrew/cask-fonts")
+        if [ $? -ne 0 ]; then
+            brew tap homebrew/cask-fonts
+        fi
+        brew install --cask font-roboto-mono-nerd-font
+    fi
+    # TODO: add installation step for ubuntu
+}
+
 cat /dev/null <<EOF
 ------------------------------------------------------------------------
-End of functions
+Installation steps
 ------------------------------------------------------------------------
 EOF
 
-parse_args "$@"
-
-check_args
-
-get_os
-
-if [ "$OS" = "ubuntu" ]; then
-    install_dev_libs_for_ubuntu
-elif type sw_vers >/dev/null 2>&1; then
-    install_dev_libs_for_mac
-else
-    err_echo "${OS} is not supported. Please use Ubuntu or macOS."
-    exit 1
-fi
+install_dev_libs
 
 install_anyenv_and_env_libs
 
@@ -433,6 +428,8 @@ install_formatter
 install_fzf
 
 create_tmux_user_conf
+
+install_nerd_fonts
 
 setup_symbolic_links
 

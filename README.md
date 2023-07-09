@@ -12,7 +12,7 @@ This is my personal collection of configuration files.
 Install on local machine on MacOS or Ubuntu.
 
 ```sh
-$ ./bin/install.sh --tmux-prefix-key b
+$ TMUX_PREFIX_KEY=n ./bin/install.sh
 ```
 
 Or launch a Docker container from a public docker image.
