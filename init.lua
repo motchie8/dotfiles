@@ -212,7 +212,7 @@ require("packer").startup(function(use)
 	-- intelligent prioritization for telescope
 	use({
 		"nvim-telescope/telescope-frecency.nvim",
-		requires = { "tami5/sqlite.lua" },
+		requires = { "tami5/sqlite.lua", "nvim-telescope/telescope.nvim", "kyazdani42/nvim-web-devicons" },
 		config = function()
 			require("telescope").load_extension("frecency")
 			vim.api.nvim_set_keymap(
@@ -935,6 +935,32 @@ require("packer").startup(function(use)
 	-- ChatGPT
 	use({
 		"madox2/vim-ai",
+		config = function()
+			local initial_chat_prompt = [[
+            >>> system
+            
+            You are a general assistant.
+            If you attach a code block add syntax type after ``` to enable syntax highlighting.
+            ]]
+			vim.g.vim_ai_chat = {
+				options = {
+					model = "gpt-3.5-turbo",
+					-- model = "gpt-4",
+					max_tokens = 1000,
+					temperature = 1,
+					request_timeout = 20,
+					selection_boundary = "",
+					initial_prompt = initial_chat_prompt,
+				},
+				ui = {
+					code_syntax_enabled = 1,
+					populate_options = 0,
+					open_chat_command = "preset_below",
+					scratch_buffer_keep_open = 0,
+					paste_mode = 1,
+				},
+			}
+		end,
 	})
 	-- GitHub Copilot
 	use({
