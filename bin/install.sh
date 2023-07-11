@@ -19,7 +19,7 @@ MAC_OS="macOS"
 UBUNTU="ubuntu"
 
 if type sw_vers >/dev/null 2>&1; then
-    OS=$MAC
+    OS=$MAC_OS
 else
     OS=$(cat /etc/os-release | grep -E '^ID="?[^"]*"?$' | tr -d '"' | awk -F '[=]' '{print $NF}')
     if [ "$OS" != $UBUNTU ]; then
@@ -393,6 +393,24 @@ install_nerd_fonts() {
     # TODO: add installation step for ubuntu
 }
 
+install_gcloud_cli() {
+    if ! type gcloud >/dev/null 2>&1; then
+        info_echo "**** Install gcloud cli ****"
+        if [ $OS = $MAC_OS ]; then
+            brew install --cask google-cloud-sdk
+        elif [ "$OS" = $UBUNTU ]; then
+            sudo apt-get install -y apt-transport-https ca-certificates gnupg curl sudo
+            echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+            curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+            sudo apt-get update && sudo apt-get install -y google-cloud-cli
+            # NOTE: init gcloud CLI by running `gcloud init`
+        else
+            echo "[ERROR] Operation System '$OS' is not supported"
+            exit 1
+        fi
+    fi
+}
+
 cat /dev/null <<EOF
 ------------------------------------------------------------------------
 Installation steps
@@ -430,6 +448,8 @@ install_fzf
 create_tmux_user_conf
 
 install_nerd_fonts
+
+install_gcloud_cli
 
 setup_symbolic_links
 
