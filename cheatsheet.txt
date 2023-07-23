@@ -98,3 +98,13 @@ Start a new conversation | :AINewChat
 ## copilot.vim
 First, configure GitHub Copilot | :Copilot setup
 Second, enable GitHub Copilot | :Copilot enable
+
+## dbtpal
+Run the current model of dbt | :lua require('dbtpal').run()
+Run all models in the project of dbt | :lua require('dbtpal').run_all()
+Run a specific model or selector of dbt | :lua require('dbtpal').run_model({selector})
+Test the current model of dbt | :lua require('dbtpal').test()
+Test all models in the project of dbt | :lua require('dbtpal').test_all()
+Test a specific model or selector of dbt | :lua require('dbtpal').test_model({selector})
+Compile the current model of dbt | :lua require('dbtpal').compile()
+Build the current model of dbt | :lua require('dbtpal').build()
