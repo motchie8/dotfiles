@@ -16,5 +16,5 @@ mypy
 pytest
 tasklib
 dbt-bigquery==1.5.1
-sqlfluff==2.1.1
+sqlfluff==2.1.2
 sqlfluff-templater-dbt==2.1.1
