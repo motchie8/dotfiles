@@ -17,6 +17,7 @@ api.nvim_set_keymap("i", "<C-h>", "<left>", { noremap = true })
 api.nvim_set_keymap("i", "<C-l>", "<right>", { noremap = true })
 api.nvim_set_keymap("n", "<S-h>", "^", { noremap = true })
 api.nvim_set_keymap("n", "<S-l>", "$", { noremap = true })
+
 -- ## normal mode ##
 api.nvim_set_keymap("n", ";", ":", { noremap = true })
 -- delete without yanking
@@ -44,12 +45,16 @@ api.nvim_set_keymap("n", "<Leader>F", [["zyiw:let @/ = '\<' . @z . '\>'<CR>:set 
 api.nvim_set_keymap("n", "<Leader>r", [[<Leader>f:%s/<C-r>///g<Left><Left>]], { noremap = false })
 api.nvim_set_keymap("n", "<Esc><Esc>", "<Cmd>set nohlsearch!<CR>", { noremap = true })
 api.nvim_set_keymap("n", "/", "/\\v", { noremap = false })
+-- copy current file path
+api.nvim_set_keymap("n", "<Leader>Y", "<Cmd>:let @+=expand('%:p')<CR>", { noremap = true })
+
 -- ## visual mode ##
 -- move cursor
 api.nvim_set_keymap("x", "<S-h>", "^", { noremap = true })
 api.nvim_set_keymap("x", "<S-l>", "$", { noremap = true })
 -- paste without yanking
 api.nvim_set_keymap("x", "p", '"_xP', { noremap = true })
+
 -- ## terminal mode ##
 api.nvim_set_keymap("t", "<esc>", [[<C-\><C-n>]], { noremap = true })
 api.nvim_set_keymap("t", "jj", [[<C-\><C-n>]], { noremap = true })
