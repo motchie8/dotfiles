@@ -411,6 +411,24 @@ install_gcloud_cli() {
     fi
 }
 
+install_heml() {
+    if ! type helm >/dev/null 2>&1; then
+        info_echo "**** Install Helm ****"
+        if [ $OS = $MAC_OS ]; then
+            brew install helm
+        elif [ "$OS" = $UBUNTU ]; then
+            curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg >/dev/null
+            sudo apt-get install apt-transport-https --yes
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+            sudo apt-get update
+            sudo apt-get install helm
+        else
+            echo "[ERROR] Operation System '$OS' is not supported"
+            exit 1
+        fi
+    fi
+}
+
 cat /dev/null <<EOF
 ------------------------------------------------------------------------
 Installation steps
@@ -450,6 +468,8 @@ create_tmux_user_conf
 install_nerd_fonts
 
 install_gcloud_cli
+
+install_heml
 
 setup_symbolic_links
 
