@@ -92,6 +92,8 @@ install_dev_libs_for_mac() {
     brew unlink neovim
     brew install --HEAD luajit
     brew install --HEAD neovim
+    brew link luajit
+    brew link neovim
     set -e
 }
 
@@ -384,10 +386,7 @@ setup_dir() {
 install_nerd_fonts() {
     info_echo "**** Install nerd fonts ****"
     if [ $OS = $MAC_OS ]; then
-        result=$(brew tap | grep -q "homebrew/cask-fonts")
-        if [ $? -ne 0 ]; then
-            brew tap homebrew/cask-fonts
-        fi
+        brew tap homebrew/cask-fonts
         brew install --cask font-roboto-mono-nerd-font
     fi
     # TODO: add installation step for ubuntu
