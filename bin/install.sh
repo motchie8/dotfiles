@@ -73,6 +73,8 @@ install_dev_libs_for_ubuntu() {
     sudo apt-get install taskwarrior -y
     # install ripgrep for telescope
     sudo apt-get install ripgrep -y
+    # install xdg-utils for opening browser
+    sudo apt-get install xdg-utils -y
     # install neovim nightly
     # NOTE: nvim-treesitter needs Neovim nightly
     sudo add-apt-repository -y ppa:neovim-ppa/unstable # ppa:neovim-ppa/stable
@@ -342,7 +344,6 @@ install_formatter() {
 }
 
 install_fzf() {
-    # install fzf
     if [ ! -e $DOTFILES_DIR/.fzf ]; then
         info_echo "**** Install fzf ***"
         git clone --depth 1 https://github.com/junegunn/fzf.git $DOTFILES_DIR/.fzf
@@ -356,6 +357,26 @@ install_fzf() {
             $DOTFILES_DIR/.fzf/install --key-bindings --completion --no-update-rc
         fi
         popd
+    fi
+}
+
+install_terraform_docs() {
+    if ! type terraform-docs >/dev/null 2>&1; then
+        info_echo "**** Install terraform-docs ***"
+        if [ "$OS" = $UBUNTU ]; then
+            TERRAFORM_DOCS_VERSION="v0.16.0"
+            go install github.com/terraform-docs/terraform-docs@${TERRAFORM_DOCS_VERSION}
+        elif [ "$OS" = $MAC_OS ]; then
+            brew install terraform-docs
+        else
+            echo "[ERROR] Operation System '$OS' is not supported"
+            exit 1
+        fi
+        # Setup code completion for zsh
+        TERRAFORM_DOCS_CODE_COMPLETION_PATH="/usr/local/share/zsh/site-functions/_terraform-docs"
+        if [ ! -e $TERRAFORM_DOCS_CODE_COMPLETION_PATH ]; then
+            terraform-docs completion zsh | sudo tee $TERRAFORM_DOCS_CODE_COMPLETION_PATH >/dev/null
+        fi
     fi
 }
 
@@ -469,6 +490,8 @@ install_nerd_fonts
 install_gcloud_cli
 
 install_heml
+
+install_terraform_docs
 
 setup_symbolic_links
 
