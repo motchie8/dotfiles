@@ -121,6 +121,7 @@ opt.clipboard:append("unnamedplus")
 
 -- color schema
 opt.syntax = "on"
+api.nvim_set_option("termguicolors", true)
 
 -- shell
 opt.sh = "zsh"
@@ -674,21 +675,21 @@ require("packer").startup(function(use)
                 
                 " Mappings for CoCList
                 " Show all diagnostics
-                nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
-                " Manage extensions
-                nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
-                " Show commands
-                nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
-                " Find symbol of current document
-                nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
-                " Search workspace symbols
-                nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
-                " Do default action for next item
-                nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
-                " Do default action for previous item
-                nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
-                " Resume latest coc list
-                nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+                ""nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+                """ Manage extensions
+                ""nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
+                """ Show commands
+                ""nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+                """ Find symbol of current document
+                ""nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+                """ Search workspace symbols
+                ""nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+                """ Do default action for next item
+                ""nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+                """ Do default action for previous item
+                ""nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+                """ Resume latest coc list
+                ""nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
             ]])
 			-- add default extensions
@@ -800,6 +801,14 @@ require("packer").startup(function(use)
 				"n",
 				"ts",
 				"<Cmd>silent !$HOME/vimwiki/data/todo/sync_task_with_calendar.sh<CR>",
+				{ noremap = true, silent = true }
+			)
+			-- NOTE: clear task lines
+			vim.api.nvim_set_keymap(
+				"n",
+				"tc",
+				-- "<Cmd>%s/\\v^ *\\* \\[[S ]\\] .* \\?(!{1,3})\\? *(\\(\\d{4}-\\d{2}-\\d{2}\\))\\? *#\\w{8}\\n//gc<CR>",
+				"<Cmd>%s/\\v^ *\\* \\[[XS ]\\] .* ?(!{1,3})? *(\\(\\d{4}-\\d{2}-\\d{2}\\))? *#\\w{8}\\n//gc<CR>",
 				{ noremap = true, silent = true }
 			)
 		end,
@@ -1048,8 +1057,8 @@ require("packer").startup(function(use)
             ]]
 			vim.g.vim_ai_chat = {
 				options = {
-					model = "gpt-3.5-turbo",
-					-- model = "gpt-4",
+					model = "gpt-4",
+					-- model = "gpt-3.5-turbo",
 					max_tokens = 1000,
 					temperature = 1,
 					request_timeout = 20,
