@@ -122,6 +122,8 @@ opt.clipboard:append("unnamedplus")
 -- color schema
 opt.syntax = "on"
 api.nvim_set_option("termguicolors", true)
+api.nvim_set_var("&t_8f", "\\<Esc>[38;2;%lu;%lu;%lum")
+api.nvim_set_var("&t_8b", "\\<Esc>[48;2;%lu;%lu;%lum")
 
 -- shell
 opt.sh = "zsh"
@@ -179,27 +181,11 @@ require("packer").startup(function(use)
 		requires = { "nvim-treesitter/nvim-treesitter" },
 		config = function()
 			vim.opt.list = true
-			vim.opt.listchars:append("space:⋅")
-			vim.opt.listchars:append("eol:↴")
-
 			vim.opt.termguicolors = true
-			vim.cmd([[highlight IndentBlanklineIndent1 guibg=#1f1f1f gui=nocombine]])
-			vim.cmd([[highlight IndentBlanklineIndent2 guibg=#1a1a1a gui=nocombine]])
-
 			require("indent_blankline").setup({
 				space_char_blankline = " ",
 				show_current_context = true,
 				show_current_context_start = true,
-				char = "",
-				char_highlight_list = {
-					"IndentBlanklineIndent1",
-					"IndentBlanklineIndent2",
-				},
-				space_char_highlight_list = {
-					"IndentBlanklineIndent1",
-					"IndentBlanklineIndent2",
-				},
-				show_trailing_blankline_indent = false,
 			})
 		end,
 	})
@@ -1057,8 +1043,8 @@ require("packer").startup(function(use)
             ]]
 			vim.g.vim_ai_chat = {
 				options = {
-					model = "gpt-4",
-					-- model = "gpt-3.5-turbo",
+					-- model = "gpt-4",
+					model = "gpt-3.5-turbo",
 					max_tokens = 1000,
 					temperature = 1,
 					request_timeout = 20,
