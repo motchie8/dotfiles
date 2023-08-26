@@ -373,8 +373,10 @@ install_terraform_docs() {
             exit 1
         fi
         # Setup code completion for zsh
-        TERRAFORM_DOCS_CODE_COMPLETION_PATH="/usr/local/share/zsh/site-functions/_terraform-docs"
+        ZSH_COMPLETION_DIR="/usr/local/share/zsh/site-functions"
+        TERRAFORM_DOCS_CODE_COMPLETION_PATH="${ZSH_COMPLETION_DIR}/_terraform-docs"
         if [ ! -e $TERRAFORM_DOCS_CODE_COMPLETION_PATH ]; then
+            sudo mkdir -p $ZSH_COMPLETION_DIR
             terraform-docs completion zsh | sudo tee $TERRAFORM_DOCS_CODE_COMPLETION_PATH >/dev/null
         fi
     fi
