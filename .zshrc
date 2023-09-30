@@ -42,6 +42,7 @@ export LESSOPEN='| src-hilite-lesspipe.sh %s'
 alias ll='ls -l'
 alias diff='diff -U1'
 alias nf='nvim $(fzf)'
+alias vim='nvim'
 
 # -----------------------------
 # zsh settings
