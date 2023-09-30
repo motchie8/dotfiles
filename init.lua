@@ -204,7 +204,7 @@ require("packer").startup(function(use)
 			vim.api.nvim_set_keymap(
 				"n",
 				"sw",
-				"<Cmd>Telescope find_files cwd=$HOME/vimwiki/data<CR>",
+				"<Cmd>Telescope find_files cwd=$HOME/vimwiki<CR>",
 				{ noremap = true, silent = true }
 			)
 		end,
@@ -752,7 +752,7 @@ require("packer").startup(function(use)
             ]])
 			vim.api.nvim_set_var("vimwiki_list", {
 				{
-					path = "~/vimwiki/data",
+					path = "~/vimwiki",
 					syntax = "markdown",
 					ext = "md",
 					auto_tags = 1,
@@ -786,7 +786,7 @@ require("packer").startup(function(use)
 			vim.api.nvim_set_keymap(
 				"n",
 				"ts",
-				"<Cmd>silent !$HOME/vimwiki/data/todo/sync_task_with_calendar.sh<CR>",
+				"<Cmd>silent !$HOME/vimwiki/todo/sync_task_with_calendar.sh<CR>",
 				{ noremap = true, silent = true }
 			)
 			-- NOTE: clear task lines
@@ -806,7 +806,7 @@ require("packer").startup(function(use)
 			require("auto-session").setup({
 				log_level = "info",
 				auto_session_enabled = true,
-				auto_session_allowed_dirs = { "~/vimwiki/data/" },
+				auto_session_allowed_dirs = { "~/vimwiki" },
 			})
 		end,
 	})
