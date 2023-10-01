@@ -3,11 +3,36 @@ set -eu
 
 cat /dev/null <<EOF
 ------------------------------------------------------------------------
-Parameters that can be overridden by environment variable.
+Parse arguments.
 ------------------------------------------------------------------------
 EOF
 
-TMUX_PREFIX_KEY=${TMUX_PREFIX_KEY:=b}
+TMUX_PREFIX_KEY=""
+
+show_help() {
+    echo "Usage: ./bin/install.sh -t TMUX_PREFIX_KEY"
+    echo "  -h                    Show this help message and exit"
+    echo "  -t TMUX_PREFIX_KEY    Specify prefix Key for tmux. ex. \"-t b\""
+}
+
+while getopts ":t:h" option; do
+    case "${option}" in
+        t) TMUX_PREFIX_KEY="${OPTARG}" ;;
+        h)
+            show_help
+            exit 0
+            ;;
+        *)
+            show_help
+            exit 1
+            ;;
+    esac
+done
+
+if [[ -z "${TMUX_PREFIX_KEY}" ]]; then
+    show_help
+    exit 1
+fi
 
 cat /dev/null <<EOF
 ------------------------------------------------------------------------
