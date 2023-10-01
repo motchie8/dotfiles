@@ -8,7 +8,6 @@ on:
 jobs:
   build_and_push_docker_image_for_ubuntu:
     # uses: ./.github/workflows/build_and_push_docker_image.yml@master
-    runs-on: ubuntu-latest
     uses: motchie8/dotfiles/.github/workflows/build_and_push_docker_image.yml@master
     with:
       os: ubuntu
