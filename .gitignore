@@ -19,3 +19,4 @@ vimspector-config
 tmux/
 iceberg.vim/
 node_modules/
+.zshrc.local

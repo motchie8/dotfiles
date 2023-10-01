@@ -28,10 +28,6 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 # Environment Variables
 # -----------------------------
 
-if [ -e $HOME/.env ]; then
-    source $HOME/.env
-fi
-
 export LESS=' -R '
 export LESSOPEN='| src-hilite-lesspipe.sh %s'
 
@@ -293,3 +289,11 @@ setopt inc_append_history
 # ヒストリを呼び出してから実行する間に一旦編集できる状態になる
 setopt hist_verify
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+
+# -----------------------------
+# Load user specific settings
+# -----------------------------
+# load zshrc.local if exists
+if [ -e $HOME/dotfiles/.zshrc.local ]; then
+    source $HOME/dotfiles/.zshrc.local
+fi
