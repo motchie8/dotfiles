@@ -111,7 +111,7 @@ install_dev_libs_for_mac() {
     brew update
     set +e
     # install pyenv, vim plugins and zsh
-    brew install node yarn wget tmux go zsh source-highlight gcc cmake ripgrep # pyenv pyenv-virtualenv
+    brew install node yarn wget tmux zsh source-highlight gcc cmake ripgrep # pyenv pyenv-virtualenv
     # install taskwarrior
     brew install task ctags
     # install neovim nightly
@@ -309,10 +309,20 @@ install_go() {
         if type brew >/dev/null 2>&1; then
             brew install go
         else
-            wget https://go.dev/dl/go1.20.5.linux-amd64.tar.gz
+            arch=$(uname -m)
+            go_version="1.12.1"
+
+            if [ "$arch" == "arm64" ]; then
+                wget -O go.tar.gz https://go.dev/dl/go${go_version}.linux-arm64.tar.gz
+            elif [ "$arch" == "x86_64" ]; then
+                wget -O go.tar.gz https://go.dev/dl/go${go_version}.linux-amd64.tar.gz
+            else
+                echo "Unsupported architecture: $arch"
+                exit 1
+            fi
             sudo rm -rf /usr/local/go
-            sudo tar -C /usr/local -xzf go1.20.5.linux-amd64.tar.gz
-            rm go1.20.5.linux-amd64.tar.gz
+            sudo tar -C /usr/local -xzf go.tar.gz
+            rm go.tar.gz
         fi
         # setup PATH to use go lang to install modules in the following steps
         export PATH=$PATH:/usr/local/go/bin
