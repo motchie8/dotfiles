@@ -310,7 +310,7 @@ install_go() {
             brew install go
         else
             arch=$(uname -m)
-            go_version="1.12.1"
+            go_version="1.21.1"
 
             if [ "$arch" == "arm64" ]; then
                 wget -O go.tar.gz https://go.dev/dl/go${go_version}.linux-arm64.tar.gz
@@ -351,7 +351,8 @@ install_formatter() {
     if ! type shfmt >/dev/null 2>&1; then
         info_echo "**** Install shfmt for sh formatter ****"
         if [ "$OS" = $UBUNTU ]; then
-            go install mvdan.cc/sh/v3/cmd/shfmt@latest
+            export GO111MODULE=on
+            go get mvdan.cc/sh/v3/cmd/shfmt@latest
         elif [ "$OS" = $MAC_OS ]; then
             brew install shfmt
         else
