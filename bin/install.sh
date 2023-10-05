@@ -330,7 +330,7 @@ install_go() {
             arch=$(uname -m)
             go_version="1.21.1"
 
-            if [ "$arch" == "arm64" ]; then
+            if [ "$arch" == "arm64" ] || [ "$arch" == "aarch64" ]; then
                 wget -O go.tar.gz https://go.dev/dl/go${go_version}.linux-arm64.tar.gz
             elif [ "$arch" == "x86_64" ]; then
                 wget -O go.tar.gz https://go.dev/dl/go${go_version}.linux-amd64.tar.gz
