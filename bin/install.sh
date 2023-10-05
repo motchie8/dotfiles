@@ -3,6 +3,22 @@ set -eu
 
 cat /dev/null <<EOF
 ------------------------------------------------------------------------
+Utility functions.
+------------------------------------------------------------------------
+EOF
+
+DOTFILES_DIR=$(dirname $(dirname $(realpath $0)))
+
+info_echo() {
+    echo -e "\033[32m$1\033[0m"
+}
+
+err_echo() {
+    echo -e "\033[31m$1\033[0m"
+}
+
+cat /dev/null <<EOF
+------------------------------------------------------------------------
 Parse arguments.
 ------------------------------------------------------------------------
 EOF
@@ -40,6 +56,7 @@ Validate operation system.
 ------------------------------------------------------------------------
 EOF
 
+# supported OS
 MAC_OS="macOS"
 UBUNTU="ubuntu"
 
@@ -47,27 +64,16 @@ if type sw_vers >/dev/null 2>&1; then
     OS=$MAC_OS
 else
     OS=$(cat /etc/os-release | grep -E '^ID="?[^"]*"?$' | tr -d '"' | awk -F '[=]' '{print $NF}')
-    if [ "$OS" != $UBUNTU ]; then
-        echo "[ERROR] Operation System '$OS' is not supported"
-        exit 1
-    fi
 fi
 
-cat /dev/null <<EOF
-------------------------------------------------------------------------
-Utility functions.
-------------------------------------------------------------------------
-EOF
-
-DOTFILES_DIR=$(pwd)
-
-info_echo() {
-    echo -e "\033[32m$1\033[0m"
+exit_with_unsupported_os() {
+    err_echo "Operation System '$OS' is not supported"
+    exit 1
 }
 
-err_echo() {
-    echo -e "\033[31m$1\033[0m"
-}
+if [ "$OS" != $UBUNTU ] && [ "$OS" != $MAC_OS ]; then
+    exit_with_unsupported_os
+fi
 
 cat /dev/null <<EOF
 ------------------------------------------------------------------------
@@ -87,7 +93,6 @@ install_dev_libs_for_ubuntu() {
     sudo apt update -y && sudo apt install -y build-essential
     sudo apt-key adv --refresh-keys --keyserver keyserver.ubuntu.com
     sudo apt-get install -y language-pack-ja
-    sudo apt-get install -y software-properties-common && sudo apt-get update -y
     sudo update-locale LANG=ja_JP.UTF-8
     # install dev dependencies
     sudo apt install -y curl git file zlib1g-dev libssl-dev \
@@ -100,10 +105,6 @@ install_dev_libs_for_ubuntu() {
     sudo apt-get install ripgrep -y
     # install xdg-utils for opening browser
     sudo apt-get install xdg-utils -y
-    # install neovim nightly
-    # NOTE: nvim-treesitter needs Neovim nightly
-    sudo add-apt-repository -y ppa:neovim-ppa/unstable # ppa:neovim-ppa/stable
-    sudo apt-get update -y && sudo apt-get install -y neovim
 }
 
 install_dev_libs_for_mac() {
@@ -111,16 +112,9 @@ install_dev_libs_for_mac() {
     brew update
     set +e
     # install pyenv, vim plugins and zsh
-    brew install node yarn wget tmux zsh source-highlight gcc cmake ripgrep # pyenv pyenv-virtualenv
+    brew install node yarn wget tmux zsh source-highlight gcc cmake ripgrep
     # install taskwarrior
     brew install task ctags
-    # install neovim nightly
-    brew unlink luajit
-    brew unlink neovim
-    brew install --HEAD luajit
-    brew install --HEAD neovim
-    brew link luajit
-    brew link neovim
     set -e
 }
 
@@ -130,13 +124,36 @@ install_dev_libs() {
     elif [ "$OS" = $MAC_OS ]; then
         install_dev_libs_for_mac
     else
-        err_echo "${OS} is not supported. Please use Ubuntu or macOS."
-        exit 1
+        exit_with_unsupported_os
+    fi
+}
+
+install_neovim() {
+    # cf. https://github.com/neovim/neovim/wiki/Installing-Neovim
+    info_echo "**** Install or update Neovim ****"
+    if [ "$OS" = $UBUNTU ]; then
+        sudo apt-get install -y software-properties-common
+        sudo add-apt-repository -y ppa:neovim-ppa/unstable
+        sudo apt-get update -y
+        sudo apt-get install -y neovim
+
+    elif [ "$OS" = $MAC_OS ]; then
+        # install neovim nightly
+        set +e
+        brew unlink luajit
+        brew unlink neovim
+        brew install --HEAD luajit
+        brew install --HEAD neovim
+        brew link luajit
+        brew link neovim
+        set -e
+    else
+        exit_with_unsupported_os
     fi
 }
 
 install_anyenv_and_env_libs() {
-    info_echo "**** Setup *envs ****"
+    info_echo "**** Setup env libs ****"
     if ! type anyenv >/dev/null 2>&1; then
         info_echo "**** Install anyenv ****"
         git clone https://github.com/anyenv/anyenv $HOME/.anyenv
@@ -271,6 +288,7 @@ install_packer_nvim() {
 
 create_tmux_user_conf() {
     # create .tmux.user.conf for custom prefix key
+    info_echo "**** Create or update .tmux.user.conf to set prefix key****"
     cat <<EOL >$DOTFILES_DIR/tmux/tmux.user.conf
 unbind C-b
 set-option -g prefix C-${TMUX_PREFIX_KEY}
@@ -356,8 +374,7 @@ install_formatter() {
         elif [ "$OS" = $MAC_OS ]; then
             brew install shfmt
         else
-            echo "[ERROR] Operation System '$OS' is not supported"
-            exit 1
+            exit_with_unsupported_os
         fi
     fi
 
@@ -405,8 +422,7 @@ install_terraform_docs() {
         elif [ "$OS" = $MAC_OS ]; then
             brew install terraform-docs
         else
-            echo "[ERROR] Operation System '$OS' is not supported"
-            exit 1
+            exit_with_unsupported_os
         fi
         # Setup code completion for zsh
         ZSH_COMPLETION_DIR="/usr/local/share/zsh/site-functions"
@@ -437,9 +453,10 @@ setup_symbolic_links() {
 }
 
 setup_dir() {
-    info_echo "**** Setup directory for vimwiki ****"
-    # make vimwiki directories
-    mkdir -p ~/vimwiki/data/todo
+    if [ ! -e $HOME/vimwiki/todo ]; then
+        info_echo "**** Create directory for vimwiki for task management****"
+        mkdir -p $HOME/vimwiki/todo
+    fi
 }
 
 install_nerd_fonts() {
@@ -463,8 +480,7 @@ install_gcloud_cli() {
             sudo apt-get update && sudo apt-get install -y google-cloud-cli
             # NOTE: init gcloud CLI by running `gcloud init`
         else
-            echo "[ERROR] Operation System '$OS' is not supported"
-            exit 1
+            exit_with_unsupported_os
         fi
     fi
 }
@@ -481,8 +497,7 @@ install_heml() {
             sudo apt-get update
             sudo apt-get install helm
         else
-            echo "[ERROR] Operation System '$OS' is not supported"
-            exit 1
+            exit_with_unsupported_os
         fi
     fi
 }
@@ -494,6 +509,8 @@ Installation steps
 EOF
 
 install_dev_libs
+
+install_neovim
 
 install_anyenv_and_env_libs
 
