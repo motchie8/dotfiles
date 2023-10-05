@@ -352,7 +352,7 @@ install_formatter() {
         info_echo "**** Install shfmt for sh formatter ****"
         if [ "$OS" = $UBUNTU ]; then
             export GO111MODULE=on
-            go get mvdan.cc/sh/v3/cmd/shfmt@latest
+            go install mvdan.cc/sh/v3/cmd/shfmt@latest
         elif [ "$OS" = $MAC_OS ]; then
             brew install shfmt
         else
