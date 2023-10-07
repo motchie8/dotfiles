@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu
+set -eux
 
 cat /dev/null <<EOF
 ------------------------------------------------------------------------
@@ -24,16 +24,19 @@ Parse arguments.
 EOF
 
 TMUX_PREFIX_KEY=""
+BUILD_NEOVIM=false
 
 show_help() {
     echo "Usage: ./bin/install.sh -t TMUX_PREFIX_KEY"
     echo "  -h                    Show this help message and exit"
+    echo "  -b                    Build Neovim from source"
     echo "  -t TMUX_PREFIX_KEY    Specify prefix Key for tmux. ex. \"-t b\""
 }
 
-while getopts ":t:h" option; do
+while getopts ":t:hb" option; do
     case "${option}" in
         t) TMUX_PREFIX_KEY="${OPTARG}" ;;
+        b) BUILD_NEOVIM=true ;;
         h)
             show_help
             exit 0
@@ -128,25 +131,53 @@ install_dev_libs() {
     fi
 }
 
+build_neovim() {
+    info_echo "**** Build Neovim from source****"
+    # install prerequisites
+    if [ "$OS" = $UBUNTU ]; then
+        sudo apt-get install -y ninja-build gettext cmake unzip curl
+    elif [ "$OS" = $MAC_OS ]; then
+        set +e
+        brew install ninja cmake gettext curl
+        set -e
+    else
+        exit_with_unsupported_os
+    fi
+    # build Neovim
+    if [ ! -e $DOTFILES_DIR/neovim ]; then
+        git clone https://github.com/neovim/neovim $DOTFILES_DIR/neovim
+    fi
+    cd $DOTFILES_DIR/neovim
+    git pull origin master
+    make CMAKE_BUILD_TYPE=RelWithDebInfo
+    sudo make install
+}
+
 install_neovim() {
     # cf. https://github.com/neovim/neovim/wiki/Installing-Neovim
     info_echo "**** Install or update Neovim ****"
     if [ "$OS" = $UBUNTU ]; then
-        sudo apt-get install -y software-properties-common
-        sudo add-apt-repository -y ppa:neovim-ppa/unstable
-        sudo apt-get update -y
-        sudo apt-get install -y neovim
-
+        if [ "$BUILD_NEOVIM" = true ] || [ "$arch" == "arm64" ] || [ "$arch" == "aarch64" ]; then
+            build_neovim
+        else
+            sudo apt-get install -y software-properties-common
+            sudo add-apt-repository -y ppa:neovim-ppa/unstable
+            sudo apt-get update -y
+            sudo apt-get install -y neovim
+        fi
     elif [ "$OS" = $MAC_OS ]; then
-        # install neovim nightly
-        set +e
-        brew unlink luajit
-        brew unlink neovim
-        brew install --HEAD luajit
-        brew install --HEAD neovim
-        brew link luajit
-        brew link neovim
-        set -e
+        if [ "$BUILD_NEOVIM" = true ]; then
+            build_neovim
+        else
+            set +e
+            brew unlink luajit
+            brew unlink neovim
+            brew install --HEAD luajit
+            brew install --HEAD neovim
+            brew link luajit
+            brew link neovim
+            set -e
+        fi
     else
         exit_with_unsupported_os
     fi
@@ -348,9 +379,15 @@ install_go() {
 }
 
 install_act() {
-    if [ ! -e ~/go/bin/act ]; then
-        info_echo "**** Install act ****"
-        curl https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
+    if ! type act >/dev/null 2>&1; then
+        info_echo "**** Install act ***"
+        if [ "$OS" = $UBUNTU ]; then
+            curl https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
+        elif [ "$OS" = $MAC_OS ]; then
+            brew install act
+        else
+            exit_with_unsupported_os
+        fi
     fi
 }
 

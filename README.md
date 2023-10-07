@@ -20,6 +20,7 @@ Show help message
 $ ./bin/install.sh -h
 Usage: ./bin/install.sh -t TMUX_PREFIX_KEY
   -h                    Show this help message and exit
+  -b                    Build Neovim from source
   -t TMUX_PREFIX_KEY    Specify prefix Key for tmux. ex. "-t b"
 ```
 
@@ -29,5 +30,5 @@ Launch a Docker container from a public docker image.
 Currently, only the Ubuntu image is available.
 
 ```sh
-$ docker run -it --rm motchie8/dotfiles:ubuntu zsh
+$ docker run -it --rm -v $(pwd):/mnt/host motchie8/dotfiles:ubuntu zsh
 ```
