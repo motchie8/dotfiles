@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eux
+set -eu
 
 cat /dev/null <<EOF
 ------------------------------------------------------------------------
@@ -16,6 +16,8 @@ info_echo() {
 err_echo() {
     echo -e "\033[31m$1\033[0m"
 }
+
+ARCH=$(uname -m)
 
 cat /dev/null <<EOF
 ------------------------------------------------------------------------
@@ -157,7 +159,7 @@ install_neovim() {
     # cf. https://github.com/neovim/neovim/wiki/Installing-Neovim
     info_echo "**** Install or update Neovim ****"
     if [ "$OS" = $UBUNTU ]; then
-        if [ "$BUILD_NEOVIM" = true ] || [ "$arch" == "arm64" ] || [ "$arch" == "aarch64" ]; then
+        if [ "$BUILD_NEOVIM" = true ] || [ "$ARCH" == "arm64" ] || [ "$ARCH" == "aarch64" ]; then
             build_neovim
         else
             sudo apt-get install -y software-properties-common
@@ -358,15 +360,14 @@ install_go() {
         if type brew >/dev/null 2>&1; then
             brew install go
         else
-            arch=$(uname -m)
             go_version="1.21.1"
 
-            if [ "$arch" == "arm64" ] || [ "$arch" == "aarch64" ]; then
+            if [ "$ARCH" == "arm64" ] || [ "$ARCH" == "aarch64" ]; then
                 wget -O go.tar.gz https://go.dev/dl/go${go_version}.linux-arm64.tar.gz
-            elif [ "$arch" == "x86_64" ]; then
+            elif [ "$ARCH" == "x86_64" ]; then
                 wget -O go.tar.gz https://go.dev/dl/go${go_version}.linux-amd64.tar.gz
             else
-                echo "Unsupported architecture: $arch"
+                echo "Unsupported architecture: $ARCH"
                 exit 1
             fi
             sudo rm -rf /usr/local/go
