@@ -1,4 +1,9 @@
 # -----------------------------
+# DOTFILES_DIR
+# -----------------------------
+DOTFILES_DIR=$(dirname $(realpath $0))
+
+# -----------------------------
 # PATH
 # -----------------------------
 # homebrew
@@ -39,12 +44,12 @@ alias ll='ls -l'
 alias diff='diff -U1'
 alias nf='nvim $(fzf)'
 alias vim='nvim'
-
+alias find_path='find_path() { command_name=$1; echo $PATH | tr ":" "\n" | while read -r dir; do if [[ -x "${dir}/${command_name}" ]]; then echo "${dir}/${command_name}"; fi; done; }; find_path'
 # -----------------------------
 # zsh settings
 # -----------------------------
 
-export ZPLUG_HOME=$HOME/dotfiles/.zplug
+export ZPLUG_HOME=$DOTFILES_DIR/.zplug
 if [ -e $ZPLUG_HOME ]; then
     source $ZPLUG_HOME/init.zsh
 fi
@@ -54,7 +59,7 @@ zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "b4b4r07/enhancd", use:init.sh
 
-source $HOME/dotfiles/.zprezto/init.zsh
+source $DOTFILES_DIR/.zprezto/init.zsh
 
 # -----------------------------
 # Completion
@@ -294,6 +299,6 @@ setopt hist_verify
 # Load user specific settings
 # -----------------------------
 # load zshrc.local if exists
-if [ -e $HOME/dotfiles/.zshrc.local ]; then
-    source $HOME/dotfiles/.zshrc.local
+if [ -e $DOTFILES_DIR/.zshrc.local ]; then
+    source $DOTFILES_DIR/.zshrc.local
 fi
