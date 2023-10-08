@@ -30,5 +30,5 @@ Launch a Docker container from a public docker image.
 Currently, only the Ubuntu image is available.
 
 ```sh
-$ docker run -it --rm -v $(pwd):/mnt/host motchie8/dotfiles:ubuntu zsh
+$ docker run -it --rm -v $(pwd):/mnt/host motchie8/dotfiles:master zsh
 ```
