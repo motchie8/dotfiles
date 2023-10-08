@@ -1,7 +1,7 @@
 # -----------------------------
 # DOTFILES_DIR
 # -----------------------------
-DOTFILES_DIR=$(dirname $(realpath $0))
+DOTFILES_DIR=$(dirname $(realpath $HOME/.zshrc))
 
 # -----------------------------
 # PATH
