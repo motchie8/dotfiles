@@ -29,6 +29,13 @@ eval "$(pyenv virtualenv-init -)"
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
+# snowsql
+export PATH="$HOME/bin:$PATH"
+# for macOS x86_64
+if [ -e /Applications/SnowSQL.app/Contents/MacOS ]; then
+    export PATH="/Applications/SnowSQL.app/Contents/MacOS:$PATH"
+fi
+
 # -----------------------------
 # Environment Variables
 # -----------------------------

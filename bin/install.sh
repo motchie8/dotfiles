@@ -540,6 +540,32 @@ install_heml() {
     fi
 }
 
+install_snowsql() {
+    if ! type snowsql >/dev/null 2>&1; then
+        info_echo "**** Install SnowSQL ****"
+        if [ $OS = $MAC_OS ]; then
+            if [ "$ARCH" == "x86_64" ]; then
+                brew install --cask snowflake-snowsql
+            else
+                info_echo "Currently, for MacOS with arm64, SnowSQL needs to be installed using pkg."
+                info_echo "cf. https://developers.snowflake.com/snowsql/"
+            fi
+        elif [ "$OS" = $UBUNTU ]; then
+            if [ "$ARCH" == "x86_64" ]; then
+                VERSION=1.2.28
+                BOOTSTRAP_VERSION=1.2
+                curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/${BOOTSTRAP_VERSION}/linux_x86_64/snowsql-${VERSION}-linux_x86_64.bash
+                touch $DOTFILES_DIR/.zshrc.local
+                SNOWSQL_DEST=$HOME/bin SNOWSQL_LOGIN_SHELL=$DOTFILES_DIR/.zshrc.local bash snowsql-${VERSION}-linux_x86_64.bash
+            else
+                info_echo "Currently, SnowSQL is not supported on arm64 Linux."
+            fi
+        else
+            exit_with_unsupported_os
+        fi
+    fi
+}
+
 cat /dev/null <<EOF
 ------------------------------------------------------------------------
 Installation steps
@@ -585,6 +611,8 @@ install_gcloud_cli
 install_heml
 
 install_terraform_docs
+
+install_snowsql
 
 setup_symbolic_links
 
