@@ -91,10 +91,29 @@ opt.showmatch = true
 opt.ruler = true
 
 -- file
-opt.swapfile = false
 opt.autoread = true
 opt.backup = false
 opt.writebackup = false
+
+-- swap
+-- enable swap file only for vimwiki diary
+local function setup_swap()
+	-- get the file path of the currently open buffer
+	local current_file = vim.fn.expand("%:p")
+
+	-- create a swap file if the file path is under $HOME/vimwiki/diary
+	if current_file:find("/vimwiki/diary/", 1, true) then
+		vim.opt.swapfile = true
+		vim.opt.directory = ""
+	else
+		-- Disable creation of swap file
+		vim.opt.swapfile = false
+	end
+end
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
+	pattern = { "*" },
+	callback = setup_swap,
+})
 
 -- line
 opt.whichwrap = "b,s,h,l,<,>,[,]"
@@ -384,15 +403,15 @@ require("packer").startup(function(use)
 	})
 	-- scroll bar
 	-- use({
-	-- 	"petertriho/nvim-scrollbar",
-	-- 	requires = { "lewis6991/gitsigns.nvim" },
-	-- 	config = function()
-	-- 		require("scrollbar.handlers.search").setup({
-	-- 			-- hlslens config overrides
-	-- 		})
-	-- 		require("gitsigns").setup()
-	-- 		require("scrollbar.handlers.gitsigns").setup()
-	-- 	end,
+	--  "petertriho/nvim-scrollbar",
+	--  requires = { "lewis6991/gitsigns.nvim" },
+	--  config = function()
+	--      require("scrollbar.handlers.search").setup({
+	--          -- hlslens config overrides
+	--      })
+	--      require("gitsigns").setup()
+	--      require("scrollbar.handlers.gitsigns").setup()
+	--  end,
 	-- })
 	-- show matched information
 	use({
