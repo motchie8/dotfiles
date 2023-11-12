@@ -1,16 +1,34 @@
 snippet schedule "Create schedule table"
-# Diary for 2023-${1}-${2}
+# Diary for 2023-${1}-${2}(${3})
 
 ## Current active tasks | status.not:Completed and +ACTIVE
 
-## Today's doing tasks | status.not:Completed and +DOING
-
 ## MTG
+${4}
 
 ## ad hoc tasks
+
+## Today's tasks
+
+## Schedule
 
 | expected | actual | action | review |
 |----------|--------|--------|--------|
 
 ## Memo
+endsnippet
+
+snippet mtg "Create MTG schedule line for diary"
+- ${1:task}: ${2:start}-${3:end}
+endsnippet
+
+snippet task "Create task line for diary"
+- [ ] ${1:task}: ${2:min}
+endsnippet
+
+snippet tr "Prompt to translate English to Japanese"
+以下の文章を簡潔な英語に翻訳してください。
+```
+${1}
+```
 endsnippet
