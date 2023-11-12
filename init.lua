@@ -389,8 +389,10 @@ require("packer").startup(function(use)
 		"Lokaltog/vim-easymotion",
 		setup = function()
 			vim.api.nvim_set_var("EasyMotion_do_mapping", 0)
-			vim.api.nvim_set_keymap("n", "f", "<Plug>(easymotion-overwin-f2)", { noremap = false })
-			vim.api.nvim_set_keymap("v", "f", "<Plug>(easymotion-overwin-f2)", { noremap = false })
+			vim.api.nvim_set_keymap("n", "f", "<Plug>(easymotion-overwin-f)", { noremap = false })
+			vim.api.nvim_set_keymap("v", "f", "<Plug>(easymotion-bd-f)", { noremap = false })
+			vim.api.nvim_set_keymap("n", "F", "<Plug>(easymotion-overwin-f2)", { noremap = false })
+			vim.api.nvim_set_keymap("v", "F", "<Plug>(easymotion-bd-f2)", { noremap = false })
 		end,
 	})
 	-- greeter to edit most recently used files
