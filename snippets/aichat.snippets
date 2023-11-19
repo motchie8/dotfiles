@@ -1,0 +1,55 @@
+snippet translate_to_english "Prompt to translate Japanese to English"
+以下の文章を英語に翻訳してください。
+```
+${1:text}
+```
+endsnippet
+
+snippet translate_to_japanese "Prompt to translate English to Japanese"
+以下の文章を日本語に翻訳してください。
+```
+${1:text}
+```
+endsnippet
+
+snippet generate_sql "Prompt to generate SQL from sample data"
+SQLのクエリで以下のような変換を行いたいです。
+* ${1:description}
+
+入力と出力のサンプルは以下の通りです。
+このような変換を行うためのSQLクエリを作成してください。
+
+* Input(csv)
+```
+${2:col1},${3:col2},${4:col3}
+${5:v1},${6:v2},${7:v3}
+```
+
+* Output(csv)
+```
+${8:col1},${9:col2},${10:col3}
+${11:v1},${12:v2},${13:v3}
+
+```
+endsnippet
+
+snippet generate_pandas "Prompt to generate Pandas code from sample data"
+PythonのDataFrameで以下のような変換を行いたいです。
+* ${1:処理の概要}
+
+入力と出力のサンプルは以下の通りです。
+このような変換をPandasで行うためのPythonコードを作成してください。
+
+* Input(csv)
+```
+col1,col2,col3
+${2},${3},${4}
+${5},${6},${7}
+```
+
+* Output(csv)
+```
+col1,col2,col3
+${8},${9},${10}
+```
+endsnippet

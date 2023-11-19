@@ -222,6 +222,19 @@ require("packer").startup(function(use)
 				"<Cmd>Telescope find_files cwd=$HOME/vimwiki<CR>",
 				{ noremap = true, silent = true }
 			)
+			-- list vim-ai chat log files
+			vim.api.nvim_set_keymap(
+				"n",
+				"sac",
+				"<Cmd>Telescope live_grep cwd=$HOME/aichat<CR>",
+				{ noremap = true, silent = true }
+			)
+			vim.api.nvim_set_keymap(
+				"n",
+				"saf",
+				"<Cmd>Telescope find_files cwd=$HOME/aichat<CR>",
+				{ noremap = true, silent = true }
+			)
 		end,
 	})
 	-- calculating matching score for telescope
@@ -806,11 +819,19 @@ require("packer").startup(function(use)
 				"<Cmd>silent !$HOME/vimwiki/todo/sync_task_with_calendar.sh<CR>",
 				{ noremap = true, silent = true }
 			)
-			-- NOTE: clear task lines
+			-- Custom keymaps
+			-- Clear taskwiki lines
 			vim.api.nvim_set_keymap(
 				"n",
 				"tc",
 				"<Cmd>%s/\\v^ *\\* \\[.\\] .* !{1,3} *\\(\\d{4}-\\d{2}-\\d{2}\\) *#\\w{8} *\\n//gc<CR>",
+				{ noremap = true, silent = true }
+			)
+			-- Convert taskwiki lines to markdown list
+			vim.api.nvim_set_keymap(
+				"n",
+				"tl",
+				"<Cmd>%s/\\v^ *\\* \\[.\\] (.*) !{1,3} *\\(\\d{4}-\\d{2}-\\d{2}\\) *#\\w{8} */- \\[ \\] \\1/gc<CR>",
 				{ noremap = true, silent = true }
 			)
 		end,
@@ -1051,16 +1072,21 @@ require("packer").startup(function(use)
 	use({
 		"madox2/vim-ai",
 		config = function()
+			-- load configs from environment variables
+			local model = os.getenv("OPENAI_API_MODEL") or "gpt-4"
+			local endpoint_url = os.getenv("OPENAI_API_ENDPOINT_URL") or "https://api.openai.com/v1/chat/completions"
+
 			local initial_chat_prompt = [[
             >>> system
             
             You are a general assistant.
             If you attach a code block add syntax type after ``` to enable syntax highlighting.
             ]]
+
 			vim.g.vim_ai_chat = {
 				options = {
-					-- model = "gpt-4",
-					model = "gpt-3.5-turbo",
+					model = model,
+					endpont_url = endpoint_url,
 					max_tokens = 1000,
 					temperature = 1,
 					request_timeout = 20,
@@ -1075,6 +1101,29 @@ require("packer").startup(function(use)
 					paste_mode = 1,
 				},
 			}
+
+			-- custom commands and keymaps
+			vim.api.nvim_create_user_command("AISavingChat", function()
+				local chat_file_path = "~/aichat/"
+				local unique_id = vim.fn.system("uuidgen")
+				local timestamp = os.date("%Y-%m-%d_%H%M%S")
+				local filename = timestamp .. "_" .. string.sub(unique_id, 1, 8) .. ".aichat"
+				vim.cmd("AINewChat")
+				vim.bo.buftype = ""
+				vim.cmd("saveas " .. chat_file_path .. filename)
+			end, {})
+
+			vim.cmd([[
+            function! AITranslateToEnglishFn(range, ...) range
+              let l:instruction= "Please translate the following sentence into simple and natural English."
+              if a:range
+                '<,'>call vim_ai#AIEditRun(a:range, {}, l:instruction)
+              else
+                call vim_ai#AIEditRun(a:range, {}, l:instruction)
+              endif
+            endfunction
+            command! -range -nargs=? AITE <line1>,<line2>call AITranslateToEnglishFn(<range>, <f-args>)
+            ]])
 		end,
 	})
 	-- GitHub Copilot

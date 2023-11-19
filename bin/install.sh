@@ -495,6 +495,10 @@ setup_dir() {
         info_echo "**** Create directory for vimwiki for task management****"
         mkdir -p $HOME/vimwiki/todo
     fi
+    if [ ! -e $HOME/aichat ]; then
+        info_echo "**** Create directory for vim-ai****"
+        mkdir -p $HOME/aichat
+    fi
 }
 
 install_nerd_fonts() {
