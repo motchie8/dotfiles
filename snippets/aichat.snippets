@@ -1,16 +1,175 @@
-snippet translate_to_english "Prompt to translate Japanese to English"
+snippet translate_to_english_1 "Prompt to translate Japanese to English"
 以下の文章を英語に翻訳してください。
-```
-${1:text}
-```
+
+\`\`\`
+${1:jp_text}
+\`\`\`
 endsnippet
+
+snippet translate_to_english_2 "Prompt to translate Japanese to English"
+Please translate the following sentence into simple and natural English.
+
+\`\`\`
+${1:jp_text}
+\`\`\`
+endsnippet
+
 
 snippet translate_to_japanese "Prompt to translate English to Japanese"
 以下の文章を日本語に翻訳してください。
-```
-${1:text}
-```
+\`\`\`
+${1:en_text}
+\`\`\`
 endsnippet
+
+
+snippet translate_to_japanese "Prompt to translate English to Japanese"
+以下の文章を日本語に翻訳してください。
+\`\`\`
+${1:en_text}
+\`\`\`
+endsnippet
+
+snippet generate_code_1 "Prompt to generate code"
+${1:lang} で ${2:target} を実装するためにはどのようなコードを書けばよいでしょうか。
+endsnippet
+
+snippet generate_code_2 "Prompt to generate code for unsupported resouces using example"
+${1:lang} の最新バージョンのでは、以下のようなコードで ${2:target_type} を実装できます。
+
+\`\`\`
+${3:example_code}
+\`\`\`
+
+上記の例を参考にしながら、以下のリソースを実装するためのコードを書いてください。
+* ${4:target_resource}
+endsnippet
+
+snippet generate_diagram "Prompt to generate mermaid diagram"
+以下のリソースを `mermaid` のflowchartで記述するためのコードを書いてください。
+
+\`\`\`
+# Database(as nodes in a cyclindrical shape)
+* ${1:database_name}
+
+# Process(as default nodes)
+* ${2:process_name}
+
+# Direction
+* ${3:direction}
+\`\`\`
+endsnippet
+
+snippet generate_feature_comparison "Prompt to generate feature comparison table"
+あなたは優秀なソフトウェアエンジニアです。
+${1:service} について調査しています。
+機能の概要を簡単に整理しつつ、他のサービスとの長所短所の比較や、使い方の例をまとめたいです。
+以下のフォーマットに従い、内容をわかりやすくまとめてください。
+
+---
+# 概要
+* サービスや機能の概要を3~5点程度で簡潔にまとめる
+
+# メリット
+* 他のサービスや既存の機能と比較したときにどのような点が優れているか、特に重要なポイントを5点程度挙げて、簡潔にまとめる
+
+# デメリット
+* 他のサービスや既存の機能と比較したときにどのような点に課題や不便があるか、特に重要なポイントを5点程度挙げて、簡潔にまとめる
+
+# 使い方
+\`\`\`
+この機能やサービスの使い方が伝わる簡単なサンプルコードを記載する
+\`\`\`
+---
+endsnippet
+
+snippet break_down_tasks "Break down tasks into todo list and gantt chart"
+Break down the tasks into smaller parts.
+あなたは優秀なソフトウェアエンジニアです。
+${1:service} について調査しています。
+機能の概要を簡単に整理しつつ、他のサービスとの長所短所の比較や、使い方の例をまとめたいです。
+以下のフォーマットに従い、内容をわかりやすくまとめてください。
+
+
+---
+# Title
+- ${2:task_title}
+
+# Definition of completion
+- 何をもってタスクが完了したとみなすかを記載する
+
+# ToDo List
+- [ ] 分割/細分化されたタスクの内容 1: 時間の見積り(min)
+- [ ] 分割/細分化されたタスクの内容 2: 時間の見積り(min)
+
+# Gantt Chart
+- 合計日数(days)
+\`\`\`mermaid
+%% 以下のような mermaid 記法でガントチャートを記載してください
+gantt
+    title A Gantt Diagram
+    dateFormat YYYY-MM-DD
+    section Section
+        A task          :a1, 2014-01-01, 30d
+        Another task    :after a1, 20d
+    section Another
+        Task in Another :2014-01-12, 12d
+        another task    :24d
+\`\`\`
+endsnippet
+
+snippet generate_design_comparison "Generate design comparison table"
+あなたは優秀なソフトウェアエンジニアです。
+${1:service} を使って ${2:function} を実現したいと考えています。
+実装のアプローチが複数あると考えています。例えば、以下の方法を検討しています。
+
+\`\`\`
+- ${3:method1}
+- ${4:method2}
+\`\`\`
+
+他にもっと良いアプローチがありましたら教えてください。
+
+また、それぞれのアプローチのメリット/デメリットをまとめたいです。
+以下のフォーマットに従い、内容をわかりやすくまとめてください。
+
+\`\`\`
+# アプローチ名1
+## Pros
+- 5つぐらいのメリットを簡潔にまとめる
+## Cons
+- 5つぐらいのデメリットを簡潔にまとめる
+
+# アプローチ名2
+## Pros
+- 5つぐらいのメリットを簡潔にまとめる
+## Cons
+- 5つぐらいのデメリットを簡潔にまとめる
+\`\`\`
+endsnippet
+
+snippet generate_mermaid_flowchart "Prompt to generate mermaid flowchart"
+こういう機能/サービスがある -> 何が出来る/他の方法とのメリデメ比較/使い方の例のフォーマット
+
+以下のリソースを `mermaid` のflowchartで記述するためのコードを書いてください。
+
+\`\`\`
+# Database(as nodes in a cyclindrical shape)
+* ${1:database_name}
+
+# Process(as default nodes)
+* ${2:process_name}
+
+# Direction
+* ${3:direction}
+\`\`\`
+
+上記の例を参考にしながら、以下のリソースを実装するためのコードを書いてください。
+\`\`\`
+* ${4:target_resource}
+\`\`\`
+endsnippet
+
 
 snippet generate_sql "Prompt to generate SQL from sample data"
 SQLのクエリで以下のような変換を行いたいです。
@@ -20,17 +179,16 @@ SQLのクエリで以下のような変換を行いたいです。
 このような変換を行うためのSQLクエリを作成してください。
 
 * Input(csv)
-```
+\`\`\`
 ${2:col1},${3:col2},${4:col3}
 ${5:v1},${6:v2},${7:v3}
-```
+\`\`\`
 
 * Output(csv)
-```
+\`\`\`
 ${8:col1},${9:col2},${10:col3}
 ${11:v1},${12:v2},${13:v3}
-
-```
+\`\`\`
 endsnippet
 
 snippet generate_pandas "Prompt to generate Pandas code from sample data"
@@ -41,15 +199,15 @@ PythonのDataFrameで以下のような変換を行いたいです。
 このような変換をPandasで行うためのPythonコードを作成してください。
 
 * Input(csv)
-```
+\`\`\`
 col1,col2,col3
 ${2},${3},${4}
 ${5},${6},${7}
-```
+\`\`\`
 
 * Output(csv)
-```
+\`\`\`
 col1,col2,col3
 ${8},${9},${10}
-```
+\`\`\`
 endsnippet
