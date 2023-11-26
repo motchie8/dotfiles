@@ -831,7 +831,7 @@ require("packer").startup(function(use)
 			vim.api.nvim_set_keymap(
 				"n",
 				"tl",
-				"<Cmd>%s/\\v^ *\\* \\[.\\] (.*) !{1,3} *\\(\\d{4}-\\d{2}-\\d{2}\\) *#\\w{8} */- \\[ \\] \\1/gc<CR>",
+				"<Cmd>%s/\\v^ *\\* \\[.\\]( ---) (.*) !{1,3} *\\(\\d{4}-\\d{2}-\\d{2}\\)? *#\\w{8} *\\n//g<CR><BAR><Cmd>%s/\\v^ *\\* \\[.\\] (.*) !{1,3} *\\(\\d{4}-\\d{2}-\\d{2}\\) *#\\w{8} */- \\[ \\] \\1/g<CR>",
 				{ noremap = true, silent = true }
 			)
 		end,
