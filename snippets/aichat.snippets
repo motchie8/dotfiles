@@ -1,4 +1,4 @@
-snippet translate_to_english_1 "Prompt to translate Japanese to English"
+snippet translate_to_english "日本語を英語に翻訳"
 以下の文章を英語に翻訳してください。
 
 \`\`\`
@@ -6,7 +6,7 @@ ${1:jp_text}
 \`\`\`
 endsnippet
 
-snippet translate_to_english_2 "Prompt to translate Japanese to English"
+snippet translate_to_english_with_nuance "日本語を英語に翻訳(ニュアンス付き)"
 Please translate the following sentence into simple and natural English.
 
 \`\`\`
@@ -15,37 +15,33 @@ ${1:jp_text}
 endsnippet
 
 
-snippet translate_to_japanese "Prompt to translate English to Japanese"
+snippet translate_to_japanese "外国語を日本語に翻訳"
 以下の文章を日本語に翻訳してください。
 \`\`\`
 ${1:en_text}
 \`\`\`
 endsnippet
 
-
-snippet translate_to_japanese "Prompt to translate English to Japanese"
-以下の文章を日本語に翻訳してください。
+snippet generate_code "言語を指定してコードを生成"
+${1:lang} で ${2:target} するコードを生成してください。
+以下のような機能を実現したいです。
 \`\`\`
-${1:en_text}
+* ${3:example}
 \`\`\`
 endsnippet
 
-snippet generate_code_1 "Prompt to generate code"
-${1:lang} で ${2:target} を実装するためにはどのようなコードを書けばよいでしょうか。
-endsnippet
-
-snippet generate_code_2 "Prompt to generate code for unsupported resouces using example"
-${1:lang} の最新バージョンのでは、以下のようなコードで ${2:target_type} を実装できます。
+snippet generate_code_by_example "例を教示してコードを生成"
+${1:lang} の最新バージョンでは、以下のようなコードで ${2:target_type} を実装できます。
 
 \`\`\`
 ${3:example_code}
 \`\`\`
 
-上記の例を参考にしながら、以下のリソースを実装するためのコードを書いてください。
+上記を踏まえて、以下のリソースを実装するコードを生成してください。
 * ${4:target_resource}
 endsnippet
 
-snippet generate_diagram "Prompt to generate mermaid diagram"
+snippet generate_flowchart "フローチャートを生成"
 以下のリソースを `mermaid` のflowchartで記述するためのコードを書いてください。
 
 \`\`\`
@@ -55,57 +51,52 @@ snippet generate_diagram "Prompt to generate mermaid diagram"
 # Process(as default nodes)
 * ${2:process_name}
 
-# Direction
+# Dependent process
 * ${3:direction}
 \`\`\`
 endsnippet
 
-snippet generate_feature_comparison "Prompt to generate feature comparison table"
-あなたは優秀なソフトウェアエンジニアです。
+snippet generate_service_comparison "サービスの比較表を生成"
 ${1:service} について調査しています。
-機能の概要を簡単に整理しつつ、他のサービスとの長所短所の比較や、使い方の例をまとめたいです。
-以下のフォーマットに従い、内容をわかりやすくまとめてください。
+他のサービスとの長所短所の比較と、使い方の例をまとめてください。
+出力は以下のフォーマットに従い、簡潔にまとめてください。
 
----
-# 概要
-* サービスや機能の概要を3~5点程度で簡潔にまとめる
-
-# メリット
-* 他のサービスや既存の機能と比較したときにどのような点が優れているか、特に重要なポイントを5点程度挙げて、簡潔にまとめる
-
-# デメリット
-* 他のサービスや既存の機能と比較したときにどのような点に課題や不便があるか、特に重要なポイントを5点程度挙げて、簡潔にまとめる
-
-# 使い方
 \`\`\`
-この機能やサービスの使い方が伝わる簡単なサンプルコードを記載する
+# サービス名
+
+## 概要
+* サービスの概要を3~5行程度で簡潔にまとめる
+
+| 機能 | できること | できないこと |
+| --- | --- | --- |
+
+## 他のサービスとの比較
+
+| サービス名 | メリット | デメリット |
+| --- | --- | --- |
+
+## 使い方
+サービスの使い方が伝わる簡単なサンプルコードを記述
 \`\`\`
----
 endsnippet
 
-snippet break_down_tasks "Break down tasks into todo list and gantt chart"
-Break down the tasks into smaller parts.
-あなたは優秀なソフトウェアエンジニアです。
-${1:service} について調査しています。
-機能の概要を簡単に整理しつつ、他のサービスとの長所短所の比較や、使い方の例をまとめたいです。
-以下のフォーマットに従い、内容をわかりやすくまとめてください。
+snippet task_break_down "タスクを細分化"
+業務で ${1:task} を実施する必要があります。
+目標を達成するための必要な内容を細分化し、以下のフォーマットに従って整理してください。
 
+\`\`\`
+## 概要
+- タスクの概要
 
----
-# Title
-- ${2:task_title}
-
-# Definition of completion
+## 完了の定義
 - 何をもってタスクが完了したとみなすかを記載する
 
-# ToDo List
-- [ ] 分割/細分化されたタスクの内容 1: 時間の見積り(min)
-- [ ] 分割/細分化されたタスクの内容 2: 時間の見積り(min)
+## ToDo List
+- [ ] 分割されたタスク: 時間の見積り(min): 期限
 
-# Gantt Chart
-- 合計日数(days)
-\`\`\`mermaid
-%% 以下のような mermaid 記法でガントチャートを記載してください
+## ガントチャート
+- 以下のような mermaid 記法でガントチャートを記載
+
 gantt
     title A Gantt Diagram
     dateFormat YYYY-MM-DD
@@ -118,96 +109,42 @@ gantt
 \`\`\`
 endsnippet
 
-snippet generate_design_comparison "Generate design comparison table"
-あなたは優秀なソフトウェアエンジニアです。
-${1:service} を使って ${2:function} を実現したいと考えています。
-実装のアプローチが複数あると考えています。例えば、以下の方法を検討しています。
+snippet generate_design_comparison "設計の比較表を生成"
+${1:service} を使って ${2:function} を実装したいです。
+現在、以下の方法を検討しています。
+メリットとデメリットを表にまとめて比較してください。
+他にも良い方法があれば、適宜表に追加してください。
 
+- 方法
 \`\`\`
 - ${3:method1}
 - ${4:method2}
 \`\`\`
 
-他にもっと良いアプローチがありましたら教えてください。
-
-また、それぞれのアプローチのメリット/デメリットをまとめたいです。
-以下のフォーマットに従い、内容をわかりやすくまとめてください。
-
+- 出力表
 \`\`\`
-# アプローチ名1
-## Pros
-- 5つぐらいのメリットを簡潔にまとめる
-## Cons
-- 5つぐらいのデメリットを簡潔にまとめる
-
-# アプローチ名2
-## Pros
-- 5つぐらいのメリットを簡潔にまとめる
-## Cons
-- 5つぐらいのデメリットを簡潔にまとめる
+| 方法 | 評価 | メリット | デメリット |
+| --- | --- | --- | --- |
 \`\`\`
 endsnippet
 
-snippet generate_mermaid_flowchart "Prompt to generate mermaid flowchart"
-こういう機能/サービスがある -> 何が出来る/他の方法とのメリデメ比較/使い方の例のフォーマット
+snippet generate_requirement_and_approach "要件と実現方法の対応表を生成"
+${1:service} を使って ${2:function} を実装したいです。
+現在、以下の要件を満たす方法を検討しています。
+メリットとデメリットをmarkdownの表にまとめて比較してください。
+他にも良い方法があれば、適宜表に追加してください。
 
-以下のリソースを `mermaid` のflowchartで記述するためのコードを書いてください。
-
+- 要件
 \`\`\`
-# Database(as nodes in a cyclindrical shape)
-* ${1:database_name}
-
-# Process(as default nodes)
-* ${2:process_name}
-
-# Direction
-* ${3:direction}
+- ${3:requirement1}
+- ${4:requirement2}
 \`\`\`
 
-上記の例を参考にしながら、以下のリソースを実装するためのコードを書いてください。
+- 出力表
 \`\`\`
-* ${4:target_resource}
-\`\`\`
-endsnippet
-
-
-snippet generate_sql "Prompt to generate SQL from sample data"
-SQLのクエリで以下のような変換を行いたいです。
-* ${1:description}
-
-入力と出力のサンプルは以下の通りです。
-このような変換を行うためのSQLクエリを作成してください。
-
-* Input(csv)
-\`\`\`
-${2:col1},${3:col2},${4:col3}
-${5:v1},${6:v2},${7:v3}
+| 要件 | 実現方法 | メリット | デメリット |
+| --- | --- | --- | --- |
 \`\`\`
 
-* Output(csv)
-\`\`\`
-${8:col1},${9:col2},${10:col3}
-${11:v1},${12:v2},${13:v3}
-\`\`\`
-endsnippet
 
-snippet generate_pandas "Prompt to generate Pandas code from sample data"
-PythonのDataFrameで以下のような変換を行いたいです。
-* ${1:処理の概要}
-
-入力と出力のサンプルは以下の通りです。
-このような変換をPandasで行うためのPythonコードを作成してください。
-
-* Input(csv)
-\`\`\`
-col1,col2,col3
-${2},${3},${4}
-${5},${6},${7}
-\`\`\`
-
-* Output(csv)
-\`\`\`
-col1,col2,col3
-${8},${9},${10}
-\`\`\`
 endsnippet
