@@ -475,7 +475,7 @@ install_terraform_libs() {
     if ! type terraform-ls >/dev/null 2>&1; then
         info_echo "**** Install terraform-ls ***"
         if [ "$OS" = $UBUNTU ]; then
-            sudo apt-get install -y terraform-ls
+            sudo apt install terraform-ls
         elif [ "$OS" = $MAC_OS ]; then
             brew install hashicorp/tap/terraform-ls
         else
