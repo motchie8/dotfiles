@@ -151,6 +151,7 @@ build_neovim() {
     fi
     cd $DOTFILES_DIR/neovim
     git pull origin master
+    rm -rf build/
     make CMAKE_BUILD_TYPE=RelWithDebInfo
     sudo make install
 }
@@ -221,9 +222,7 @@ install_python() {
     i=0
     for PYTHON_VERSION in "${PYTHON_VERSIONS[@]}"; do
         NEOVIM_VIRTUAL_ENV=${NEOVIM_VIRTUAL_ENVS[i]}
-        result=0
-        output=$(pyenv versions | grep -q $NEOVIM_VIRTUAL_ENV) || result=$?
-        if [ $result -ne 0 ]; then
+        if ! pyenv versions | grep -q $NEOVIM_VIRTUAL_ENV; then
             info_echo "**** Install python ${PYTHON_VERSION} ****"
             pyenv install -s $PYTHON_VERSION
             info_echo "**** Setup python virtualenv ${NEOVIM_VIRTUAL_ENV} ****"
@@ -244,8 +243,7 @@ install_zsh_and_set_as_default_shell() {
     DEFAULT_SHELL=$(echo $SHELL | awk -F '[/]' '{print $NF}')
     if [ "$DEFAULT_SHELL" != "zsh" ]; then
         info_echo "**** Change default shell from ${DEFAULT_SHELL} to zsh ****"
-        result=$(cat /etc/shells | grep -q "zsh")
-        if [ $? -ne 0 ]; then
+        if ! cat /etc/shells | grep -q "zsh"; then
             echo $(which zsh) >>/etc/shells
         fi
         sudo chsh -s $(which zsh) $(whoami)
@@ -342,9 +340,7 @@ install_tmux_mem_cpu_load() {
         popd
     else
         pushd $DOTFILES_DIR/tmux/plugins/tmux-mem-cpu-load
-        result=0
-        output=$(git pull | grep -q "Already up to date") || result=$?
-        if [ $result -ne 0 ]; then
+        if ! git pull | grep -q "Already up to date"; then
             info_echo "**** Update tmux-mem-cpu-load ****"
             cmake .
             make
@@ -383,7 +379,15 @@ install_act() {
     if ! type act >/dev/null 2>&1; then
         info_echo "**** Install act ***"
         if [ "$OS" = $UBUNTU ]; then
-            curl https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
+            if [ "$ARCH" == "arm64" ] || [ "$ARCH" == "aarch64" ]; then
+                wget -O act.tar.gz https://github.com/nektos/act/releases/latest/download/act_Linux_arm64.tar.gz
+            elif [ "$ARCH" == "x86_64" ]; then
+                wget -O act.tar.gz https://github.com/nektos/act/releases/latest/download/act_Linux_x86_64.tar.gz
+            else
+                echo "Unsupported architecture: $ARCH"
+                exit 1
+            fi
+            sudo tar xf act.tar.gz -C /usr/local/bin act
         elif [ "$OS" = $MAC_OS ]; then
             brew install act
         else
@@ -441,9 +445,7 @@ install_fzf() {
         $DOTFILES_DIR/.fzf/install --key-bindings --completion --no-update-rc
     else
         pushd $DOTFILES_DIR/.fzf
-        result=0
-        output=$(git pull | grep -q "Already up to date") || result=$?
-        if [ $result -ne 0 ]; then
+        if ! git pull | grep -q "Already up to date"; then
             info_echo "**** Update fzf ***"
             $DOTFILES_DIR/.fzf/install --key-bindings --completion --no-update-rc
         fi
@@ -451,7 +453,7 @@ install_fzf() {
     fi
 }
 
-install_terraform_docs() {
+install_terraform_libs() {
     if ! type terraform-docs >/dev/null 2>&1; then
         info_echo "**** Install terraform-docs ***"
         if [ "$OS" = $UBUNTU ]; then
@@ -468,6 +470,16 @@ install_terraform_docs() {
         if [ ! -e $TERRAFORM_DOCS_CODE_COMPLETION_PATH ]; then
             sudo mkdir -p $ZSH_COMPLETION_DIR
             terraform-docs completion zsh | sudo tee $TERRAFORM_DOCS_CODE_COMPLETION_PATH >/dev/null
+        fi
+    fi
+    if ! type terraform-ls >/dev/null 2>&1; then
+        info_echo "**** Install terraform-ls ***"
+        if [ "$OS" = $UBUNTU ]; then
+            sudo apt-get install -y terraform-ls
+        elif [ "$OS" = $MAC_OS ]; then
+            brew install hashicorp/tap/terraform-ls
+        else
+            exit_with_unsupported_os
         fi
     fi
 }
@@ -614,7 +626,7 @@ install_gcloud_cli
 
 install_heml
 
-install_terraform_docs
+install_terraform_libs
 
 install_snowsql
 
