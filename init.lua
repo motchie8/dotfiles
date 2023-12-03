@@ -46,7 +46,7 @@ api.nvim_set_keymap("n", "<Leader>bb", "<Cmd>b#<CR>", { noremap = true })
 api.nvim_set_keymap("n", "<Leader>bd", "<Cmd>bdelete<CR>", { noremap = true })
 -- search and replace
 api.nvim_set_keymap("n", "<Leader>F", [["zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>]], { noremap = true })
-api.nvim_set_keymap("n", "<Leader>r", [[<Leader>f:%s/<C-r>///g<Left><Left>]], { noremap = false })
+api.nvim_set_keymap("n", "<Leader>R", [[<Leader>f:%s/<C-r>///g<Left><Left>]], { noremap = false })
 api.nvim_set_keymap("n", "<Esc><Esc>", "<Cmd>set nohlsearch!<CR>", { noremap = true })
 api.nvim_set_keymap("n", "/", "/\\v", { noremap = false })
 -- copy current file path
