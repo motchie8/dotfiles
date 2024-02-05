@@ -51,6 +51,7 @@ api.nvim_set_keymap("n", "<Esc><Esc>", "<Cmd>set nohlsearch!<CR>", { noremap = t
 api.nvim_set_keymap("n", "/", "/\\v", { noremap = false })
 -- copy current file path
 api.nvim_set_keymap("n", "<Leader>Y", "<Cmd>:let @+=expand('%:p')<CR>", { noremap = true })
+api.nvim_set_keymap("n", "cp", "<Cmd>:let @+=expand('%:p')<CR>", { noremap = true })
 
 -- ## visual mode ##
 -- move cursor
@@ -77,7 +78,7 @@ opt.softtabstop = 4
 opt.autoindent = true
 opt.smartindent = true
 
--- serach
+-- search
 opt.ignorecase = true
 opt.smartcase = true
 opt.hlsearch = true
@@ -521,7 +522,7 @@ require("packer").startup(function(use)
 				local id = vim.api.nvim_create_augroup("neofmt", {})
 				vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 					pattern = { "*" },
-					command = "undojoin | Neoformat",
+					command = "try | undojoin | Neoformat | catch /^Vim%((\a+))=:E790/ | finally | silent Neoformat | endtry",
 					group = id,
 				})
 			end, {})
@@ -724,7 +725,8 @@ require("packer").startup(function(use)
 				"coc-tsserver",
 				"coc-eslint",
 				"coc-prettier",
-				"coc-react-refactor",
+				"coc-snippets",
+				"coc-sqlfluff",
 			})
 
 			-- Additional settings

@@ -17,8 +17,6 @@ tmux/tmux.user.conf
 vimspector-config
 .zplug
 .python-version
-.tmux/.tmux.user.conf
-tmux/
 iceberg.vim/
 node_modules/
 .zshrc.local

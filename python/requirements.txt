@@ -1,6 +1,6 @@
 wheel
 poetry
-neovim
+pynvim
 flake8
 flake8-import-order
 autopep8

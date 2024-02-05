@@ -266,7 +266,7 @@ ulimit -c 0
 # %*    時間(hh:flag_mm:ss)
 # %T    時間(hh:mm)
 # %t    時間(hh:mm(am/pm))
-PROMPT='%F{cyan}%n@%m%f:%~# '
+PROMPT='[%F{gray}%?%f] %F{cyan}%n@%m%f:%~# '
 
 # promptテーマ設定
 # prompt skwp
@@ -305,6 +305,8 @@ setopt hist_verify
 # -----------------------------
 # Load user specific settings
 # -----------------------------
+# environment variables list for credentials to be defined and loaded in .zshrc.local
+export OPENAI_API_KEY=
 # load zshrc.local if exists
 if [ -e $DOTFILES_DIR/.zshrc.local ]; then
     source $DOTFILES_DIR/.zshrc.local

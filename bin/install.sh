@@ -27,18 +27,21 @@ EOF
 
 TMUX_PREFIX_KEY=""
 BUILD_NEOVIM=false
+SETUP_SYMBOLIC_LINKS=false
 
 show_help() {
-    echo "Usage: ./bin/install.sh -t TMUX_PREFIX_KEY"
+    echo "Usage: ./bin/install.sh -b -s -t TMUX_PREFIX_KEY"
     echo "  -h                    Show this help message and exit"
     echo "  -b                    Build Neovim from source"
+    echo "  -s                    Setup symbolic links"
     echo "  -t TMUX_PREFIX_KEY    Specify prefix Key for tmux. ex. \"-t b\""
 }
 
-while getopts ":t:hb" option; do
+while getopts ":t:hbs" option; do
     case "${option}" in
         t) TMUX_PREFIX_KEY="${OPTARG}" ;;
         b) BUILD_NEOVIM=true ;;
+        s) SETUP_SYMBOLIC_LINKS=true ;;
         h)
             show_help
             exit 0
@@ -489,24 +492,6 @@ install_terraform_libs() {
     fi
 }
 
-setup_symbolic_links() {
-    info_echo "**** Setup symbolic links ****"
-    target_paths=("$HOME/.zshrc" "$HOME/.config/nvim" "$HOME/.config/nvim/coc-settings.json" "$HOME/.config/nvim/init.lua" "$HOME/.config/nvim/cheatsheet.txt" "$HOME/.tmux.conf")
-    link_paths=("$DOTFILES_DIR/.zshrc" "$DOTFILES_DIR/.vim" "$DOTFILES_DIR/coc-settings.json" "$DOTFILES_DIR/init.lua" "$DOTFILES_DIR/cheatsheet.txt" "$DOTFILES_DIR/tmux/tmux.common.conf")
-    mkdir -p ~/.config
-    for i in "${!target_paths[@]}"; do
-        if [ -e "${target_paths[i]}" ]; then
-            if [ ! -L "${target_paths[i]}" ]; then
-                info_echo "File already exists at ${target_paths[i]}, so skip creating symbolic link"
-                continue
-            else
-                unlink "${target_paths[i]}"
-            fi
-        fi
-        ln -s "${link_paths[i]}" "${target_paths[i]}"
-    done
-}
-
 setup_dir() {
     if [ ! -e $HOME/vimwiki/todo ]; then
         info_echo "**** Create directory for vimwiki for task management****"
@@ -584,6 +569,12 @@ install_snowsql() {
         else
             exit_with_unsupported_os
         fi
+    fi
+}
+
+setup_symbolic_links() {
+    if [ "$SETUP_SYMBOLIC_LINKS" = true ]; then
+        source $DOTFILES_DIR/bin/setup_symbolic_links.sh
     fi
 }
 

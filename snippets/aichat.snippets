@@ -1,25 +1,21 @@
 snippet translate_to_english "日本語を英語に翻訳"
 以下の文章を英語に翻訳してください。
-
-\`\`\`
-${1:jp_text}
-\`\`\`
+仕事の同僚に向けて書いているため、丁寧な表現が望ましいです。
+英語が得意ではないメンバーもいるため、翻訳はできるだけ平易で端的な表現になるよう心掛けてください。
 endsnippet
 
 snippet translate_to_english_with_nuance "日本語を英語に翻訳(ニュアンス付き)"
 Please translate the following sentence into simple and natural English.
-
-\`\`\`
-${1:jp_text}
-\`\`\`
 endsnippet
-
 
 snippet translate_to_japanese "外国語を日本語に翻訳"
 以下の文章を日本語に翻訳してください。
-\`\`\`
-${1:en_text}
-\`\`\`
+endsnippet
+
+snippet include_section "include sectionを生成"
+>>> include
+
+/path/**/*.py
 endsnippet
 
 snippet generate_code "言語を指定してコードを生成"
@@ -145,6 +141,4 @@ ${1:service} を使って ${2:function} を実装したいです。
 | 要件 | 実現方法 | メリット | デメリット |
 | --- | --- | --- | --- |
 \`\`\`
-
-
 endsnippet
