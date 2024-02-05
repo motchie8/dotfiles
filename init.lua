@@ -226,13 +226,13 @@ require("packer").startup(function(use)
 			vim.api.nvim_set_keymap(
 				"n",
 				"sac",
-				"<Cmd>Telescope live_grep cwd=$HOME/aichat<CR>",
+				"<Cmd>Telescope live_grep cwd=$HOME/vimwiki/aichat<CR>",
 				{ noremap = true, silent = true }
 			)
 			vim.api.nvim_set_keymap(
 				"n",
 				"saf",
-				"<Cmd>Telescope find_files cwd=$HOME/aichat<CR>",
+				"<Cmd>Telescope find_files cwd=$HOME/vimwiki/aichat<CR>",
 				{ noremap = true, silent = true }
 			)
 		end,
@@ -824,7 +824,7 @@ require("packer").startup(function(use)
 			vim.api.nvim_set_keymap(
 				"n",
 				"tc",
-				"<Cmd>%s/\\v^ *\\* \\[.\\] .* !{1,3} *\\(\\d{4}-\\d{2}-\\d{2}\\) *#\\w{8} *\\n//gc<CR>",
+				"<Cmd>%s/\\v^ *\\* \\[.\\] .* !{1,3} *\\(\\d{4}-\\d{2}-\\d{2}\\) *#\\w{8} *\\n//g<CR>",
 				{ noremap = true, silent = true }
 			)
 			-- Convert taskwiki lines to markdown list
@@ -1104,7 +1104,7 @@ require("packer").startup(function(use)
 
 			-- custom commands and keymaps
 			vim.api.nvim_create_user_command("AISavingChat", function()
-				local chat_file_path = "~/aichat/"
+				local chat_file_path = "~/vimwiki/aichat/"
 				local unique_id = vim.fn.system("uuidgen")
 				local timestamp = os.date("%Y-%m-%d_%H%M%S")
 				local filename = timestamp .. "_" .. string.sub(unique_id, 1, 8) .. ".aichat"

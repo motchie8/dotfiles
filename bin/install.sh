@@ -103,7 +103,7 @@ install_dev_libs_for_ubuntu() {
     sudo apt install -y curl git file zlib1g-dev libssl-dev \
         libreadline-dev libbz2-dev libsqlite3-dev wget cmake \
         pkg-config unzip libtool libtool-bin m4 automake gettext \
-        zsh x11-apps libffi-dev yarn liblzma-dev
+        zsh x11-apps libffi-dev yarn liblzma-dev gpg
     # install taskwarrior
     sudo apt-get install taskwarrior -y
     # install ripgrep for telescope
@@ -457,8 +457,9 @@ install_terraform_libs() {
     if ! type terraform-docs >/dev/null 2>&1; then
         info_echo "**** Install terraform-docs ***"
         if [ "$OS" = $UBUNTU ]; then
-            TERRAFORM_DOCS_VERSION="v0.16.0"
+            TERRAFORM_DOCS_VERSION="v0.17.0"
             go install github.com/terraform-docs/terraform-docs@${TERRAFORM_DOCS_VERSION}
+            export PATH=$PATH:$HOME/go/bin
         elif [ "$OS" = $MAC_OS ]; then
             brew install terraform-docs
         else
@@ -475,6 +476,10 @@ install_terraform_libs() {
     if ! type terraform-ls >/dev/null 2>&1; then
         info_echo "**** Install terraform-ls ***"
         if [ "$OS" = $UBUNTU ]; then
+            wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+            sudo apt-get install -y lsb-release
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+            sudo apt update
             sudo apt install terraform-ls
         elif [ "$OS" = $MAC_OS ]; then
             brew install hashicorp/tap/terraform-ls
@@ -548,8 +553,8 @@ install_heml() {
             curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg >/dev/null
             sudo apt-get install apt-transport-https --yes
             echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
-            sudo apt-get update
-            sudo apt-get install helm
+            sudo apt-get update -y
+            sudo apt-get install -y helm
         else
             exit_with_unsupported_os
         fi

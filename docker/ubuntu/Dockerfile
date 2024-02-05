@@ -18,6 +18,7 @@ RUN sudo chown -R $user /home/$user/dotfiles
 
 WORKDIR /home/$user/dotfiles
 
-RUN ./bin/install.sh -t b
+RUN ./bin/install.sh -t b -b
 
-RUN nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+RUN nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync' \
+    && nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
