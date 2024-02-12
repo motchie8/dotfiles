@@ -497,9 +497,9 @@ setup_dir() {
         info_echo "**** Create directory for vimwiki for task management****"
         mkdir -p $HOME/vimwiki/todo
     fi
-    if [ ! -e $HOME/aichat ]; then
+    if [ ! -e $HOME/vimwiki/aichat ]; then
         info_echo "**** Create directory for vim-ai****"
-        mkdir -p $HOME/aichat
+        mkdir -p $HOME/vimwiki/aichat
     fi
 }
 
@@ -509,7 +509,9 @@ install_nerd_fonts() {
         brew tap homebrew/cask-fonts
         brew install --cask font-roboto-mono-nerd-font
     fi
-    # TODO: add installation step for ubuntu
+    # NOTE: install RobotMono Nerd Font for WSL manually
+    # cf. Option 1: Download already patched font
+    # https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/RobotoMono
 }
 
 install_gcloud_cli() {
