@@ -531,6 +531,21 @@ install_gcloud_cli() {
     fi
 }
 
+install_aws_cli() {
+    if ! type aws >/dev/null 2>&1; then
+        info_echo "**** Install aws cli ****"
+        if [ $OS = $MAC_OS ]; then
+            brew install awscli
+        elif [ "$OS" = $UBUNTU ]; then
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+            rm awscliv2.zip
+            rm -rf aws
+        fi
+    fi
+}
+
 install_heml() {
     if ! type helm >/dev/null 2>&1; then
         info_echo "**** Install Helm ****"
@@ -621,6 +636,8 @@ create_tmux_user_conf
 install_nerd_fonts
 
 install_gcloud_cli
+
+install_aws_cli
 
 install_heml
 
