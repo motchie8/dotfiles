@@ -157,6 +157,7 @@ build_neovim() {
     rm -rf build/
     make CMAKE_BUILD_TYPE=RelWithDebInfo
     sudo make install
+    cd $DOTFILES_DIR
 }
 
 install_neovim() {
