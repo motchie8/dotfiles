@@ -262,6 +262,52 @@ require("packer").startup(function(use)
 			)
 		end,
 	})
+	-- change picker by command prefix
+	use({
+		"d00h/telescope-any",
+		requires = { "nvim-telescope/telescope.nvim" },
+		config = function()
+			local builtin = require("telescope.builtin")
+			local opts = {
+				pickers = {
+					-- File Pickers
+					[""] = builtin.find_files,
+					["/"] = builtin.live_grep,
+					["gf "] = builtin.git_files,
+					[":"] = builtin.current_buffer_fuzzy_find,
+
+					-- Vim Pickers
+					["b "] = builtin.buffers,
+					["o "] = builtin.oldfiles,
+					["q "] = builtin.quickfix,
+					["command "] = builtin.commands,
+					["history "] = builtin.command_history,
+					["man "] = builtin.man_pages,
+					["options "] = builtin.vim_options,
+					["keymaps "] = builtin.keymaps,
+
+					-- Neovim LSP Pickers
+					["d "] = builtin.diagnostics,
+
+					-- Git Pickers
+					["gc "] = builtin.git_commits,
+					["gbc "] = builtin.git_bcommits,
+					["gb "] = builtin.git_branches,
+					["gs "] = builtin.git_status,
+
+					-- Treesitter Picker
+					["tree "] = builtin.treesitter,
+				},
+			} -- or user
+			local telescope_any = require("telescope-any").create_telescope_any(opts)
+			-- vim.api.nvim_create_user_command("TelescopeAny", telescope_any, { nargs = 0 })
+			vim.api.nvim_set_keymap("n", "ta", "", {
+				noremap = true,
+				silent = true,
+				callback = telescope_any,
+			})
+		end,
+	})
 	-- command line finder
 	-- use({ "ibhagwan/fzf-lua", requires = { "kyazdani42/nvim-web-devicons" } })
 	use({
@@ -283,6 +329,14 @@ require("packer").startup(function(use)
 					enable = true,
 				},
 			})
+		end,
+	})
+	-- highlight todo comments
+	use({
+		"folke/todo-comments.nvim",
+		requires = "nvim-lua/plenary.nvim",
+		config = function()
+			require("todo-comments").setup({})
 		end,
 	})
 	-- explorer
@@ -547,6 +601,10 @@ require("packer").startup(function(use)
 		branch = "release",
 		setup = function()
 			vim.cmd([[
+                " configuration based on https://github.com/neoclide/coc.nvim/tree/84ce03120925c980288665028aedcf06f6cb837e
+
+                " https://raw.githubusercontent.com/neoclide/coc.nvim/master/doc/coc-example-config.vim
+
                 " May need for Vim (not Neovim) since coc.nvim calculates byte offset by count
                 " utf-8 byte sequence
                 set encoding=utf-8
@@ -567,11 +625,13 @@ require("packer").startup(function(use)
                 " no select by `"suggest.noselect": true` in your configuration file
                 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
                 " other plugin before putting this into your config
-                inoremap <silent><expr> <TAB>
-                      \ coc#pum#visible() ? coc#pum#next(1) :
-                      \ CheckBackspace() ? "\<Tab>" :
-                      \ coc#refresh()
-                inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+                " HACK: CopilotのためにTabキーの割り当てを無効化
+                "inoremap <silent><expr> <TAB>
+                "      \ coc#pum#visible() ? coc#pum#next(1) :
+                "      \ CheckBackspace() ? "\<Tab>" :
+                "      \ coc#refresh()
+                "inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
                 
                 " Make <CR> to accept selected completion item or notify coc.nvim to format
                 " <C-g>u breaks current undo, please make your own choice
@@ -671,10 +731,11 @@ require("packer").startup(function(use)
                   vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
                 endif
                 
-                " Use CTRL-S for selections ranges
-                " Requires 'textDocument/selectionRange' support of language server
-                " nmap <silent> <C-s> <Plug>(coc-range-select)
-                " xmap <silent> <C-s> <Plug>(coc-range-select)
+                " HACK: 他のキーマップのためにキーマップを無効化
+                "" Use CTRL-S for selections ranges
+                "" Requires 'textDocument/selectionRange' support of language server
+                "nmap <silent> <C-s> <Plug>(coc-range-select)
+                "xmap <silent> <C-s> <Plug>(coc-range-select)
                 
                 " Add `:Format` command to format current buffer
                 command! -nargs=0 Format :call CocActionAsync('format')
@@ -688,28 +749,30 @@ require("packer").startup(function(use)
                 " Add (Neo)Vim's native statusline support
                 " NOTE: Please see `:h coc-status` for integrations with external plugins that
                 " provide custom statusline: lightline.vim, vim-airline
-                set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+                " FIXME: 不正な文字が含まれている
+                " set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
                 
+                " HACK: 他のキーマップのためにキーマップを無効化
                 " Mappings for CoCList
                 " Show all diagnostics
-                ""nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
-                """ Manage extensions
-                ""nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
-                """ Show commands
-                ""nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
-                """ Find symbol of current document
-                ""nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
-                """ Search workspace symbols
-                ""nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
-                """ Do default action for next item
-                ""nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
-                """ Do default action for previous item
-                ""nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
-                """ Resume latest coc list
-                ""nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
-
+                "nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+                "" Manage extensions
+                "nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
+                "" Show commands
+                "nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+                "" Find symbol of current document
+                "nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+                "" Search workspace symbols
+                "nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+                "" Do default action for next item
+                "nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+                "" Do default action for previous item
+                "nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+                "" Resume latest coc list
+                "nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
             ]])
-			-- add default extensions
+
+			-- NOTE: デフォルトのextentionsを追加
 			vim.api.nvim_set_var("coc_global_extensions", {
 				"coc-lists",
 				"coc-highlight",
@@ -729,7 +792,7 @@ require("packer").startup(function(use)
 				"coc-sqlfluff",
 			})
 
-			-- Additional settings
+			-- NOTE: 追加の設定
 			vim.opt.updatetime = 50
 			local keyset = vim.keymap.set
 			-- Use Ctrl-h (or K) to show documentation in preview window.
@@ -1151,6 +1214,23 @@ require("packer").startup(function(use)
 
                 autocmd BufReadPost COMMIT_EDITMSG call s:append_diff()
             ]])
+		end,
+	})
+	use({
+		"CopilotC-Nvim/CopilotChat.nvim",
+		branch = "canary",
+		requires = {
+			"github/copilot.vim",
+			"nvim-lua/plenary.nvim",
+		},
+		config = function()
+			require("CopilotChat").setup({})
+			vim.api.nvim_create_user_command("CopilotChatQuick", function()
+				local input = vim.fn.input("Quick Chat: ")
+				if input ~= "" then
+					require("CopilotChat").ask(input, { selection = require("CopilotChat.select").buffer })
+				end
+			end, {})
 		end,
 	})
 	-- Package Manager

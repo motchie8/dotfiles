@@ -302,8 +302,10 @@ install_node() {
     fi
     if ! type node >/dev/null 2>&1; then
         info_echo "**** Install node ****"
-        nvm install 16.15.1
-        # nvm use --lts
+        NODE_VERSION=18.19.1
+        nvm install $NODE_VERSION
+        nvm alias default $NODE_VERSION
+        nvm use $NODE_VERSION
     fi
 }
 
@@ -590,6 +592,18 @@ install_snowsql() {
     fi
 }
 
+install_devcontainer_cli() {
+    if ! type devcontainer >/dev/null 2>&1; then
+        info_echo "**** Install devcontainer cli ****"
+        npm install -g @devcontainers/cli
+    fi
+    if [ ! -e $DOTFILES_DIR/devcontainer/devcontainer-cli-port-forwarder ]; then
+        info_echo "**** Install devcontainer cli port forwarder ****"
+        mkdir -p $DOTFILES_DIR/devcontainer
+        git clone https://github.com/nohzafk/devcontainer-cli-port-forwarder.git $DOTFILES_DIR/devcontainer/devcontainer-cli-port-forwarder
+    fi
+}
+
 setup_symbolic_links() {
     if [ "$SETUP_SYMBOLIC_LINKS" = true ]; then
         source $DOTFILES_DIR/bin/setup_symbolic_links.sh
@@ -645,6 +659,8 @@ install_heml
 install_terraform_libs
 
 install_snowsql
+
+install_devcontainer_cli
 
 setup_symbolic_links
 
