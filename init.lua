@@ -298,13 +298,13 @@ require("packer").startup(function(use)
 					-- Treesitter Picker
 					["tree "] = builtin.treesitter,
 				},
-			} -- or user
+			}
 			local telescope_any = require("telescope-any").create_telescope_any(opts)
-			-- vim.api.nvim_create_user_command("TelescopeAny", telescope_any, { nargs = 0 })
-			vim.api.nvim_set_keymap("n", "ta", "", {
+			vim.api.nvim_create_user_command("TelescopeAny", telescope_any, { nargs = 0 })
+			vim.api.nvim_set_keymap("n", "ta", "<Cmd>TelescopeAny<CR>", {
 				noremap = true,
 				silent = true,
-				callback = telescope_any,
+				-- callback = telescope_any,
 			})
 		end,
 	})

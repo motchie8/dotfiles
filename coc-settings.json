@@ -12,8 +12,8 @@
   "jedi.diagnostics.didSave": true,
   "jedi.workspace.extraPaths": [],
   "pyright.inlayHints.functionReturnTypes": false,
-  "pyright.inlayHints.variableTypes": true,
-  "pyright.inlayHints.parameterTypes": true,
+  "pyright.inlayHints.variableTypes": false,
+  "pyright.inlayHints.parameterTypes": false,
   "languageserver": {
     "terraform": {
       "command": "terraform-ls",
