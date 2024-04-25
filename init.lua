@@ -1172,23 +1172,103 @@ require("packer").startup(function(use)
 				local chat_file_path = "~/vimwiki/aichat/"
 				local unique_id = vim.fn.system("uuidgen")
 				local timestamp = os.date("%Y-%m-%d_%H%M%S")
+				local aichat_filename = timestamp .. "_" .. string.sub(unique_id, 1, 8) .. ".aichat"
+				vim.cmd("AINewChat")
+				vim.bo.buftype = ""
+				vim.api.nvim_buf_set_lines(0, 0, 0, false, {
+					"[chat-options]",
+					"model=" .. model,
+					"temperature=0.2",
+					"",
+					">>> system",
+					"",
+					"You are a general assistant.",
+					"If you attach a code block add syntax type after ``` to enable syntax highlighting.",
+					"",
+				})
+				vim.cmd("saveas " .. chat_file_path .. aichat_filename)
+			end, {})
+
+			vim.api.nvim_create_user_command("AIIncludingChat", function()
+				local bufnr = vim.api.nvim_get_current_buf()
+				local current_filename = vim.api.nvim_buf_get_name(bufnr)
+				local chat_file_path = "~/vimwiki/aichat/"
+				local unique_id = vim.fn.system("uuidgen")
+				local timestamp = os.date("%Y-%m-%d_%H%M%S")
+				local aichat_filename = timestamp .. "_" .. string.sub(unique_id, 1, 8) .. ".aichat"
+				vim.cmd("AINewChat")
+				vim.bo.buftype = ""
+				vim.api.nvim_buf_set_lines(0, 0, 0, false, {
+					"[chat-options]",
+					"model=" .. model,
+					"temperature=0.2",
+					"",
+					">>> system",
+					"",
+					"You are a general assistant.",
+					"If you attach a code block add syntax type after ``` to enable syntax highlighting.",
+					"",
+					">>> include",
+					"",
+					current_filename,
+					"",
+				})
+				vim.cmd("saveas " .. chat_file_path .. aichat_filename)
+			end, {})
+
+			vim.api.nvim_create_user_command("AITranslationChat", function()
+				local chat_file_path = "~/vimwiki/aichat/"
+				local unique_id = vim.fn.system("uuidgen")
+				local timestamp = os.date("%Y-%m-%d_%H%M%S")
 				local filename = timestamp .. "_" .. string.sub(unique_id, 1, 8) .. ".aichat"
 				vim.cmd("AINewChat")
 				vim.bo.buftype = ""
+				vim.api.nvim_buf_set_lines(0, 0, 0, false, {
+					"[chat-options]",
+					"model=" .. model,
+					"temperature=0.2",
+					"",
+					">>> system",
+					"",
+					"Can you translate the following Japanese sentence into English?",
+					"",
+				})
 				vim.cmd("saveas " .. chat_file_path .. filename)
 			end, {})
 
-			vim.cmd([[
-            function! AITranslateToEnglishFn(range, ...) range
-              let l:instruction= "Please translate the following sentence into simple and natural English."
-              if a:range
-                '<,'>call vim_ai#AIEditRun(a:range, {}, l:instruction)
-              else
-                call vim_ai#AIEditRun(a:range, {}, l:instruction)
-              endif
-            endfunction
-            command! -range -nargs=? AITE <line1>,<line2>call AITranslateToEnglishFn(<range>, <f-args>)
-            ]])
+			vim.api.nvim_create_user_command("AIFileTranslation", function()
+				local bufnr = vim.api.nvim_get_current_buf()
+				local current_filename = vim.api.nvim_buf_get_name(bufnr)
+				local chat_file_path = "~/vimwiki/aichat/"
+				local unique_id = vim.fn.system("uuidgen")
+				local timestamp = os.date("%Y-%m-%d_%H%M%S")
+				local filename = timestamp .. "_" .. string.sub(unique_id, 1, 8) .. ".aichat"
+				vim.cmd("AINewChat")
+				vim.bo.buftype = ""
+				-- バッファの全ての行を削除
+				local current_buf = vim.api.nvim_get_current_buf()
+				local line_count = vim.api.nvim_buf_line_count(current_buf)
+				vim.api.nvim_buf_set_lines(current_buf, 0, line_count, false, {})
+				-- バッファの先頭に新しい行を追加
+				vim.api.nvim_buf_set_lines(0, 0, 0, false, {
+					"[chat-options]",
+					"model=" .. model,
+					"temperature=0.2",
+					"",
+					">>> user",
+					"",
+					"Please translate the following file into English.",
+					"",
+					">>> include",
+					"",
+					current_filename,
+					"",
+				})
+				vim.cmd("saveas " .. chat_file_path .. filename)
+			end, {})
+
+			vim.api.nvim_set_keymap("n", "Te", "<Cmd>AIEdit translate into english<CR>", { noremap = true })
+			vim.api.nvim_set_keymap("x", "Te", "<Cmd>AIEdit translate into english<CR>", { noremap = true })
 		end,
 	})
 	-- GitHub Copilot
