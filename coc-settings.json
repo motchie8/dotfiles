@@ -14,6 +14,7 @@
   "pyright.inlayHints.functionReturnTypes": false,
   "pyright.inlayHints.variableTypes": false,
   "pyright.inlayHints.parameterTypes": false,
+  "Lua.diagnostics.globals": ["vim"],
   "languageserver": {
     "terraform": {
       "command": "terraform-ls",
