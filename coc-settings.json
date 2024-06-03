@@ -25,7 +25,7 @@
     }
   },
   "snippets.ultisnips.directories": [
-    "~/.local/share/nvim/site/pack/packer/start/vim-snippets/UltiSnips",
+    "~/.local/share/nvim/lazy/vim-snippets/UltiSnips",
     "~/dotfiles/snippets"
   ]
 }
