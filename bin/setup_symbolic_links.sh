@@ -47,7 +47,7 @@ link_paths=("$DOTFILES_DIR/.zshrc" "$DOTFILES_DIR/coc-settings.json" "$DOTFILES_
 
 setup_symbolic_links() {
     info_echo "**** Setup symbolic links ****"
-    mkdir -p ~/.config
+    mkdir -p ~/.config/nvim
     for i in "${!target_paths[@]}"; do
         if [ ! -L "${target_paths[i]}" ]; then
             if [ -e "${target_paths[i]}" ]; then
