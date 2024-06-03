@@ -21,3 +21,4 @@ iceberg.vim/
 node_modules/
 .zshrc.local
 neovim
+build

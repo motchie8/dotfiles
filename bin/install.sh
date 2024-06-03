@@ -1,23 +1,13 @@
 #!/bin/bash
-set -eu
+set -eux
 
 cat /dev/null <<EOF
 ------------------------------------------------------------------------
-Utility functions.
+Source common functions and variables.
 ------------------------------------------------------------------------
 EOF
-
-DOTFILES_DIR=$(dirname $(dirname $(realpath $0)))
-
-info_echo() {
-    echo -e "\033[32m$1\033[0m"
-}
-
-err_echo() {
-    echo -e "\033[31m$1\033[0m"
-}
-
-ARCH=$(uname -m)
+source "$(dirname $(realpath $0))/common.sh"
+export PATH="$HOME/bin:$PATH"
 
 cat /dev/null <<EOF
 ------------------------------------------------------------------------
@@ -27,21 +17,18 @@ EOF
 
 TMUX_PREFIX_KEY=""
 BUILD_NEOVIM=false
-SETUP_SYMBOLIC_LINKS=false
 
 show_help() {
-    echo "Usage: ./bin/install.sh -b -s -t TMUX_PREFIX_KEY"
-    echo "  -h                    Show this help message and exit"
+    echo "Usage: ./bin/install.sh -t {TMUX_PREFIX_KEY} [-b]"
+    echo "  -t [TMUX_PREFIX_KEY]  Specify prefix Key for tmux. ex. \"-t b\""
     echo "  -b                    Build Neovim from source"
-    echo "  -s                    Setup symbolic links"
-    echo "  -t TMUX_PREFIX_KEY    Specify prefix Key for tmux. ex. \"-t b\""
+    echo "  -h                    Show this help message and exit"
 }
 
-while getopts ":t:hbs" option; do
+while getopts ":t:hb" option; do
     case "${option}" in
         t) TMUX_PREFIX_KEY="${OPTARG}" ;;
         b) BUILD_NEOVIM=true ;;
-        s) SETUP_SYMBOLIC_LINKS=true ;;
         h)
             show_help
             exit 0
@@ -60,104 +47,67 @@ fi
 
 cat /dev/null <<EOF
 ------------------------------------------------------------------------
-Validate operation system.
-------------------------------------------------------------------------
-EOF
-
-# supported OS
-MAC_OS="macOS"
-UBUNTU="ubuntu"
-
-if type sw_vers >/dev/null 2>&1; then
-    OS=$MAC_OS
-else
-    OS=$(cat /etc/os-release | grep -E '^ID="?[^"]*"?$' | tr -d '"' | awk -F '[=]' '{print $NF}')
-fi
-
-exit_with_unsupported_os() {
-    err_echo "Operation System '$OS' is not supported"
-    exit 1
-}
-
-if [ "$OS" != $UBUNTU ] && [ "$OS" != $MAC_OS ]; then
-    exit_with_unsupported_os
-fi
-
-cat /dev/null <<EOF
-------------------------------------------------------------------------
 Functions for installation.
 ------------------------------------------------------------------------
 EOF
 
-install_dev_libs_for_ubuntu() {
-    info_echo "**** Install dev libs for Ubuntu ****"
-    if [ $(whoami) = "root" ]; then
-        apt update -y && apt install -y sudo
-    fi
-    # set timezone
-    TZ=Asia/Tokyo
-    sudo ln -snf /usr/share/zoneinfo/$TZ /etc/localtime # && echo $TZ > /etc/timezone
-    export DEBIAN_FEND=noninteractive
-    sudo apt update -y && sudo apt install -y build-essential
-    sudo apt-key adv --refresh-keys --keyserver keyserver.ubuntu.com
-    sudo apt-get install -y language-pack-ja
-    sudo update-locale LANG=ja_JP.UTF-8
-    # install dev dependencies
-    sudo apt install -y curl git file zlib1g-dev libssl-dev \
-        libreadline-dev libbz2-dev libsqlite3-dev wget cmake \
-        pkg-config unzip libtool libtool-bin m4 automake gettext \
-        zsh x11-apps libffi-dev yarn liblzma-dev gpg
-    # install taskwarrior
-    sudo apt-get install taskwarrior -y
-    # install ripgrep for telescope
-    sudo apt-get install ripgrep -y
-    # install xdg-utils for opening browser
-    sudo apt-get install xdg-utils -y
-}
-
-install_dev_libs_for_mac() {
-    info_echo "**** Install dev libs for macOS ****"
-    brew update
-    set +e
-    # install pyenv, vim plugins and zsh
-    brew install node yarn wget tmux zsh source-highlight gcc cmake ripgrep
-    # install taskwarrior
-    brew install task ctags
-    set -e
-}
-
-install_dev_libs() {
-    if [ "$OS" = $UBUNTU ]; then
-        install_dev_libs_for_ubuntu
-    elif [ "$OS" = $MAC_OS ]; then
-        install_dev_libs_for_mac
-    else
-        exit_with_unsupported_os
-    fi
+install_dev_libs_and_cmake() {
+    $DOTFILES_DIR/bin/setup_deb_libs.sh
 }
 
 build_neovim() {
     info_echo "**** Build Neovim from source****"
     # install prerequisites
     if [ "$OS" = $UBUNTU ]; then
-        sudo apt-get install -y ninja-build gettext cmake unzip curl
+        sudo apt-get install -y ninja-build gettext unzip curl
     elif [ "$OS" = $MAC_OS ]; then
         set +e
-        brew install ninja cmake gettext curl
+        brew install ninja gettext curl
         set -e
     else
         exit_with_unsupported_os
     fi
     # build Neovim
-    if [ ! -e $DOTFILES_DIR/neovim ]; then
-        git clone https://github.com/neovim/neovim $DOTFILES_DIR/neovim
+    if [ ! -e $BUILD_DIR/neovim ]; then
+        git clone --depth 1 https://github.com/neovim/neovim $BUILD_DIR/neovim
+        cd $BUILD_DIR/neovim
+        make CMAKE_BUILD_TYPE=RelWithDebInfo
+        sudo make install
+    else
+        cd $BUILD_DIR/neovim
+        if ! git pull | grep -q "Already up to date"; then
+            make distclean
+            make CMAKE_BUILD_TYPE=RelWithDebInfo
+            sudo make install
+        fi
     fi
-    cd $DOTFILES_DIR/neovim
-    git pull origin master
-    rm -rf build/
-    make CMAKE_BUILD_TYPE=RelWithDebInfo
-    sudo make install
     cd $DOTFILES_DIR
+}
+
+install_taskwarrior() {
+    if [ "$OS" = $UBUNTU ]; then
+        if [ ! -e $BUILD_DIR/task ]; then
+            # NOTE: apt-get does not yet support TaskWarrior v3.
+            # sudo apt-get install taskwarrior -y
+            mkdir -p $BUILD_DIR/task
+            cd $BUILD_DIR/task
+            TASK_VERSION=3.0.2
+            wget https://github.com/GothenburgBitFactory/taskwarrior/releases/download/v${TASK_VERSION}/task-${TASK_VERSION}.tar.gz
+            tar zxvf task-${TASK_VERSION}.tar.gz
+            cd task-${TASK_VERSION}
+            # install prerequisites
+            install_rust
+            sudo apt-get install uuid-dev -y
+            cmake -DCMAKE_BUILD_TYPE=release .
+            make
+            sudo make install
+            cd $DOTFILES_DIR
+        fi
+    elif [ "$OS" = $MAC_OS ]; then
+        brew install task
+    else
+        exit_with_unsupported_os
+    fi
 }
 
 install_neovim() {
@@ -194,7 +144,7 @@ install_anyenv_and_env_libs() {
     info_echo "**** Setup env libs ****"
     if ! type anyenv >/dev/null 2>&1; then
         info_echo "**** Install anyenv ****"
-        git clone https://github.com/anyenv/anyenv $HOME/.anyenv
+        git clone --depth 1 https://github.com/anyenv/anyenv $HOME/.anyenv
         export PATH="$HOME/.anyenv/bin:$PATH"
         eval "$(anyenv init -)"
         anyenv install --force-init
@@ -212,7 +162,7 @@ install_anyenv_and_env_libs() {
     fi
     if [ ! -e $(pyenv root)/plugins/pyenv-virtualenv ]; then
         info_echo "**** Install pyenv virtualenv****"
-        git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
+        git clone --depth 1 https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
         eval "$(pyenv virtualenv-init -)"
     fi
 }
@@ -243,7 +193,7 @@ install_python() {
     done
 }
 
-install_zsh_and_set_as_default_shell() {
+set_zsh_as_default_shell() {
     DEFAULT_SHELL=$(echo $SHELL | awk -F '[/]' '{print $NF}')
     if [ "$DEFAULT_SHELL" != "zsh" ]; then
         info_echo "**** Change default shell from ${DEFAULT_SHELL} to zsh ****"
@@ -256,10 +206,10 @@ install_zsh_and_set_as_default_shell() {
 
 setup_zsh() {
     # install zplug
-    export ZPLUG_HOME=$DOTFILES_DIR/.zplug
+    export ZPLUG_HOME=$BUILD_DIR/zplug
     if [ ! -e $ZPLUG_HOME ]; then
         info_echo "**** Install zplug ****"
-        git clone https://github.com/zplug/zplug $ZPLUG_HOME
+        git clone --depth 1 https://github.com/zplug/zplug $ZPLUG_HOME
     else
         info_echo "**** Update zplug ****"
         pushd $ZPLUG_HOME
@@ -267,28 +217,32 @@ setup_zsh() {
         popd
     fi
     # install zprezto and setup zsh dotfiles
-    if [ ! -e $DOTFILES_DIR/.zprezto ]; then
+    if [ ! -e $BUILD_DIR/zprezto ]; then
         info_echo "**** Install zprezto ****"
-        git clone --recursive https://github.com/sorin-ionescu/prezto.git $DOTFILES_DIR/.zprezto
+        git clone --depth 1 --recursive https://github.com/sorin-ionescu/prezto.git $BUILD_DIR/zprezto
         for rcfile_name in zlogin zlogout zpreztorc zprofile zshenv; do
-            if [ ! -e $HOME/$rcfile_name ]; then
-                ln -s "$DOTFILES_DIR/.zprezto/runcoms/.$rcfile_name" "$HOME/.$rcfile_name"
-            fi
+            ln -s "$BUILD_DIR/zprezto/runcoms/.$rcfile_name" "$HOME/.$rcfile_name"
         done
     else
         info_echo "**** Update zprezto ****"
-        pushd $DOTFILES_DIR/.zprezto
-        git pull
+        pushd $BUILD_DIR/zprezto
+        if ! git pull | grep -q "Already up to date"; then
+            for rcfile_name in zlogin zlogout zpreztorc zprofile zshenv; do
+                unlink "$HOME/.$rcfile_name"
+                ln -s "$BUILD_DIR/zprezto/runcoms/.$rcfile_name" "$HOME/.$rcfile_name"
+            done
+        fi
         popd
     fi
+    set_zsh_as_default_shell
 }
 
 install_iceberg_tmux_conf() {
     # download iceberg.tmux.conf
-    if [ ! -e $DOTFILES_DIR/tmux/colors/iceberg.tmux.conf ]; then
+    if [ ! -e $BUILD_DIR/tmux/colors/iceberg.tmux.conf ]; then
         info_echo "**** Install tmux color schema ****"
-        mkdir -p $DOTFILES_DIR/tmux/colors/
-        wget -O $DOTFILES_DIR/tmux/colors/iceberg.tmux.conf https://raw.githubusercontent.com/gkeep/iceberg-dark/master/.tmux/iceberg.tmux.conf
+        mkdir -p $BUILD_DIR/tmux/colors/
+        wget -O $BUILD_DIR/tmux/colors/iceberg.tmux.conf https://raw.githubusercontent.com/gkeep/iceberg-dark/master/.tmux/iceberg.tmux.conf
     fi
 }
 
@@ -309,20 +263,6 @@ install_node() {
     fi
 }
 
-install_packer_nvim() {
-    # install nvim package manager
-    if [ ! -e $HOME/.local/share/nvim/site/pack/packer/start ]; then
-        info_echo "**** Install packer.nvim ****"
-        mkdir -p $DOTFILES_DIR/.vim/plugins
-        git clone --depth 1 https://github.com/wbthomason/packer.nvim $HOME/.local/share/nvim/site/pack/packer/start/packer.nvim
-    else
-        info_echo "**** Update packer.nvim ****"
-        pushd $HOME/.local/share/nvim/site/pack/packer/start/packer.nvim
-        git pull
-        popd
-    fi
-}
-
 create_tmux_user_conf() {
     # create .tmux.user.conf for custom prefix key
     info_echo "**** Create or update .tmux.user.conf to set prefix key****"
@@ -338,7 +278,7 @@ install_tmux_mem_cpu_load() {
     if [ ! -e $DOTFILES_DIR/tmux/plugins/tmux-mem-cpu-load ]; then
         info_echo "**** Install tmux-mem-cpu-load ****"
         mkdir -p $DOTFILES_DIR/tmux/plugins
-        git clone https://github.com/thewtex/tmux-mem-cpu-load.git $DOTFILES_DIR/tmux/plugins/tmux-mem-cpu-load
+        git clone --depth 1 https://github.com/thewtex/tmux-mem-cpu-load.git $DOTFILES_DIR/tmux/plugins/tmux-mem-cpu-load
         pushd $DOTFILES_DIR/tmux/plugins/tmux-mem-cpu-load
         cmake .
         make
@@ -405,10 +345,10 @@ install_act() {
 install_rust() {
     if ! type cargo >/dev/null 2>&1; then
         info_echo "**** Install rust ****"
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs >install_rust.sh
-        sh install_rust.sh -y
-        rm install_rust.sh
-        export PATH="$HOME/bin:$HOME/.cargo/bin:$PATH"
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs >rustup-init.sh
+        sh rustup-init.sh -y --no-modify-path
+        rm rustup-init.sh
+        export PATH="$HOME/.cargo/bin:$PATH"
     fi
 }
 
@@ -573,18 +513,21 @@ install_snowsql() {
             if [ "$ARCH" == "x86_64" ]; then
                 brew install --cask snowflake-snowsql
             else
-                info_echo "Currently, for MacOS with arm64, SnowSQL needs to be installed using pkg."
-                info_echo "cf. https://developers.snowflake.com/snowsql/"
+                err_echo "Currently, for MacOS with arm64, SnowSQL needs to be installed using pkg."
+                err_echo "cf. https://developers.snowflake.com/snowsql/"
             fi
         elif [ "$OS" = $UBUNTU ]; then
             if [ "$ARCH" == "x86_64" ]; then
+                mkdir -p $BUILD_DIR/snowsql/bin
+                cd $BUILD_DIR/snowsql
                 VERSION=1.2.28
                 BOOTSTRAP_VERSION=1.2
                 curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/${BOOTSTRAP_VERSION}/linux_x86_64/snowsql-${VERSION}-linux_x86_64.bash
-                touch $DOTFILES_DIR/.zshrc.local
-                SNOWSQL_DEST=$HOME/bin SNOWSQL_LOGIN_SHELL=$DOTFILES_DIR/.zshrc.local bash snowsql-${VERSION}-linux_x86_64.bash
+                touch $DOTFILES_DIR/.zshrc.tmp
+                SNOWSQL_DEST=$HOME/bin SNOWSQL_LOGIN_SHELL=$DOTFILES_DIR/.zshrc.tmp bash snowsql-${VERSION}-linux_x86_64.bash
+                rm -rf $DOTFILES_DIR/.zshrc.tmp
             else
-                info_echo "Currently, SnowSQL is not supported on arm64 Linux."
+                err_echo "Currently, SnowSQL is not supported on arm64 Linux."
             fi
         else
             exit_with_unsupported_os
@@ -600,14 +543,34 @@ install_devcontainer_cli() {
     if [ ! -e $DOTFILES_DIR/devcontainer/devcontainer-cli-port-forwarder ]; then
         info_echo "**** Install devcontainer cli port forwarder ****"
         mkdir -p $DOTFILES_DIR/devcontainer
-        git clone https://github.com/nohzafk/devcontainer-cli-port-forwarder.git $DOTFILES_DIR/devcontainer/devcontainer-cli-port-forwarder
+        git clone --depth 1 https://github.com/nohzafk/devcontainer-cli-port-forwarder.git $DOTFILES_DIR/devcontainer/devcontainer-cli-port-forwarder
+    fi
+}
+
+install_lua_language_server() {
+    if ! type lua-language-server >/dev/null 2>&1; then
+        info_echo "**** Install lua-language-server ****"
+        if [ $OS = $MAC_OS ]; then
+            brew install lua-language-server
+        elif [ "$OS" = $UBUNTU ]; then
+            mkdir -p $BUILD_DIR/lua-language-server
+            cd $BUILD_DIR/lua-language-server
+            LUA_LANGUAGE_SERVER_VERSION=3.9.1
+            if [ "$ARCH" == "arm64" ] || [ "$ARCH" == "aarch64" ]; then
+                LUA_LANGUAGE_SERVER_ARCH="arm64"
+            else
+                LUA_LANGUAGE_SERVER_ARCH="x64"
+            fi
+            wget https://github.com/LuaLS/lua-language-server/releases/download/${LUA_LANGUAGE_SERVER_VERSION}/lua-language-server-${LUA_LANGUAGE_SERVER_VERSION}-linux-${LUA_LANGUAGE_SERVER_ARCH}.tar.gz
+            tar zxvf lua-language-server-${LUA_LANGUAGE_SERVER_VERSION}-linux-${LUA_LANGUAGE_SERVER_ARCH}.tar.gz
+            ln -s $(readlink -f bin/lua-language-server) $HOME/bin/lua-language-server
+            cd $DOTFILES_DIR
+        fi
     fi
 }
 
 setup_symbolic_links() {
-    if [ "$SETUP_SYMBOLIC_LINKS" = true ]; then
-        source $DOTFILES_DIR/bin/setup_symbolic_links.sh
-    fi
+    $DOTFILES_DIR/bin/setup_symbolic_links.sh
 }
 
 cat /dev/null <<EOF
@@ -616,25 +579,21 @@ Installation steps
 ------------------------------------------------------------------------
 EOF
 
-install_dev_libs
+install_dev_libs_and_cmake
 
 install_neovim
+
+install_taskwarrior
 
 install_anyenv_and_env_libs
 
 install_python
-
-install_zsh_and_set_as_default_shell
 
 setup_zsh
 
 install_iceberg_tmux_conf
 
 install_node
-
-install_packer_nvim
-
-install_tmux_mem_cpu_load
 
 install_go
 
@@ -645,6 +604,8 @@ install_rust
 install_formatter
 
 install_fzf
+
+install_tmux_mem_cpu_load
 
 create_tmux_user_conf
 
@@ -661,6 +622,8 @@ install_terraform_libs
 install_snowsql
 
 install_devcontainer_cli
+
+install_lua_language_server
 
 setup_symbolic_links
 

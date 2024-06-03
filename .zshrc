@@ -6,6 +6,8 @@ DOTFILES_DIR=$(dirname $(realpath $HOME/.zshrc))
 # -----------------------------
 # PATH
 # -----------------------------
+export PATH="$HOME/bin:$PATH"
+
 # homebrew
 if [ -e /opt/homebrew/bin/brew ]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -29,8 +31,6 @@ eval "$(pyenv virtualenv-init -)"
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
-# snowsql
-export PATH="$HOME/bin:$PATH"
 # for macOS x86_64
 if [ -e /Applications/SnowSQL.app/Contents/MacOS ]; then
     export PATH="/Applications/SnowSQL.app/Contents/MacOS:$PATH"
@@ -56,17 +56,16 @@ alias find_path='find_path() { command_name=$1; echo $PATH | tr ":" "\n" | while
 # zsh settings
 # -----------------------------
 
-export ZPLUG_HOME=$DOTFILES_DIR/.zplug
+export ZPLUG_HOME=$DOTFILES_DIR/build/zplug
 if [ -e $ZPLUG_HOME ]; then
     source $ZPLUG_HOME/init.zsh
+    zplug "zsh-users/zsh-completions"
+    zplug "zsh-users/zsh-autosuggestions"
+    zplug "zsh-users/zsh-syntax-highlighting", defer:2
+    zplug "b4b4r07/enhancd", use:init.sh
 fi
 
-zplug "zsh-users/zsh-completions"
-zplug "zsh-users/zsh-autosuggestions"
-zplug "zsh-users/zsh-syntax-highlighting", defer:2
-zplug "b4b4r07/enhancd", use:init.sh
-
-source $DOTFILES_DIR/.zprezto/init.zsh
+source $DOTFILES_DIR/build/zprezto/init.zsh
 
 # -----------------------------
 # Completion
@@ -305,9 +304,11 @@ setopt hist_verify
 # -----------------------------
 # Load user specific settings
 # -----------------------------
-# environment variables list for credentials to be defined and loaded in .zshrc.local
-export OPENAI_API_KEY=
 # load zshrc.local if exists
 if [ -e $DOTFILES_DIR/.zshrc.local ]; then
     source $DOTFILES_DIR/.zshrc.local
+fi
+# load .env if exists
+if [ -e $DOTFILES_DIR/.env ]; then
+    source $DOTFILES_DIR/.env
 fi
