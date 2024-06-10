@@ -40,15 +40,21 @@ return {
 			"nvim-telescope/telescope.nvim",
 			"nvim-tree/nvim-web-devicons",
 		},
-		keys = {
-			{
-				"sp",
-				function()
-					require("telescope").extensions.frecency.frecency()
-				end,
-				desc = "Intelligent prioritization",
-			},
-		},
+		event = "VeryLazy",
+		config = function()
+			vim.api.nvim_set_keymap("n", "sp", function()
+				require("telescope").extensions.frecency.frecency()
+			end)
+		end,
+		-- keys = {
+		-- 	{
+		-- 		"sp",
+		-- 		function()
+		-- 			require("telescope").extensions.frecency.frecency()
+		-- 		end,
+		-- 		desc = "Intelligent prioritization",
+		-- 	},
+		-- },
 	},
 	-- Change picker by command prefix
 	{

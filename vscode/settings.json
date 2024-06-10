@@ -20,7 +20,7 @@
   "workbench.startupEditor": "none",
   "workbench.editor.openPositioning": "first",
   "explorer.openEditors.visible": 0,
-  "workbench.editor.showTabs": false,
+  "workbench.editor.showTabs": "single",
   "workbench.editor.enablePreview": true,
   "workbench.editor.enablePreviewFromQuickOpen": true,
   "debug.inlineValues": "on",
@@ -246,4 +246,5 @@
   "editor.inlineSuggest.enabled": true,
   "terminal.integrated.confirmOnExit": "always",
   "terminal.integrated.defaultProfile.windows": "Ubuntu-20.04 (WSL)",
+  "workbench.editor.tabActionCloseVisibility": false,
 }
