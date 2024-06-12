@@ -15,7 +15,6 @@ Check necessary environment variables and libs
 EOF
 
 TASK_SYNC_GCP_BUCKET_NAME="${TASK_SYNC_GCP_BUCKET_NAME:-}"
-TASK_SYNC_GCP_PROJECT_ID="${TASK_SYNC_GCP_PROJECT_ID:-}"
 TASK_SYNC_GCP_SA_CREDENTIAL_PATH="${TASK_SYNC_GCP_SA_CREDENTIAL_PATH:-}"
 TASK_SYNC_ENCRYPTION_SECRET="${TASK_SYNC_ENCRYPTION_SECRET:-}"
 
@@ -32,10 +31,7 @@ if [[ -z "${TASK_SYNC_GCP_BUCKET_NAME}" ]]; then
     err_echo "TASK_SYNC_GCP_BUCKET_NAME is not set in environment variables."
     exit 1
 fi
-if [[ -z "${TASK_SYNC_GCP_PROJECT_ID}" ]]; then
-    err_echo "TASK_SYNC_GCP_PROJECT_ID is not set in environment variables."
-    exit 1
-fi
+
 if [[ -z "${TASK_SYNC_GCP_SA_CREDENTIAL_PATH}" ]]; then
     err_echo "TASK_SYNC_GCP_SA_CREDENTIAL_PATH is not set in environment variables."
     exit 1

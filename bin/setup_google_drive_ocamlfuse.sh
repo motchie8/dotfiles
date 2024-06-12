@@ -10,13 +10,25 @@ source "$(dirname $(realpath $0))/common.sh"
 
 cat /dev/null <<EOF
 ------------------------------------------------------------------------
-Validate operation system.
+Check necessary environment variables and libs
 ------------------------------------------------------------------------
 EOF
 
 if [ "$OS" != $UBUNTU ]; then
     err_echo "Currently, this script is only supported on Ubuntu"
     exit_with_unsupported_os
+fi
+
+GOOGLE_DRIVE_OCAMLFUSE_CLIENT_ID="${GOOGLE_DRIVE_OCAMLFUSE_CLIENT_ID:-}"
+GOOGLE_DRIVE_OCAMLFUSE_CLIENT_SECRET="${GOOGLE_DRIVE_OCAMLFUSE_CLIENT_SECRET:-}"
+
+if [[ -z "${GOOGLE_DRIVE_OCAMLFUSE_CLIENT_ID}" ]]; then
+    err_echo "GOOGLE_DRIVE_OCAMLFUSE_CLIENT_ID is not set in environment variables."
+    exit 1
+fi
+if [[ -z "${GOOGLE_DRIVE_OCAMLFUSE_CLIENT_SECRET}" ]]; then
+    err_echo "GOOGLE_DRIVE_OCAMLFUSE_CLIENT_SECRET is not set in environment variables."
+    exit 1
 fi
 
 cat /dev/null <<EOF
@@ -27,7 +39,10 @@ EOF
 
 # Install google-drive-ocamlfuse
 sudo apt install software-properties-common -y
+# for stable version
 sudo add-apt-repository ppa:alessandro-strada/ppa
+# for beta version
+# sudo add-apt-repository ppa:alessandro-strada/google-drive-ocamlfuse-beta
 sudo apt update
 sudo apt upgrade -y
 sudo apt install google-drive-ocamlfuse -y
@@ -38,7 +53,6 @@ sudo sh -c 'cat >| /bin/firefox <<EOF
 echo \$* > /dev/stderr
 EOF'
 sudo chmod 777 /bin/firefox
-google-drive-ocamlfuse -browser firefox
 
 # Setup FUSE settings
 sudo touch /etc/fuse.conf
@@ -49,7 +63,8 @@ sudo mkdir -p /mnt/google_drive
 sudo chmod 777 /mnt/google_drive
 
 # Mount Google Drive for the first time
-sudo google-drive-ocamlfuse -o allow_other -label google_drive /mnt/google_drive
+info_echo "Please copy the URL that is output below, paste it into your browser, and follow the steps to authorize access to Google Drive."
+sudo google-drive-ocamlfuse -id $GOOGLE_DRIVE_OCAMLFUSE_CLIENT_ID -secret $GOOGLE_DRIVE_OCAMLFUSE_CLIENT_SECRET -label google_drive /mnt/google_drive -o allow_other -browser firefox
 
 # Mount Google Drive on startup
 # Create gdfuse command
