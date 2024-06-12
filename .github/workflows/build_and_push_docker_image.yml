@@ -9,6 +9,7 @@ on:
 
 env:
   REGISTRY_IMAGE: "motchie8/dotfiles"
+  CICD: "1"
 
 jobs:
   build:
