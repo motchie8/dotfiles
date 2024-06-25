@@ -42,9 +42,8 @@ return {
 		},
 		event = "VeryLazy",
 		config = function()
-			vim.api.nvim_set_keymap("n", "sp", function()
-				require("telescope").extensions.frecency.frecency()
-			end)
+			require("telescope").load_extension("frecency")
+			vim.api.nvim_set_keymap("n", "sp", "<cmd>Telescope frecency<cr>", { noremap = true })
 		end,
 		-- keys = {
 		-- 	{
