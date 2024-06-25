@@ -9,7 +9,6 @@ on:
 
 env:
   REGISTRY_IMAGE: "motchie8/dotfiles"
-  CICD: "1"
 
 jobs:
   build:
@@ -43,6 +42,9 @@ jobs:
       - name: Build and push by digest
         id: build
         uses: docker/build-push-action@v4
+        env:
+          CICD_FLAG: "1"
+          CICD_PLATFORM: ${{ matrix.platform }}
         with:
           context: ./
           platforms: ${{ matrix.platform }}

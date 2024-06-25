@@ -583,14 +583,13 @@ install_dev_libs_and_cmake
 
 install_neovim
 
-# NOTE: Temporarily skip building TaskWarrior for arm64 and aarch64 in CICD pipeline
-# when building TaskWarrior for arm64 using GitHub Actions,
-# the job exceeds the maximum execution time of GitHub Actions(6 hours).
-if [ "$ARCH" == "x86_64" ] || [ "${CICD:=0}" == "0" ]; then
+# NOTE: Temporarily skip building TaskWarrior for linux/arm64 in GitHub Actions's CICD pipeline 
+# because building TaskWarrior for arm64 exceeds the maximum execution time of GitHub Actions(6 hours).
+if [ "${CICD_FLAG:=0}" == "1" ] && [ "$CICD_PLATFORM" == "linux/arm64" ]; then
+    info_echo "**** Skip building TaskWarrior ****"
+else
     install_taskwarrior
 else
-    info_echo "**** Skip building TaskWarrior ****"
-fi
 
 install_anyenv_and_env_libs
 
