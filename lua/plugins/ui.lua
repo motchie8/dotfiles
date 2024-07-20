@@ -91,6 +91,24 @@ return {
 			{ "<C-e>", "<cmd>WinResizerStartResize<cr>", desc = "Resize Window" },
 		},
 	},
+	-- line decorations by vim modes
+	{
+		"mvllow/modes.nvim",
+		tag = "v0.2.1",
+		opts = {},
+	},
+	-- highlight word under cursor and manual keywords
+	{
+		"t9md/vim-quickhl",
+		config = function()
+			vim.cmd([[
+                nmap <Space>m <Plug>(quickhl-manual-this)
+                xmap <Space>m <Plug>(quickhl-manual-this)
+                nmap <Space>M <Plug>(quickhl-manual-reset)
+                xmap <Space>M <Plug>(quickhl-manual-reset)
+            ]])
+		end,
+	},
 	-- highlight indent line
 	{
 		"shellRaining/hlchunk.nvim",

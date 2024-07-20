@@ -1,0 +1,9 @@
+model_list:
+  - model_name: claude3-5-sonnet
+    litellm_params:
+      model: claude-3-5-sonnet-20240620
+      api_key: "os.environ/ANTHROPIC_API_KEY"
+  - model_name: gemini
+    litellm_params:
+      model: gemini/gemini-pro
+      api_key: "os.environ/GEMINI_API_KEY"

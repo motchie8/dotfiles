@@ -52,6 +52,9 @@ alias diff='diff -U1'
 alias nf='nvim $(fzf)'
 alias vim='nvim'
 alias find_path='find_path() { command_name=$1; echo $PATH | tr ":" "\n" | while read -r dir; do if [[ -x "${dir}/${command_name}" ]]; then echo "${dir}/${command_name}"; fi; done; }; find_path'
+alias drwm='docker_run_with_mount() { image_name=$1; docker run -it --rm -v $(pwd):/mnt/host -w /mnt/host ${image_name} bash; }; docker_run_with_mount'
+alias docker_image_show_cmd='docker_image_show_cmd() { image_name=$1; docker inspect ${image_name} | jq -r ".[0].Config.Entrypoint, .[0].Config.Cmd"; }; docker_image_show_cmd'
+
 # -----------------------------
 # zsh settings
 # -----------------------------

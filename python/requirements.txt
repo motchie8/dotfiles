@@ -20,3 +20,4 @@ sqlfluff
 sqlfluff-templater-dbt
 litellm[proxy]
 debugpy
+google-generativeai

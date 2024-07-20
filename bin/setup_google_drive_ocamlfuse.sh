@@ -53,18 +53,22 @@ sudo sh -c 'cat >| /bin/firefox <<EOF
 echo \$* > /dev/stderr
 EOF'
 sudo chmod 777 /bin/firefox
+export PATH="/bin:$PATH"
 
 # Setup FUSE settings
 sudo touch /etc/fuse.conf
-sudo sed -i '/# *user_allow_other/c\user_allow_other' /etc/fuse.conf || echo 'user_allow_other' | sudo tee -a /etc/fuse.conf
+sudo sed -i '/#user_allow_other/c\user_allow_other' /etc/fuse.conf || echo 'user_allow_other' | sudo tee -a /etc/fuse.conf
+
+# Setup configuration
+info_echo "Please copy the URL that is output below, paste it into your browser, and follow the steps to authorize access to Google Drive."
+sudo google-drive-ocamlfuse -id $GOOGLE_DRIVE_OCAMLFUSE_CLIENT_ID -secret $GOOGLE_DRIVE_OCAMLFUSE_CLIENT_SECRET
 
 # Setup mount point
 sudo mkdir -p /mnt/google_drive
 sudo chmod 777 /mnt/google_drive
 
 # Mount Google Drive for the first time
-info_echo "Please copy the URL that is output below, paste it into your browser, and follow the steps to authorize access to Google Drive."
-sudo google-drive-ocamlfuse -id $GOOGLE_DRIVE_OCAMLFUSE_CLIENT_ID -secret $GOOGLE_DRIVE_OCAMLFUSE_CLIENT_SECRET -label google_drive /mnt/google_drive -o allow_other -browser firefox
+google-drive-ocamlfuse -id $GOOGLE_DRIVE_OCAMLFUSE_CLIENT_ID -secret $GOOGLE_DRIVE_OCAMLFUSE_CLIENT_SECRET -label google_drive -o allow_other /mnt/google_drive
 
 # Mount Google Drive on startup
 # Create gdfuse command
@@ -81,8 +85,8 @@ if ! grep -q "gdfuse#google_drive" /etc/fstab; then
 fi
 
 # Unmount and remount
-sudo fusermount -u /mnt/google_drive
-sudo mount -a
+fusermount -u /mnt/google_drive
+mount -a
 
 # Setup Symbolic Link for task.md
 if [ ! -e $HOME/vimwiki/todo ]; then

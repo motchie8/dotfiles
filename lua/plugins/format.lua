@@ -23,6 +23,8 @@ return {
 				"<Cmd>Neoformat! markdown<CR>",
 				{ noremap = true, silent = true }
 			)
+			-- for sql
+			vim.api.nvim_set_var("neoformat_enabled_sql", {})
 		end,
 	},
 }

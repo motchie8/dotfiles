@@ -208,13 +208,14 @@ return {
 				"coc-rust-analyzer",
 				"coc-sh",
 				"coc-snippets",
-				"coc-sql",
+				--"coc-sql",
 				"coc-sqlfluff",
 				"coc-toml",
 				"coc-tsserver",
 				"coc-xml",
 				"coc-yaml",
 				"@yaegassy/coc-pysen",
+				--"@yaegassy/coc-ruff",
 			})
 			-- Use Ctrl-h (or K) to show documentation in preview window.
 			keyset("n", "<C-h>", ":<C-u>CocActionAsync('doHover')<CR>", { silent = true })

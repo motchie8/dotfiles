@@ -7,7 +7,7 @@ return {
 	-- Convert Jupyter Notebook file to python file by jupytext
 	{
 		"goerz/jupytext.vim",
-		ft = { "python", "ipynb" },
+		ft = { "ipynb" },
 		config = function()
 			vim.cmd([[
                 execute 'source' '~/.local/share/nvim/lazy/jupytext.vim'

@@ -27,5 +27,6 @@
   "snippets.ultisnips.directories": [
     "~/.local/share/nvim/lazy/vim-snippets/UltiSnips",
     "~/dotfiles/snippets"
-  ]
+  ],
+  "sqlfluff.dialect": "bigquery"
 }
