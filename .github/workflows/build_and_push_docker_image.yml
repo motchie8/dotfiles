@@ -47,8 +47,8 @@ jobs:
           CICD_PLATFORM: ${{ matrix.platform }}
         with:
           context: ./
-          build-args:
-            - "BUILD_FROM_SOURCE=false"
+          build-args: |
+            BUILD_FROM_SOURCE=false
           platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}
           file: docker/ubuntu/Dockerfile
