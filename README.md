@@ -15,17 +15,12 @@ Install the necessary libraries for the development environment.
 $ make install
 ```
 
-Use the following script to run the installation script with custom options.
-
-```sh
-$ ./bin/install.sh -h
-Usage: ./bin/install.sh -t TMUX_PREFIX_KEY
-  -h                    Show this help message and exit
-  -b                    Build Neovim from source
-  -t TMUX_PREFIX_KEY    Specify prefix Key for tmux. For example, "-t b"
-```
-
 ### Optional
+
+Install TaskWarrior for task management.
+```sh
+$ make install-taskwarrior
+```
 
 Set up TaskWarrior for file synchronization. GCS bucket and a GCP service account are required. Copy `.env.example` to create `.env` and set your variables.
 

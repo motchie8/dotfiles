@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -eu
 
 cat /dev/null <<EOF
@@ -6,7 +6,8 @@ cat /dev/null <<EOF
 Utility functions.
 ------------------------------------------------------------------------
 EOF
-source "$(dirname $(realpath $0))/common.sh"
+# source "$(dirname "$(realpath "$0")")/common.sh"
+source "bin/common.sh"
 
 cat /dev/null <<EOF
 ------------------------------------------------------------------------

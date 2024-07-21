@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -eu
 
 cat /dev/null <<EOF
@@ -6,7 +6,8 @@ cat /dev/null <<EOF
 Source common functions and variables.
 ------------------------------------------------------------------------
 EOF
-source "$(dirname $(realpath $0))/common.sh"
+# source "$(dirname "$(realpath $0)")/common.sh"
+source "bin/common.sh"
 
 cat /dev/null <<EOF
 ------------------------------------------------------------------------
@@ -14,7 +15,7 @@ Check necessary environment variables and libs
 ------------------------------------------------------------------------
 EOF
 
-if [ "$OS" != $UBUNTU ]; then
+if [ "$OS" != "$UBUNTU" ]; then
     err_echo "Currently, this script is only supported on Ubuntu"
     exit_with_unsupported_os
 fi
@@ -61,14 +62,14 @@ sudo sed -i '/#user_allow_other/c\user_allow_other' /etc/fuse.conf || echo 'user
 
 # Setup configuration
 info_echo "Please copy the URL that is output below, paste it into your browser, and follow the steps to authorize access to Google Drive."
-sudo google-drive-ocamlfuse -id $GOOGLE_DRIVE_OCAMLFUSE_CLIENT_ID -secret $GOOGLE_DRIVE_OCAMLFUSE_CLIENT_SECRET
+sudo google-drive-ocamlfuse -id "$GOOGLE_DRIVE_OCAMLFUSE_CLIENT_ID" -secret "$GOOGLE_DRIVE_OCAMLFUSE_CLIENT_SECRET"
 
 # Setup mount point
 sudo mkdir -p /mnt/google_drive
 sudo chmod 777 /mnt/google_drive
 
 # Mount Google Drive for the first time
-google-drive-ocamlfuse -id $GOOGLE_DRIVE_OCAMLFUSE_CLIENT_ID -secret $GOOGLE_DRIVE_OCAMLFUSE_CLIENT_SECRET -label google_drive -o allow_other /mnt/google_drive
+google-drive-ocamlfuse -id "$GOOGLE_DRIVE_OCAMLFUSE_CLIENT_ID" -secret "$GOOGLE_DRIVE_OCAMLFUSE_CLIENT_SECRET" -label google_drive -o allow_other /mnt/google_drive
 
 # Mount Google Drive on startup
 # Create gdfuse command
@@ -89,9 +90,9 @@ fusermount -u /mnt/google_drive
 mount -a
 
 # Setup Symbolic Link for task.md
-if [ ! -e $HOME/vimwiki/todo ]; then
-    mkdir -p $HOME/vimwiki/todo
+if [ ! -e "$HOME/vimwiki/todo" ]; then
+    mkdir -p "$HOME/vimwiki/todo"
 fi
-if [ ! -e $HOME/vimwiki/todo/task.md ]; then
-    ln -s /mnt/google_drive/vimwiki/data/todo/task.md $HOME/vimwiki/todo/task.md
+if [ ! -e "$HOME/vimwiki/todo/task.md" ]; then
+    ln -s /mnt/google_drive/vimwiki/data/todo/task.md "$HOME/vimwiki/todo/task.md"
 fi

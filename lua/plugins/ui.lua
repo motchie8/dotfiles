@@ -112,7 +112,8 @@ return {
 	-- highlight indent line
 	{
 		"shellRaining/hlchunk.nvim",
-		event = { "BufReadPre", "BufNewFile" },
+		-- event = { "BufReadPre", "BufNewFile" },
+		event = "VeryLazy",
 		opts = {
 			chunk = {
 				enable = true,

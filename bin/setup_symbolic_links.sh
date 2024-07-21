@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -eu
 
 cat /dev/null <<EOF
@@ -6,7 +6,8 @@ cat /dev/null <<EOF
 Source common functions and variables.
 ------------------------------------------------------------------------
 EOF
-source "$(dirname $(realpath $0))/common.sh"
+# source "$(dirname "$(realpath $0)")/common.sh"
+source "bin/common.sh"
 
 cat /dev/null <<EOF
 ------------------------------------------------------------------------
@@ -69,8 +70,20 @@ delete_symbolic_links() {
     done
 }
 
+setup_dir() {
+    if [ ! -e "$HOME/vimwiki/todo" ]; then
+        info_echo "**** Create directory for vimwiki for task management****"
+        mkdir -p "$HOME/vimwiki/todo"
+    fi
+    if [ ! -e "$HOME/vimwiki/aichat" ]; then
+        info_echo "**** Create directory for vim-ai****"
+        mkdir -p "$HOME/vimwiki/aichat"
+    fi
+}
+
 if [ "$DELETE_LINKS" = true ]; then
     delete_symbolic_links
 else
     setup_symbolic_links
+    setup_dir
 fi
