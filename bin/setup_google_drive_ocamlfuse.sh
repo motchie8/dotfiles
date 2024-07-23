@@ -34,10 +34,47 @@ fi
 
 cat /dev/null <<EOF
 ------------------------------------------------------------------------
+Parse arguments.
+------------------------------------------------------------------------
+EOF
+
+AUTHORIZE_AGAIN=false
+
+show_help() {
+    echo "Usage: ./bin/setup_google_drive_ocamlfuse.sh [-a]"
+    echo "  -a                    Authorize google drice access again"
+    echo "  -h                    Show this help message and exit"
+}
+
+while getopts "::ha" option; do
+    case "${option}" in
+        a) AUTHORIZE_AGAIN=true ;;
+        h)
+            show_help
+            exit 0
+            ;;
+        *)
+            show_help
+            exit 1
+            ;;
+    esac
+done
+
+cat /dev/null <<EOF
+------------------------------------------------------------------------
 Main functions.
 ------------------------------------------------------------------------
 EOF
 
+if [ "$AUTHORIZE_AGAIN" = true ]; then
+    info_echo "Authorize google-drive-ocamlfuse again"
+    rm -rf ~/.gdfuse/google_drive
+    google-drive-ocamlfuse -id "$GOOGLE_DRIVE_OCAMLFUSE_CLIENT_ID" -secret "$GOOGLE_DRIVE_OCAMLFUSE_CLIENT_SECRET" -label google_drive -o allow_other /mnt/google_drive
+    google-drive-ocamlfuse -o allow_other -label google_drive /mnt/google_drive
+    exit 0
+fi
+
+info_echo "Setup google-drive-ocamlfuse for the first time"
 # Install google-drive-ocamlfuse
 sudo apt install software-properties-common -y
 # for stable version
@@ -70,6 +107,7 @@ sudo chmod 777 /mnt/google_drive
 
 # Mount Google Drive for the first time
 google-drive-ocamlfuse -id "$GOOGLE_DRIVE_OCAMLFUSE_CLIENT_ID" -secret "$GOOGLE_DRIVE_OCAMLFUSE_CLIENT_SECRET" -label google_drive -o allow_other /mnt/google_drive
+google-drive-ocamlfuse -o allow_other -label google_drive /mnt/google_drive
 
 # Mount Google Drive on startup
 # Create gdfuse command

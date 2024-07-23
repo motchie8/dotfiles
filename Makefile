@@ -42,6 +42,9 @@ lint:
 test:
 	act -P ubuntu-latest=catthehacker/ubuntu:act-latest -W .github/workflows/build_and_push_docker_image.yml
 
+auth-gdrive:
+	./bin/setup_google_drive_ocamlfuse.sh -a
+
 clean:	
 	for rcfile_name in zlogin zlogout zpreztorc zprofile zshenv; do \
         if [ -L "$$HOME/.$$rcfile_name" ]; then \
@@ -56,4 +59,4 @@ clean:
 	rm -rf build
 	./bin/setup_symbolic_links.sh -d
 
-.PHONY: install install-from-source install-by-package-manager install-base-from-source install-base-by-package-manager install-taskwarrior-from-source install-taskwarrior-by-package-manager install-tasksync install-google-drive-fuse build build-docker-image-build-from-source build-docker-image-using-package-manager lint test clean install-taskwarrior
+.PHONY: install install-from-source install-by-package-manager install-base-from-source install-base-by-package-manager install-taskwarrior-from-source install-taskwarrior-by-package-manager install-tasksync install-google-drive-fuse build build-docker-image-build-from-source build-docker-image-using-package-manager lint test clean install-taskwarrior auth-gdrive
