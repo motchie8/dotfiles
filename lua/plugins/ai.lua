@@ -5,8 +5,8 @@ return {
 		event = "VeryLazy",
 		config = function()
 			-- load default configs from environment variables
-			local model = os.getenv("OPENAI_API_MODEL") or "gpt-4"
-			local endpoint_url = os.getenv("OPENAI_API_ENDPOINT_URL") or "https://api.openai.com/v1/chat/completions"
+			local model = os.getenv("OPENAI_API_MODEL")
+			local endpoint_url = os.getenv("OPENAI_API_ENDPOINT_URL")
 
 			local initial_chat_prompt = [[
             >>> system
@@ -143,6 +143,108 @@ return {
 					require("CopilotChat").ask(input, { selection = require("CopilotChat.select").buffer })
 				end
 			end, {})
+		end,
+	},
+	-- Emulate the behaviour of the Cursor AI IDE
+	{
+		"yetone/avante.nvim",
+		event = "VeryLazy",
+		lazy = false,
+		version = false, -- set this if you want to always pull the latest change
+		opts = {
+			-- add any opts here
+		},
+		-- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+		build = "make",
+		-- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter",
+			"stevearc/dressing.nvim",
+			"nvim-lua/plenary.nvim",
+			"MunifTanjim/nui.nvim",
+			--- The below dependencies are optional,
+			"nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+			-- "zbirenbaum/copilot.lua", -- for providers='copilot'
+			{
+				-- support for image pasting
+				-- "HakonHarnes/img-clip.nvim",
+				-- event = "VeryLazy",
+				-- opts = {
+				-- 	-- recommended settings
+				-- 	default = {
+				-- 		embed_image_as_base64 = false,
+				-- 		prompt_for_file_name = false,
+				-- 		drag_and_drop = {
+				-- 			insert_mode = true,
+				-- 		},
+				-- 		-- required for Windows users
+				-- 		use_absolute_path = true,
+				-- 	},
+				-- },
+			},
+			{
+				-- Make sure to set this up properly if you have lazy=true
+				"MeanderingProgrammer/render-markdown.nvim",
+				opts = {
+					file_types = { "markdown", "Avante" },
+				},
+				ft = { "markdown", "Avante" },
+			},
+		},
+		mappings = {
+			--- @class AvanteConflictMappings
+			diff = {
+				ours = "co",
+				theirs = "ct",
+				all_theirs = "ca",
+				both = "cb",
+				cursor = "cc",
+				next = "]x",
+				prev = "[x",
+			},
+			suggestion = {
+				accept = "<M-l>",
+				next = "<M-]>",
+				prev = "<M-[>",
+				dismiss = "<C-]>",
+			},
+			jump = {
+				next = "]]",
+				prev = "[[",
+			},
+			submit = {
+				normal = "<CR>",
+				insert = "<C-s>",
+			},
+			sidebar = {
+				switch_windows = "<Tab>",
+				reverse_switch_windows = "<S-Tab>",
+			},
+		},
+		windows = {
+			width = 40, -- default % based on available width
+		},
+		config = function()
+			local provider = os.getenv("AVANTE_PROVIDER")
+			local auto_suggestions_provider = os.getenv("AVANTE_AUTO_SUGGESTIONS_PROVIDER") or "copilot"
+			local azure_endpoint = os.getenv("AZURE_ENDPOINT")
+			local azure_deployment = os.getenv("AZURE_DEPLOYMENT_NAME")
+			require("avante").setup({
+				provider = provider,
+				auto_suggestions_provider = auto_suggestions_provider,
+				behaviour = {
+					auto_suggestions = false, -- Experimental stage and may need much cost
+				},
+				azure = {
+					endpoint = azure_endpoint,
+					deployment = azure_deployment,
+					api_version = "2024-06-01",
+					timeout = 30000, -- Timeout in milliseconds
+					temperature = 0,
+					max_tokens = 4096,
+					["local"] = false,
+				},
+			})
 		end,
 	},
 }

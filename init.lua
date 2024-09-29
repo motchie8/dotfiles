@@ -27,7 +27,9 @@ api.nvim_set_keymap("n", "<S-l>", "$", { noremap = true })
 -- ## normal mode ##
 api.nvim_set_keymap("n", ";", ":", { noremap = true })
 -- delete without yanking
-api.nvim_set_keymap("n", "d", '"_d', { noremap = true })
+api.nvim_set_keymap("n", "x", '"_d', { noremap = true })
+api.nvim_set_keymap("n", "X", '"_D', { noremap = true })
+api.nvim_set_keymap("o", "x", "d", { noremap = true })
 -- move cursor
 api.nvim_set_keymap("n", "s", "<Nop>", { noremap = true })
 api.nvim_set_keymap("n", "sj", "<C-w>j", { noremap = true })
@@ -39,8 +41,6 @@ api.nvim_set_keymap("n", "sJ", "<C-w>J", { noremap = true })
 api.nvim_set_keymap("n", "sK", "<C-w>K", { noremap = true })
 api.nvim_set_keymap("n", "sH", "<C-w>H", { noremap = true })
 api.nvim_set_keymap("n", "sL", "<C-w>L", { noremap = true })
--- api.nvim_set_keymap("n", "sw", "<C-w>_<C-w>|", { noremap = true })
--- api.nvim_set_keymap("n", "sW", "<C-w>", { noremap = true })
 -- buffer operations
 api.nvim_set_keymap("n", "<Leader>bp", "<Cmd>bprevious<CR>", { noremap = true })
 api.nvim_set_keymap("n", "<Leader>bn", "<Cmd>bnext<CR>", { noremap = true })
@@ -48,14 +48,25 @@ api.nvim_set_keymap("n", "<Leader>bb", "<Cmd>b#<CR>", { noremap = true })
 api.nvim_set_keymap("n", "<Leader>bd", "<Cmd>bdelete<CR>", { noremap = true })
 -- search and replace
 api.nvim_set_keymap("n", "<Leader>F", [["zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>]], { noremap = true })
---api.nvim_set_keymap("n", "<Leader>R", [[<Leader>f:%s/<C-r>///g<Left><Left>]], { noremap = false })
-vim.keymap.set("x", "<leader>R", 'y:%s/<C-r><C-r>"//g<Left><Left>')
 vim.keymap.set("n", "<leader>R", 'yiw:%s/<C-r><C-r>"//g<Left><Left>')
 api.nvim_set_keymap("n", "<Esc><Esc>", "<Cmd>set nohlsearch!<CR>", { noremap = true })
 api.nvim_set_keymap("n", "/", "/\\v", { noremap = false })
 -- copy current file path
 api.nvim_set_keymap("n", "<Leader>Y", "<Cmd>:let @+=expand('%:p')<CR>", { noremap = true })
 api.nvim_set_keymap("n", "cp", "<Cmd>:let @+=expand('%:p')<CR>", { noremap = true })
+-- text object
+api.nvim_set_keymap("n", "i<space>", "iW", { noremap = true })
+api.nvim_set_keymap("n", "a<space>", "aW", { noremap = true })
+-- redo
+api.nvim_set_keymap("n", "U", "<C-r>", { noremap = true })
+-- remap %
+api.nvim_set_keymap("n", "M", "%", { noremap = false })
+-- paste with indent
+api.nvim_set_keymap("n", "p", "p`]", { noremap = true })
+api.nvim_set_keymap("n", "P", "P`[", { noremap = true })
+-- jump to next/previous paragraph
+api.nvim_set_keymap("n", "<C-j>", "}", { noremap = true })
+api.nvim_set_keymap("n", "<C-k>", "{", { noremap = true })
 
 -- ## visual mode ##
 -- move cursor
@@ -63,6 +74,20 @@ api.nvim_set_keymap("x", "<S-h>", "^", { noremap = true })
 api.nvim_set_keymap("x", "<S-l>", "$", { noremap = true })
 -- paste without yanking
 api.nvim_set_keymap("x", "p", '"_xP', { noremap = true })
+-- delete without yanking
+api.nvim_set_keymap("x", "x", '"_x', { noremap = true })
+-- replace
+vim.keymap.set("x", "<leader>R", 'y:%s/<C-r><C-r>"//g<Left><Left>')
+-- text object
+api.nvim_set_keymap("x", "i<space>", "iW", { noremap = true })
+-- yank without moving cursor
+api.nvim_set_keymap("x", "y", "mzy`z", { noremap = true })
+-- indent
+api.nvim_set_keymap("x", "<", "<gv", { noremap = true })
+api.nvim_set_keymap("x", ">", ">gv", { noremap = true })
+-- move line
+-- api.nvim_set_keymap("x", "<C-j>", ":move'>+1<CR>gv=gv", { noremap = true })
+-- api.nvim_set_keymap("x", "<C-k>", ":move'<-2<CR>gv=gv", { noremap = true })
 
 -- ## terminal mode ##
 api.nvim_set_keymap("t", "<esc>", [[<C-\><C-n>]], { noremap = true })
@@ -118,7 +143,8 @@ opt.errorbells = false
 
 -- other settings
 opt.cmdheight = 2
-opt.laststatus = 2
+-- [avante.nvim] views can only be fully collapsed with the global statusline
+opt.laststatus = 3
 
 -- clipboard
 opt.clipboard:append("unnamedplus")

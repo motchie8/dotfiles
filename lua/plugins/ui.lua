@@ -16,7 +16,7 @@ return {
 		},
 		keys = {
 			{
-				"<leader>a",
+				"<leader>A",
 				"<cmd>AerialToggle!<cr>",
 				desc = "Toggle Aerial",
 			},
@@ -31,7 +31,7 @@ return {
 				end,
 			})
 			-- set a keymap to toggle aerial
-			vim.keymap.set("n", "<leader>a", "<cmd>AerialToggle!<CR>")
+			vim.keymap.set("n", "<leader>A", "<cmd>AerialToggle!<CR>")
 		end,
 	},
 	-- Show matched information
