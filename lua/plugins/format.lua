@@ -1,7 +1,7 @@
 return {
 	{
 		"sbdchd/neoformat",
-		build = '[ -e "$HOME/.local/share/nvim/lazy/neoformat/autoload/neoformat/formatters/dbt.vim" ] || mkdir -p "$HOME/.local/share/nvim/lazy/neoformat/autoload/neoformat/formatters/" && ln -s "$HOME/dotfiles/vim/autoload/neoformat/formatters/dbt.vim" "$HOME/.local/share/nvim/lazy/neoformat/autoload/neoformat/formatters/dbt.vim"',
+		build = '[ ! -e "$HOME/.local/share/nvim/lazy/neoformat/autoload/neoformat/formatters/dbt.vim" ] && mkdir -p "$HOME/.local/share/nvim/lazy/neoformat/autoload/neoformat/formatters" && ln -s "$HOME/dotfiles/vim/autoload/neoformat/formatters/dbt.vim" "$HOME/.local/share/nvim/lazy/neoformat/autoload/neoformat/formatters/dbt.vim" || :',
 		config = function()
 			vim.api.nvim_create_user_command("EnableNeoFormat", function()
 				local id = vim.api.nvim_create_augroup("neofmt", {})
@@ -16,7 +16,7 @@ return {
 			end, {})
 			vim.api.nvim_command("EnableNeoFormat")
 			-- for zsh
-			vim.api.nvim_set_var("shfmt_opt", "-ci")
+			vim.api.nvim_set_var("shfmt_opt", "-ci --indent 4")
 			-- for markdown
 			vim.api.nvim_set_keymap(
 				"n",

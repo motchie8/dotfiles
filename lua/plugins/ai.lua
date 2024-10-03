@@ -7,6 +7,7 @@ return {
 			-- load default configs from environment variables
 			local model = os.getenv("OPENAI_API_MODEL")
 			local endpoint_url = os.getenv("OPENAI_API_ENDPOINT_URL")
+			local default_role = os.getenv("VIM_AI_DEFAULT_ROLE") or ""
 
 			local initial_chat_prompt = [[
             >>> system
@@ -18,7 +19,7 @@ return {
 			vim.g.vim_ai_chat = {
 				options = {
 					model = model,
-					endpont_url = endpoint_url,
+					endpoint_url = endpoint_url,
 					max_tokens = 1000,
 					temperature = 1,
 					request_timeout = 20,
@@ -112,6 +113,9 @@ return {
 			end, {})
 			vim.api.nvim_set_keymap("n", "Te", "<Cmd>AIEdit translate into english<CR>", { noremap = true })
 			vim.api.nvim_set_keymap("x", "Te", "<Cmd>AIEdit translate into english<CR>", { noremap = true })
+			vim.api.nvim_create_user_command("AIC", function()
+				vim.cmd("AIChat" .. default_role)
+			end, {})
 		end,
 	},
 	-- Copilot
