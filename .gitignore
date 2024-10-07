@@ -17,3 +17,5 @@ node_modules/
 neovim/
 devcontainer/
 build/
+config/lite-llm-config.yaml
+config/vim-ai-roles.ini

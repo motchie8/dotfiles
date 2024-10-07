@@ -7,7 +7,7 @@ return {
 			-- load default configs from environment variables
 			local model = os.getenv("OPENAI_API_MODEL")
 			local endpoint_url = os.getenv("OPENAI_API_ENDPOINT_URL")
-			local default_role = os.getenv("VIM_AI_DEFAULT_ROLE") or ""
+			local default_role = os.getenv("VIM_AI_DEFAULT_ROLE")
 
 			local initial_chat_prompt = [[
             >>> system
@@ -114,7 +114,11 @@ return {
 			vim.api.nvim_set_keymap("n", "Te", "<Cmd>AIEdit translate into english<CR>", { noremap = true })
 			vim.api.nvim_set_keymap("x", "Te", "<Cmd>AIEdit translate into english<CR>", { noremap = true })
 			vim.api.nvim_create_user_command("AIC", function()
-				vim.cmd("AIChat" .. default_role)
+				if default_role == nil or default_role == "" then
+					vim.cmd("AIChat")
+				else
+					vim.cmd("AIChat /" .. default_role)
+				end
 			end, {})
 		end,
 	},
