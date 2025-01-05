@@ -543,6 +543,32 @@ install_shellcheck() {
     fi
 }
 
+install_vhs() {
+    if ! type vhs >/dev/null 2>&1; then
+        info_echo "**** Install vhs ****"
+        if [ "$OS" = "$MAC_OS" ]; then
+            brew install vhs ttyd ffmpeg
+        elif [ "$OS" = "$UBUNTU" ]; then
+            # install vhs
+            go install github.com/charmbracelet/vhs@latest
+            # install dependencies for vhs
+            sudo apt install ffmpeg -y
+            if [ "$ARCH" == "arm64" ]; then
+                suffix="arm"
+            elif [ "$ARCH" == "aarch64" ]; then
+                suffix="arm64"
+            else
+                suffix="x86_64"
+            fi
+            version="1.7.7"
+            wget https://github.com/tsl0922/ttyd/releases/download/${version}/ttyd.${suffix} -O "$HOME"/bin/ttyd
+            chmod +x "$HOME"/bin/ttyd
+        else
+            exit_with_unsupported_os
+        fi
+    fi
+}
+
 cat /dev/null <<EOF
 ------------------------------------------------------------------------
 Installation steps
@@ -592,5 +618,7 @@ install_devcontainer_cli
 install_lua_language_server
 
 install_shellcheck
+
+install_vhs
 
 info_echo "**** Installation succeeded ****"
