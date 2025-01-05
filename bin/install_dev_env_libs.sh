@@ -141,7 +141,7 @@ install_anyenv_and_env_libs() {
 install_python() {
     # create envs and install python versions for neovim by pyenv-virtualenv
     PYTHON2_VERSION=2.7.18
-    PYTHON3_VERSION=3.10.11
+    PYTHON3_VERSION=3.12.8
     PYTHON_VERSIONS=("$PYTHON2_VERSION" "$PYTHON3_VERSION")
     NEOVIM_VIRTUAL_ENVS=("neovim2" "neovim3")
     i=0
@@ -424,10 +424,16 @@ install_gcloud_cli() {
         if [ "$OS" = "$MAC_OS" ]; then
             brew install --cask google-cloud-sdk
         elif [ "$OS" = "$UBUNTU" ]; then
-            sudo apt-get install -y apt-transport-https ca-certificates gnupg curl sudo
-            echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-            curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
-            sudo apt-get update && sudo apt-get install -y google-cloud-cli
+            if [ "$ARCH" == "arm64" ] || [ "$ARCH" == "aarch64" ]; then
+                # NOTE: currently, gcloud CLI is not available for arm64 ubuntu
+                # > 以下のパッケージには満たせない依存関係があります: google-cloud-cli : 依存: python3 (< 3.12) しかし、3.12.3-0ubuntu2 はインストールされようとしています: 問題を解決することができません。壊れた変更禁止パッケージがあります。
+                info_echo "Currently, gcloud CLI is not available for arm64 Linux. So skip installation."
+            else
+                sudo apt-get install -y apt-transport-https ca-certificates gnupg curl sudo
+                echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+                curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+                sudo apt-get update && sudo apt-get install -y google-cloud-cli
+            fi
             # NOTE: init gcloud CLI by running `gcloud init`
         else
             exit_with_unsupported_os
