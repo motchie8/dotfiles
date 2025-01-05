@@ -27,6 +27,7 @@ api.nvim_set_keymap("n", "<S-l>", "$", { noremap = true })
 -- ## normal mode ##
 api.nvim_set_keymap("n", ";", ":", { noremap = true })
 -- delete without yanking
+api.nvim_set_keymap("n", "d", '"_d', { noremap = true })
 api.nvim_set_keymap("n", "x", '"_d', { noremap = true })
 api.nvim_set_keymap("n", "X", '"_D', { noremap = true })
 api.nvim_set_keymap("o", "x", "d", { noremap = true })
@@ -54,9 +55,6 @@ api.nvim_set_keymap("n", "/", "/\\v", { noremap = false })
 -- copy current file path
 api.nvim_set_keymap("n", "<Leader>Y", "<Cmd>:let @+=expand('%:p')<CR>", { noremap = true })
 api.nvim_set_keymap("n", "cp", "<Cmd>:let @+=expand('%:p')<CR>", { noremap = true })
--- text object
-api.nvim_set_keymap("n", "i<space>", "iW", { noremap = true })
-api.nvim_set_keymap("n", "a<space>", "aW", { noremap = true })
 -- redo
 api.nvim_set_keymap("n", "U", "<C-r>", { noremap = true })
 -- remap %
