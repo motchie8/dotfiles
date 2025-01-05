@@ -559,10 +559,8 @@ install_vhs() {
             go install github.com/charmbracelet/vhs@latest
             # install dependencies for vhs
             sudo apt install ffmpeg -y
-            if [ "$ARCH" == "arm64" ]; then
-                suffix="arm"
-            elif [ "$ARCH" == "aarch64" ]; then
-                suffix="arm64"
+            if [ "$ARCH" == "arm64" ] || [ "$ARCH" == "aarch64" ]; then
+                suffix="aarch64"
             else
                 suffix="x86_64"
             fi
