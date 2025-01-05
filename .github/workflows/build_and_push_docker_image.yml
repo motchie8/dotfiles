@@ -19,9 +19,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform:
-          - linux/amd64
-          - linux/arm64
+        os: [linux]
+        arch: [amd64, arm64]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -44,12 +43,12 @@ jobs:
         uses: docker/build-push-action@v4
         env:
           CICD_FLAG: "1"
-          CICD_PLATFORM: ${{ matrix.platform }}
+          CICD_PLATFORM: ${{ matrix.os }}/${{ matrix.arch }}
         with:
           context: ./
           build-args: |
             BUILD_FROM_SOURCE=false
-          platforms: ${{ matrix.platform }}
+          platforms: ${{ matrix.os }}/${{ matrix.arch }}
           labels: ${{ steps.meta.outputs.labels }}
           file: docker/ubuntu/Dockerfile
           outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
@@ -61,7 +60,7 @@ jobs:
       - name: Upload digest
         uses: actions/upload-artifact@v4
         with:
-          name: digests-${{ replace(matrix.platform, '/', '-') }}
+          name: digests-${{ matrix.os }}-${{ matrix.arch }}
           path: /tmp/digests/*
           if-no-files-found: error
           retention-days: 1
