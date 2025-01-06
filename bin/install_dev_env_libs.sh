@@ -132,9 +132,14 @@ install_anyenv_and_env_libs() {
         eval "$(anyenv init -)"
     fi
     if [ ! -e "$(pyenv root)"/plugins/pyenv-virtualenv ]; then
-        info_echo "**** Install pyenv virtualenv****"
+        info_echo "**** Install pyenv virtualenv ****"
         git clone --depth 1 https://github.com/pyenv/pyenv-virtualenv.git "$(pyenv root)"/plugins/pyenv-virtualenv
         eval "$(pyenv virtualenv-init -)"
+    fi
+    if [ ! -e "$(anyenv root)"/plugins/anyenv-update ]; then
+        info_echo "**** Install anyenv-update ****"
+        mkdir -p $(anyenv root)/plugins
+        git clone https://github.com/znz/anyenv-update.git $(anyenv root)/plugins/anyenv-update
     fi
 }
 
@@ -410,7 +415,6 @@ install_terraform_libs() {
 install_nerd_fonts() {
     info_echo "**** Install nerd fonts ****"
     if [ "$OS" = "$MAC_OS" ]; then
-        brew tap homebrew/cask-fonts
         brew install --cask font-roboto-mono-nerd-font
     fi
     # NOTE: install RobotMono Nerd Font for WSL manually

@@ -70,11 +70,16 @@ jobs:
       - build
     environment:
       name: prod
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [linux]
+        arch: [amd64, arm64]
     steps:
       - name: Download digests
         uses: actions/download-artifact@v4
         with:
-          name: digests
+          name: digests-${{ matrix.os }}-${{ matrix.arch }}
           path: /tmp/digests
       - name: Docker meta
         id: meta
