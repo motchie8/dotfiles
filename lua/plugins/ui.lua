@@ -22,10 +22,12 @@ return {
 
 			-- Set menu
 			dashboard.section.buttons.val = {
+				dashboard.button("d", "  > Diary", ":cd $HOME/vimwiki | VimwikiMakeDiaryNote <CR>"),
+				dashboard.button("a", "  > AIChat", ":AISavingChat<CR>"),
+				dashboard.button("s", "  > Settings", ":cd $HOME/dotfiles | :e init.lua<CR>"),
+				dashboard.button("r", "  > Recent", ":Telescope oldfiles<CR>"),
 				dashboard.button("e", "  > New file", ":ene <BAR> startinsert <CR>"),
 				dashboard.button("f", "  > Find file", ":cd $HOME/vimwiki | Telescope find_files<CR>"),
-				dashboard.button("r", "  > Recent", ":Telescope oldfiles<CR>"),
-				dashboard.button("s", "  > Settings", ":e $MYVIMRC | :cd %:p:h | split . | wincmd k | pwd<CR>"),
 				dashboard.button("q", "  > Quit NVIM", ":qa<CR>"),
 			}
 			-- Send config to alpha
