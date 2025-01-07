@@ -10,19 +10,23 @@ return {
             ]])
 			vim.api.nvim_set_var("vimwiki_list", {
 				{
-					path = "~/vimwiki",
+					path = "~/vimwiki/diary",
 					syntax = "markdown",
 					ext = "md",
-					auto_tags = 1,
 					auto_diary_index = 1,
-					auto_generate_tags = 1,
+					auto_toc = 1,
+				},
+				{
+					path = "~/vimwiki/todo",
+					syntax = "markdown",
+					ext = "md",
 					auto_toc = 1,
 				},
 			})
 			vim.api.nvim_set_var("vimwiki_global_ext", 1)
 			vim.api.nvim_set_var("vimwiki_markdown_link_ext", 1)
 			vim.api.nvim_set_var("taskwiki_markup_syntax", "markdown")
-			vim.api.nvim_set_var("markdown_folding", 1)
+			vim.api.nvim_set_var("markdown_folding", 0)
 
 			-- register markdown files to vimwiki
 			vim.api.nvim_set_var("vimwiki_filetypes", { "markdown" })

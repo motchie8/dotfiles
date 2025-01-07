@@ -1,10 +1,9 @@
 return {
-	-- Top page to edit most recently used files
+	-- Top page for nvim
 	{
 		"goolord/alpha-nvim",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		config = function()
-			-- require("alpha").setup(require("alpha.themes.startify").config)
 			local alpha = require("alpha")
 			local dashboard = require("alpha.themes.dashboard")
 
@@ -24,11 +23,11 @@ return {
 			dashboard.section.buttons.val = {
 				dashboard.button("d", "  > Diary", ":cd $HOME/vimwiki | VimwikiMakeDiaryNote <CR>"),
 				dashboard.button("a", "  > AIChat", ":AISavingChat<CR>"),
-				dashboard.button("s", "  > Settings", ":cd $HOME/dotfiles | :e init.lua<CR>"),
+				dashboard.button("c", "  > Config", ":cd $HOME/dotfiles | :e init.lua<CR>"),
 				dashboard.button("r", "  > Recent", ":Telescope oldfiles<CR>"),
+				dashboard.button("f", "  > Find files", ":cd $HOME/vimwiki | Telescope live_grep<CR>"),
 				dashboard.button("e", "  > New file", ":ene <BAR> startinsert <CR>"),
-				dashboard.button("f", "  > Find file", ":cd $HOME/vimwiki | Telescope find_files<CR>"),
-				dashboard.button("q", "  > Quit NVIM", ":qa<CR>"),
+				dashboard.button("q", "  > Quit", ":qa<CR>"),
 			}
 			-- Send config to alpha
 			alpha.setup(dashboard.opts)

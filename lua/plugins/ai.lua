@@ -8,25 +8,33 @@ return {
 			vim.g.vim_ai_roles_config_file = "~/dotfiles/config/vim-ai-roles.ini"
 
 			-- Open new chat with conversation saving
-			vim.api.nvim_create_user_command("AISavingChat", function()
+			vim.api.nvim_create_user_command("AISavingChat", function(opts)
 				local chat_file_path = "~/vimwiki/aichat/"
 				local unique_id = vim.fn.system("uuidgen")
 				local timestamp = os.date("%Y-%m-%d_%H%M%S")
 				local aichat_filename = timestamp .. "_" .. string.sub(unique_id, 1, 8) .. ".aichat"
-				vim.cmd("AIChat")
+				local default_role = "/below"
+				if opts ~= nil then
+					local predefined_role = opts[1]
+					vim.cmd("AIChat " .. predefined_role)
+				else
+					vim.cmd("AIChat" .. default_role)
+				end
 				vim.bo.buftype = ""
 				vim.cmd("saveas " .. chat_file_path .. aichat_filename)
-			end, {})
+			end, { nargs = "?" })
 
 			-- Continue chat. If default role is set, use it.
-			vim.api.nvim_create_user_command("AIC", function()
+			vim.api.nvim_create_user_command("AIC", function(opts)
 				local default_role = os.getenv("VIM_AI_DEFAULT_ROLE")
-				if default_role == nil or default_role == "" then
-					vim.cmd("AIChat")
-				else
+				if opts ~= nil then
+					vim.cmd("AIChat " .. opts[1])
+				elseif default_role ~= nil and default_role ~= "" then
 					vim.cmd("AIChat /" .. default_role)
+				else
+					vim.cmd("AIChat")
 				end
-			end, {})
+			end, { nargs = "?" })
 
 			-- Open new chat including the current buffer
 			vim.api.nvim_create_user_command("AIIncludingChat", function()
@@ -56,6 +64,10 @@ return {
 			local function is_litellm_running()
 				local handle = io.popen("ps aux | grep '[l]itellm'")
 				-- if handle is nil, then litellm is not running
+				-- check if the result is not empty
+				if handle == nil then
+					return false
+				end
 				local result = handle:read("*a")
 				handle:close()
 				return result ~= ""
@@ -200,7 +212,6 @@ return {
 					timeout = 30000, -- Timeout in milliseconds
 					temperature = 0,
 					max_tokens = 4096,
-					["local"] = false,
 				},
 			})
 		end,
