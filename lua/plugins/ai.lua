@@ -14,8 +14,9 @@ return {
 				local timestamp = os.date("%Y-%m-%d_%H%M%S")
 				local aichat_filename = timestamp .. "_" .. string.sub(unique_id, 1, 8) .. ".aichat"
 				local default_role = "/below"
-				if opts ~= nil then
-					local predefined_role = opts[1]
+				local args = opts.args
+				if args ~= nil and args ~= "" then
+					local predefined_role = args[1]
 					vim.cmd("AIChat " .. predefined_role)
 				else
 					vim.cmd("AIChat" .. default_role)
@@ -27,8 +28,9 @@ return {
 			-- Continue chat. If default role is set, use it.
 			vim.api.nvim_create_user_command("AIC", function(opts)
 				local default_role = os.getenv("VIM_AI_DEFAULT_ROLE")
-				if opts ~= nil then
-					vim.cmd("AIChat " .. opts[1])
+				local args = opts.args
+				if args ~= nil and args ~= "" then
+					vim.cmd("AIChat " .. args[1])
 				elseif default_role ~= nil and default_role ~= "" then
 					vim.cmd("AIChat /" .. default_role)
 				else

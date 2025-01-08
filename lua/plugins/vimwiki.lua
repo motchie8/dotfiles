@@ -10,16 +10,10 @@ return {
             ]])
 			vim.api.nvim_set_var("vimwiki_list", {
 				{
-					path = "~/vimwiki/diary",
+					path = "~/vimwiki",
 					syntax = "markdown",
 					ext = "md",
 					auto_diary_index = 1,
-					auto_toc = 1,
-				},
-				{
-					path = "~/vimwiki/todo",
-					syntax = "markdown",
-					ext = "md",
 					auto_toc = 1,
 				},
 			})
