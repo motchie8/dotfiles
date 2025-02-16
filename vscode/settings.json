@@ -1,39 +1,41 @@
 {
-  "files.autoSave": "afterDelay",
-  "editor.wordWrap": "on",
-  "editor.minimap.enabled": false,
-  "editor.insertSpaces": true,
-  "editor.tabSize": 4,
-  "editor.fontSize": 13,
-  "editor.renderWhitespace": "selection",
-  "editor.formatOnSave": true,
   "breadcrumbs.enabled": true,
+  "dbt.dbtPythonPathOverride": "$HOME/.anyenv/envs/pyenv/versions/dbt/bin/python",
+  "debug.inlineValues": "on",
+  "editor.fontFamily": "'RobotoMono Nerd Font'",
+  "editor.fontSize": 14,
+  "editor.fontVariations": false,
+  "editor.formatOnSave": true,
+  "editor.insertSpaces": true,
+  "editor.inlineSuggest.enabled": true,
+  "editor.minimap.enabled": false,
+  "editor.renderWhitespace": "none",
+  "editor.tabSize": 4,
+  "editor.wordWrap": "on",
+  "explorer.openEditors.visible": 5,
   "files.autoGuessEncoding": true,
+  "files.autoSave": "afterDelay",
   "files.trimFinalNewlines": true,
   "files.trimTrailingWhitespace": true,
-  "workbench.editor.labelFormat": "short",
-  "workbench.editor.revealIfOpen": false,
-  "workbench.editor.showIcons": true,
-  "workbench.editor.highlightModifiedTabs": true,
-  "workbench.editor.tabSizing": "shrink",
-  "workbench.editor.tabCloseButton": "off",
-  "workbench.startupEditor": "none",
-  "workbench.editor.openPositioning": "first",
-  "explorer.openEditors.visible": 0,
-  "workbench.editor.showTabs": "single",
-  "workbench.editor.enablePreview": true,
-  "workbench.editor.enablePreviewFromQuickOpen": true,
-  "debug.inlineValues": "on",
-  "window.zoomLevel": 1,
+  "git.autofetch": true,
+  "git.openRepositoryInParentFolders": "always",
+  "security.workspace.trust.untrustedFiles": "open",
+  "terminal.integrated.allowChords": true,
+  "terminal.integrated.commandsToSkipShell": [
+    "workbench.view.explorer",
+    "actions.findWithSelection",
+    "workbench.view.explorer"
+  ],
+  "terminal.integrated.confirmOnExit": "always",
   "terminal.integrated.copyOnSelection": false,
-  "vim.useSystemClipboard": true,
-  "vim.hlsearch": true,
+  "terminal.integrated.defaultProfile.windows": "Ubuntu-20.04 (WSL)",
+  "terminal.integrated.fontFamily": "'RobotoMono Nerd Font'",
+  "terminal.integrated.fontLigatures.enabled": true,
+  "terminal.integrated.fontSize": 14,
   "vim.easymotion": true,
-  "vim.visualstar": true,
-  "vim.useCtrlKeys": true,
+  "vim.hlsearch": true,
   "vim.ignorecase": true,
   "vim.incsearch": true,
-  "vim.sneak": true,
   "vim.insertModeKeyBindings": [
     {
       "before": [
@@ -216,6 +218,9 @@
       ]
     }
   ],
+  "vim.sneak": true,
+  "vim.useCtrlKeys": true,
+  "vim.useSystemClipboard": true,
   "vim.visualModeKeyBindings": [
     {
       "before": [
@@ -234,17 +239,26 @@
       ]
     }
   ],
-  "git.autofetch": true,
+  "vim.visualstar": true,
+  "window.confirmSaveUntitledWorkspace": false,
+  "window.zoomLevel": 1,
+  "workbench.colorTheme": "Iceberg",
+  "workbench.editor.enablePreview": true,
+  "workbench.editor.enablePreviewFromQuickOpen": true,
+  "workbench.editor.highlightModifiedTabs": true,
+  "workbench.editor.labelFormat": "short",
+  "workbench.editor.openPositioning": "first",
+  "workbench.editor.revealIfOpen": false,
+  "workbench.editor.showIcons": true,
+  "workbench.editor.showTabs": "single",
+  "workbench.editor.tabActionCloseVisibility": false,
+  "workbench.editor.tabCloseButton": "off",
+  "workbench.editor.tabSizing": "shrink",
+  "workbench.startupEditor": "terminal",
   "[json]": {
     "editor.quickSuggestions": {
       "strings": true
     },
     "editor.suggest.insertMode": "replace"
-  },
-  "security.workspace.trust.untrustedFiles": "open",
-  "workbench.colorTheme": "Iceberg",
-  "editor.inlineSuggest.enabled": true,
-  "terminal.integrated.confirmOnExit": "always",
-  "terminal.integrated.defaultProfile.windows": "Ubuntu-20.04 (WSL)",
-  "workbench.editor.tabActionCloseVisibility": false,
+  }
 }

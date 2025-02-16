@@ -1,13 +1,20 @@
-// Place your key bindings in this file to override the defaults
 [
-  //{
-  //    "key": "s l",
-  //    "command": "workbench.action.focusActiveEditorGroup",
-  //    "when": "filesExplorerFocus"
-  //},
   {
     "key": "ctrl+s",
     "command": "workbench.action.navigateUp",
     "when": "terminalFocus"
+  },
+  {
+    "key": "ctrl+b",
+    "command": "workbench.action.nextEditor"
+  },
+  {
+    "key": "ctrl+f",
+    "command": "workbench.action.focusActiveEditorGroup",
+    "when": "filesExplorerFocus"
+  },
+  {
+    "key": "ctrl+t",
+    "command": "workbench.view.explorer"
   }
 ]

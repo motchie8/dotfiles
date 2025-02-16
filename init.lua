@@ -134,6 +134,7 @@ opt.sidescroll = 1
 -- blank
 opt.backspace = { "indent", "eol", "start" }
 opt.list = true
+opt.listchars = { tab = "▸ ", extends = ">", precedes = "<", nbsp = "+" }
 
 -- sourd
 opt.visualbell = false

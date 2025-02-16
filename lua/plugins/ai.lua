@@ -6,6 +6,31 @@ return {
 		config = function()
 			-- Custom roles file location
 			vim.g.vim_ai_roles_config_file = "~/dotfiles/config/vim-ai-roles.ini"
+			local default_model = os.getenv("VIM_AI_DEFAULT_MODEL") or "azure"
+			local default_endpoint = os.getenv("VIM_AI_DEFAULT_ENDPOINT") or "http://0.0.0.0:4000/chat/completions"
+
+			local default_complete_prompt =
+				"You are an agent with knowledge of software engineering. Generate consise commands to realize the content asked. Do not provide any explanation or comments. If you answer in a code, do not wrap it in code block."
+			vim.g.vim_ai_complete = {
+				prompt = "",
+				engine = "chat",
+				options = {
+					model = default_model,
+					endpoint_url = default_endpoint,
+					max_tokens = 0,
+					max_completion_tokens = 0,
+					temperature = 1.0,
+					request_timeout = 20,
+					stream = 1,
+					enable_auth = 0,
+					token_file_path = "",
+					selection_boundary = "#####",
+					initial_prompt = default_complete_prompt,
+				},
+				ui = {
+					paste_mode = 1,
+				},
+			}
 
 			-- Open new chat with conversation saving
 			vim.api.nvim_create_user_command("AISavingChat", function(opts)
