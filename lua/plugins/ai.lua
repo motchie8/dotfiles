@@ -146,7 +146,6 @@ return {
 	{
 		"yetone/avante.nvim",
 		event = "VeryLazy",
-		lazy = false,
 		version = false, -- set this if you want to always pull the latest change
 		opts = {
 			-- add any opts here
@@ -188,38 +187,15 @@ return {
 				ft = { "markdown", "Avante" },
 			},
 		},
-		mappings = {
-			--- @class AvanteConflictMappings
-			diff = {
-				ours = "co",
-				theirs = "ct",
-				all_theirs = "ca",
-				both = "cb",
-				cursor = "cc",
-				next = "]x",
-				prev = "[x",
-			},
-			suggestion = {
-				accept = "<M-l>",
-				next = "<M-]>",
-				prev = "<M-[>",
-				dismiss = "<C-]>",
-			},
-			jump = {
-				next = "]]",
-				prev = "[[",
-			},
-			submit = {
-				normal = "<CR>",
-				insert = "<C-s>",
-			},
-			sidebar = {
-				switch_windows = "<Tab>",
-				reverse_switch_windows = "<S-Tab>",
-			},
-		},
 		windows = {
 			width = 40, -- default % based on available width
+		},
+		keys = {
+			{
+				"<shift><ctrl>i",
+				"<cmd>AvanteChat<cr>",
+				desc = "Start a chat session with AI",
+			},
 		},
 		config = function()
 			local provider = os.getenv("AVANTE_PROVIDER")
@@ -231,6 +207,65 @@ return {
 				auto_suggestions_provider = auto_suggestions_provider,
 				behaviour = {
 					auto_suggestions = false, -- Experimental stage and may need much cost
+					auto_set_keymaps = true,
+					auto_apply_diff_after_generation = true,
+					jump_result_buffer_on_finish = true,
+					enable_cursor_planning_mode = false,
+				},
+				mappings = {
+					diff = {
+						ours = "co",
+						theirs = "ct",
+						all_theirs = "ca",
+						both = "cb",
+						cursor = "cc",
+						next = "]x",
+						prev = "[x",
+					},
+					suggestion = {
+						accept = "<M-l>",
+						next = "<M-]>",
+						prev = "<M-[>",
+						dismiss = "<C-]>",
+					},
+					jump = {
+						next = "]]",
+						prev = "[[",
+					},
+					submit = {
+						normal = "<CR>",
+						insert = "<C-s>",
+					},
+					-- NOTE: The following will be safely set by avante.nvim
+					ask = "<leader>aa",
+					edit = "<leader>ae",
+					refresh = "<leader>ar",
+					focus = "<leader>af",
+					toggle = {
+						default = "<leader>at",
+						debug = "<leader>ad",
+						hint = "<leader>ah",
+						suggestion = "<leader>as",
+						repomap = "<leader>aR",
+					},
+					sidebar = {
+						apply_all = "A",
+						apply_cursor = "a",
+						retry_user_request = "r",
+						edit_user_request = "e",
+						switch_windows = "<Tab>",
+						reverse_switch_windows = "<S-Tab>",
+						remove_file = "d",
+						add_file = "@",
+						close = { "<Esc>", "q" },
+						---@alias AvanteCloseFromInput { normal: string | nil, insert: string | nil }
+						---@type AvanteCloseFromInput | nil
+						close_from_input = nil, -- e.g., { normal = "<Esc>", insert = "<C-d>" }
+					},
+					files = {
+						add_current = "<leader>ac", -- Add current buffer to selected files
+					},
+					select_model = "<leader>a?", -- Select model command
 				},
 				azure = {
 					endpoint = azure_endpoint,
@@ -239,6 +274,13 @@ return {
 					timeout = 30000, -- Timeout in milliseconds
 					temperature = 0,
 					max_tokens = 4096,
+				},
+				claude = {
+					endpoint = "https://api.anthropic.com",
+					model = "claude-3-7-sonnet-20250219",
+					timeout = 30000, -- Timeout in milliseconds
+					temperature = 0,
+					max_tokens = 8000,
 				},
 			})
 		end,
