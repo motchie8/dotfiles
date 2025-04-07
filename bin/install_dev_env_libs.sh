@@ -233,7 +233,7 @@ install_node() {
     fi
     if ! type node >/dev/null 2>&1; then
         info_echo "**** Install node ****"
-        NODE_VERSION=18.19.1
+        NODE_VERSION=22.14.0
         nvm install "$NODE_VERSION"
         nvm alias default "$NODE_VERSION"
         nvm use "$NODE_VERSION"
@@ -577,6 +577,26 @@ install_vhs() {
     fi
 }
 
+install_aider() {
+    if ! type aider >/dev/null 2>&1; then
+        info_echo "**** Install Aider ****"
+        pipx install aider-install
+        aider-install
+        info_echo "**** Install Playwright for web page support ****"
+        pipx install playwright
+        playwright install --with-deps chromium
+        info_echo "**** Install PortAudio for voice coding support ****"
+        if [ "$OS" = "$MAC_OS" ]; then
+            brew install portaudio
+        elif [ "$OS" = "$UBUNTU" ]; then
+            sudo apt-get install libportaudio2 -y
+            sudo apt install libasound2-plugins -y
+        else
+            exit_with_unsupported_os
+        fi
+    fi
+}
+
 cat /dev/null <<EOF
 ------------------------------------------------------------------------
 Installation steps
@@ -628,5 +648,7 @@ install_lua_language_server
 install_shellcheck
 
 install_vhs
+
+install_aider
 
 info_echo "**** Installation succeeded ****"

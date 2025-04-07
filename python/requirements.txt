@@ -21,3 +21,4 @@ sqlfluff
 sqlfluff-templater-dbt
 tasklib
 wheel
+pipx

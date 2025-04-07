@@ -20,3 +20,4 @@ build/
 config/lite-llm-config.yaml
 config/vim-ai-roles.ini
 *.bak
+.aider*
