@@ -142,161 +142,43 @@ return {
 			end, {})
 		end,
 	},
-	-- Utility for Aider
+	-- Aider
 	{
-		"joshuavial/aider.nvim",
-		opts = {
-			auto_manage_context = false, -- automatically manage buffer context
-			default_bindings = false, -- use default <leader>A keybindings
-			debug = false, -- enable debug logging
-			ignore_buffers = { "^term:", "NeogitConsole", "NvimTree_", "neo-tree filesystem", ">>> AI chat" },
+		"GeorgesAlkhouri/nvim-aider",
+		cmd = "Aider",
+		-- Example key mappings for common actions:
+		keys = {
+			{ "<leader>a", "<cmd>Aider toggle<cr>", desc = "Toggle Aider" },
+			{ "<leader>as", "<cmd>Aider send<cr>", desc = "Send to Aider", mode = { "n", "v" } },
+			{ "<leader>ac", "<cmd>Aider command<cr>", desc = "Aider Commands" },
+			{ "<leader>ab", "<cmd>Aider buffer<cr>", desc = "Send Buffer" },
+			{ "<leader>a+", "<cmd>Aider add<cr>", desc = "Add File" },
+			{ "<leader>a-", "<cmd>Aider drop<cr>", desc = "Drop File" },
+			{ "<leader>ar", "<cmd>Aider add readonly<cr>", desc = "Add Read-Only" },
+			-- Example nvim-tree.lua integration if needed
+			{ "<leader>a+", "<cmd>AiderTreeAddFile<cr>", desc = "Add File from Tree to Aider", ft = "NvimTree" },
+			{ "<leader>a-", "<cmd>AiderTreeDropFile<cr>", desc = "Drop File from Tree from Aider", ft = "NvimTree" },
 		},
-		config = function()
-			vim.api.nvim_set_keymap("n", "<leader>a", ":AiderOpen<CR>", { noremap = true, silent = true })
-			vim.api.nvim_set_keymap("n", "<leader>am", ":AiderAddModifiedFiles<CR>", { noremap = true, silent = true })
-		end,
+		dependencies = {
+			"folke/snacks.nvim",
+			--- The below dependencies are optional
+			"catppuccin/nvim",
+			"nvim-tree/nvim-tree.lua",
+			--- Neo-tree integration
+			{
+				"nvim-neo-tree/neo-tree.nvim",
+				opts = function(_, opts)
+					-- Example mapping configuration (already set by default)
+					opts.window = {
+						mappings = {
+							["+"] = { "nvim_aider_add", desc = "add to aider" },
+							["-"] = { "nvim_aider_drop", desc = "drop from aider" },
+						},
+					}
+					require("nvim_aider.neo_tree").setup(opts)
+				end,
+			},
+		},
+		config = true,
 	},
-	-- Emulate the behaviour of the Cursor AI IDE
-	-- {
-	-- 	"yetone/avante.nvim",
-	-- 	event = "VeryLazy",
-	-- 	version = false, -- set this if you want to always pull the latest change
-	-- 	opts = {
-	-- 		-- add any opts here
-	-- 	},
-	-- 	-- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-	-- 	build = "make",
-	-- 	-- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
-	-- 	dependencies = {
-	-- 		"nvim-treesitter/nvim-treesitter",
-	-- 		"stevearc/dressing.nvim",
-	-- 		"nvim-lua/plenary.nvim",
-	-- 		"MunifTanjim/nui.nvim",
-	-- 		--- The below dependencies are optional,
-	-- 		"nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-	-- 		-- "zbirenbaum/copilot.lua", -- for providers='copilot'
-	-- 		{
-	-- 			-- support for image pasting
-	-- 			-- "HakonHarnes/img-clip.nvim",
-	-- 			-- event = "VeryLazy",
-	-- 			-- opts = {
-	-- 			-- 	-- recommended settings
-	-- 			-- 	default = {
-	-- 			-- 		embed_image_as_base64 = false,
-	-- 			-- 		prompt_for_file_name = false,
-	-- 			-- 		drag_and_drop = {
-	-- 			-- 			insert_mode = true,
-	-- 			-- 		},
-	-- 			-- 		-- required for Windows users
-	-- 			-- 		use_absolute_path = true,
-	-- 			-- 	},
-	-- 			-- },
-	-- 		},
-	-- 		{
-	-- 			-- Make sure to set this up properly if you have lazy=true
-	-- 			"MeanderingProgrammer/render-markdown.nvim",
-	-- 			opts = {
-	-- 				file_types = { "markdown", "Avante" },
-	-- 			},
-	-- 			ft = { "markdown", "Avante" },
-	-- 		},
-	-- 	},
-	-- 	windows = {
-	-- 		width = 40, -- default % based on available width
-	-- 	},
-	-- 	keys = {
-	-- 		{
-	-- 			"<shift><ctrl>i",
-	-- 			"<cmd>AvanteChat<cr>",
-	-- 			desc = "Start a chat session with AI",
-	-- 		},
-	-- 	},
-	-- 	config = function()
-	-- 		local provider = os.getenv("AVANTE_PROVIDER")
-	-- 		local auto_suggestions_provider = os.getenv("AVANTE_AUTO_SUGGESTIONS_PROVIDER") or "copilot"
-	-- 		local azure_endpoint = os.getenv("AZURE_ENDPOINT")
-	-- 		local azure_deployment = os.getenv("AZURE_DEPLOYMENT_NAME")
-	-- 		require("avante").setup({
-	-- 			provider = provider,
-	-- 			auto_suggestions_provider = auto_suggestions_provider,
-	-- 			behaviour = {
-	-- 				auto_suggestions = false, -- Experimental stage and may need much cost
-	-- 				auto_set_keymaps = true,
-	-- 				auto_apply_diff_after_generation = true,
-	-- 				jump_result_buffer_on_finish = true,
-	-- 				enable_cursor_planning_mode = false,
-	-- 			},
-	-- 			mappings = {
-	-- 				diff = {
-	-- 					ours = "co",
-	-- 					theirs = "ct",
-	-- 					all_theirs = "ca",
-	-- 					both = "cb",
-	-- 					cursor = "cc",
-	-- 					next = "]x",
-	-- 					prev = "[x",
-	-- 				},
-	-- 				suggestion = {
-	-- 					accept = "<M-l>",
-	-- 					next = "<M-]>",
-	-- 					prev = "<M-[>",
-	-- 					dismiss = "<C-]>",
-	-- 				},
-	-- 				jump = {
-	-- 					next = "]]",
-	-- 					prev = "[[",
-	-- 				},
-	-- 				submit = {
-	-- 					normal = "<CR>",
-	-- 					insert = "<C-s>",
-	-- 				},
-	-- 				-- NOTE: The following will be safely set by avante.nvim
-	-- 				ask = "<leader>aa",
-	-- 				edit = "<leader>ae",
-	-- 				refresh = "<leader>ar",
-	-- 				focus = "<leader>af",
-	-- 				toggle = {
-	-- 					default = "<leader>at",
-	-- 					debug = "<leader>ad",
-	-- 					hint = "<leader>ah",
-	-- 					suggestion = "<leader>as",
-	-- 					repomap = "<leader>aR",
-	-- 				},
-	-- 				sidebar = {
-	-- 					apply_all = "A",
-	-- 					apply_cursor = "a",
-	-- 					retry_user_request = "r",
-	-- 					edit_user_request = "e",
-	-- 					switch_windows = "<Tab>",
-	-- 					reverse_switch_windows = "<S-Tab>",
-	-- 					remove_file = "d",
-	-- 					add_file = "@",
-	-- 					close = { "<Esc>", "q" },
-	-- 					---@alias AvanteCloseFromInput { normal: string | nil, insert: string | nil }
-	-- 					---@type AvanteCloseFromInput | nil
-	-- 					close_from_input = nil, -- e.g., { normal = "<Esc>", insert = "<C-d>" }
-	-- 				},
-	-- 				files = {
-	-- 					add_current = "<leader>ac", -- Add current buffer to selected files
-	-- 				},
-	-- 				select_model = "<leader>a?", -- Select model command
-	-- 			},
-	-- 			azure = {
-	-- 				endpoint = azure_endpoint,
-	-- 				deployment = azure_deployment,
-	-- 				api_version = "2024-06-01",
-	-- 				timeout = 30000, -- Timeout in milliseconds
-	-- 				temperature = 0,
-	-- 				max_tokens = 4096,
-	-- 			},
-	-- 			claude = {
-	-- 				endpoint = "https://api.anthropic.com",
-	-- 				model = "claude-3-7-sonnet-20250219",
-	-- 				timeout = 30000, -- Timeout in milliseconds
-	-- 				temperature = 0,
-	-- 				max_tokens = 8000,
-	-- 			},
-	-- 		})
-	-- 	end,
-	-- },
 }

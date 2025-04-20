@@ -582,9 +582,6 @@ install_aider() {
         info_echo "**** Install Aider ****"
         pipx install aider-install
         aider-install
-        info_echo "**** Install Playwright for web page support ****"
-        pipx install playwright
-        playwright install --with-deps chromium
         info_echo "**** Install PortAudio for voice coding support ****"
         if [ "$OS" = "$MAC_OS" ]; then
             brew install portaudio
@@ -595,6 +592,21 @@ install_aider() {
             exit_with_unsupported_os
         fi
     fi
+    if ! type mcpm-aider >/dev/null 2>&1; then
+        info_echo "**** Install mcpm-aider for MCP support ****"
+        npm install -g @poai/mcpm-aider
+        cp "$DOTFILES_DIR"/config/claude_desktop_config.json.example "$DOTFILES_DIR"/config/claude_desktop_config.json
+        if [ "$OS" = "$MAC_OS" ]; then
+            mkdir -p ~/Library/Application\ Support/Claude
+            ln -s "$DOTFILES_DIR"/config/claude_desktop_config.json ~/Library/Application\ Support/Claude/claude_desktop_config.json
+        elif [ "$OS" = "$UBUNTU" ]; then
+            mkdir -p ~/.config/claude
+            ln -s "$DOTFILES_DIR"/config/claude_desktop_config.json ~/.config/claude/claude_desktop_config.json
+        else
+            exit_with_unsupported_os
+        fi
+    fi
+
 }
 
 cat /dev/null <<EOF
