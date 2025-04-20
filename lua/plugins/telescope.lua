@@ -55,55 +55,24 @@ return {
 		-- 	},
 		-- },
 	},
-	-- Change picker by command prefix
+	-- quickfix + telescope
 	{
-		"d00h/telescope-any",
+		"atusy/qfscope.nvim",
 		dependencies = { "nvim-telescope/telescope.nvim" },
-		keys = {
-			{
-				"ta",
-				"<cmd>TelescopeAny<cr>",
-				desc = "Switch telescope picker by prefix",
-			},
-		},
+		event = "VeryLazy",
 		config = function()
-			local builtin = require("telescope.builtin")
-			local opts = {
-				pickers = {
-					-- File Pickers
-					[""] = builtin.find_files,
-					["/"] = builtin.live_grep,
-					["gf "] = builtin.git_files,
-					[":"] = builtin.current_buffer_fuzzy_find,
-
-					-- Vim Pickers
-					["b "] = builtin.buffers,
-					["o "] = builtin.oldfiles,
-					["q "] = builtin.quickfix,
-					["command "] = builtin.commands,
-					["history "] = builtin.command_history,
-					["man "] = builtin.man_pages,
-					["options "] = builtin.vim_options,
-					["keymaps "] = builtin.keymaps,
-
-					-- Neovim LSP Pickers
-					["d "] = builtin.diagnostics,
-
-					-- Git Pickers
-					["gc "] = builtin.git_commits,
-					["gbc "] = builtin.git_bcommits,
-					["gb "] = builtin.git_branches,
-					["gs "] = builtin.git_status,
-
-					-- Treesitter Picker
-					["tree "] = builtin.treesitter,
+			local qfs_actions = require("qfscope.actions")
+			require("telescope").setup({
+				defaults = {
+					mappings = {
+						i = {
+							["<C-G><C-G>"] = qfs_actions.qfscope_search_filename,
+							["<C-G><C-F>"] = qfs_actions.qfscope_grep_filename,
+							["<C-G><C-L>"] = qfs_actions.qfscope_grep_line,
+							["<C-G><C-T>"] = qfs_actions.qfscope_grep_text,
+						},
+					},
 				},
-			}
-			local telescope_any = require("telescope-any").create_telescope_any(opts)
-			vim.api.nvim_create_user_command("TelescopeAny", telescope_any, { nargs = 0 })
-			vim.api.nvim_set_keymap("n", "ta", "<Cmd>TelescopeAny<CR>", {
-				noremap = true,
-				silent = true,
 			})
 		end,
 	},
