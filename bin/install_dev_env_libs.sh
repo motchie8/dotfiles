@@ -169,6 +169,21 @@ install_python() {
     done
 }
 
+install_pipx() {
+    if ! type pipx >/dev/null 2>&1; then
+        info_echo "**** Install pipx ****"
+        if [ "$OS" = "$MAC_OS" ]; then
+            brew install pipx
+            pipx ensurepath
+        elif [ "$OS" = "$UBUNTU" ]; then
+            sudo apt install pipx -y
+            pipx ensurepath
+        else
+            exit_with_unsupported_os
+        fi
+    fi
+}
+
 set_zsh_as_default_shell() {
     DEFAULT_SHELL=$(echo "$SHELL" | awk -F '[/]' '{print $NF}')
     if [ "$DEFAULT_SHELL" != "zsh" ]; then
@@ -620,6 +635,8 @@ install_neovim
 install_anyenv_and_env_libs
 
 install_python
+
+install_pipx
 
 setup_zsh
 

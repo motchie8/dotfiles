@@ -36,6 +36,11 @@ if [ -e /Applications/SnowSQL.app/Contents/MacOS ]; then
     export PATH="/Applications/SnowSQL.app/Contents/MacOS:$PATH"
 fi
 
+# for pipx
+if [ -e $HOME/.local/bin ]; then
+    export PATH="$HOME/.local/bin:$PATH"
+fi
+
 # -----------------------------
 # Environment Variables
 # -----------------------------
