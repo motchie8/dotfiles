@@ -174,13 +174,12 @@ install_pipx() {
         info_echo "**** Install pipx ****"
         if [ "$OS" = "$MAC_OS" ]; then
             brew install pipx
-            pipx ensurepath
         elif [ "$OS" = "$UBUNTU" ]; then
             sudo apt install pipx -y
-            pipx ensurepath
         else
             exit_with_unsupported_os
         fi
+        export PATH="$HOME/.local/bin:$PATH"
     fi
 }
 
@@ -596,6 +595,7 @@ install_aider() {
     if ! type aider >/dev/null 2>&1; then
         info_echo "**** Install Aider ****"
         pipx install aider-install
+        export PATH="$HOME/.local/bin:$PATH"
         aider-install
         info_echo "**** Install PortAudio for voice coding support ****"
         if [ "$OS" = "$MAC_OS" ]; then
