@@ -325,6 +325,7 @@ install_act() {
                 exit 1
             fi
             sudo tar xf act.tar.gz -C /usr/local/bin act
+            rm act.tar.gz
         elif [ "$OS" = "$MAC_OS" ]; then
             brew install act
         else

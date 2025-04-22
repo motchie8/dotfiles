@@ -30,6 +30,7 @@ COPY --chown=$user:$user bin /home/$user/dotfiles/bin
 COPY --chown=$user:$user python /home/$user/dotfiles/python
 COPY --chown=$user:$user tmux /home/$user/dotfiles/tmux
 COPY --chown=$user:$user Makefile /home/$user/dotfiles/Makefile
+COPY --chown=$user:$user config /home/$user/dotfiles/config
 RUN if [ "$BUILD_FROM_SOURCE" = "true" ]; then \
         make install-base-from-source; \
     else \
@@ -37,7 +38,6 @@ RUN if [ "$BUILD_FROM_SOURCE" = "true" ]; then \
     fi
 
 # Copy other settings in alphabetical order
-COPY --chown=$user:$user config /home/$user/dotfiles/config
 COPY --chown=$user:$user dap /home/$user/dotfiles/dap
 COPY --chown=$user:$user lua /home/$user/dotfiles/lua
 COPY --chown=$user:$user snippets /home/$user/dotfiles/snippets
