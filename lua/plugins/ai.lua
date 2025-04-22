@@ -180,5 +180,13 @@ return {
 			},
 		},
 		config = true,
+		opts = {
+			args = {
+				"--no-auto-commits",
+				"--pretty",
+				"--stream",
+				"--watch-files",
+			},
+		},
 	},
 }
