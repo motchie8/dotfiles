@@ -1,11 +1,29 @@
 [default.chat]
 options.temperature = 1.0
-options.enable_auth = 0
+options.auth_type = none
 options.model = gpt-4o
 options.endpoint_url = http://0.0.0.0:4000/chat/completions
 
 [claude]
-options.temperature = 0.2
-options.enable_auth = 0
+options.temperature = 1.0
+options.auth_type = none
 options.model = claude3-5-sonnet
+options.endpoint_url = http://0.0.0.0:4000/chat/completions
+
+[azure]
+options.temperature = 1.0
+options.auth_type = none
+options.model = azure
+options.endpoint_url = http://0.0.0.0:4000/chat/completions
+
+[vertexai_claude3_5]
+options.temperature = 1.0
+options.auth_type = none
+options.model = vertexai-claude-3-5
+options.endpoint_url = http://0.0.0.0:4000/chat/completions
+
+[vertexai_claude3_7]
+options.temperature = 1.0
+options.auth_type = none
+options.model = vertexai-claude-3-7
 options.endpoint_url = http://0.0.0.0:4000/chat/completions

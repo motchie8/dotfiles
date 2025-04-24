@@ -13,3 +13,13 @@ model_list:
       api_base: "os.environ/AZURE_API_BASE"
       api_version: "os.environ/AZURE_API_VERSION"
       api_key: "os.environ/AZURE_API_KEY"
+  - model_name: vertexai-claude-3-5
+    litellm_params:
+        model: vertex_ai/vertex_ai/claude-3-5-sonnet-v2@20241022
+        vertex_project: "os.environ/VERTEXAI_PROJECT"
+        vertex_location: "os.environ/VERTEXAI_LOCATION"
+  - model_name: vertexai-claude-3-7
+    litellm_params:
+        model: vertex_ai/vertex_ai/claude-3-7-sonnet@20250219
+        vertex_project: "os.environ/VERTEXAI_PROJECT"
+        vertex_location: "os.environ/VERTEXAI_LOCATION" 
