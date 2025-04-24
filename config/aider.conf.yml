@@ -1,0 +1,13 @@
+alias:
+  - "a-gpt4o:azure/gpt-4o"
+  - "o-gpt4o:openai/gpt-4o"
+  - "c-claude3.5:anthropic/claude-3-5-sonnet-latest"
+  - "c-claude3.7:anthropic/claude-3-7-sonnet-latest"
+  - "v-claude3.5:vertex_ai/claude-3-5-sonnet-v2@20241022"
+  - "v-claude3.7:vertex_ai/claude-3-7-sonnet@20250219"
+dark-mode: true
+watch-files: true
+analytics-disable: true
+show-release-notes: false
+voice-language: ja
+chat-language: ja

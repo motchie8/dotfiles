@@ -43,8 +43,8 @@ Main functions.
 ------------------------------------------------------------------------
 EOF
 
-target_paths=("$HOME/.zshrc" "$HOME/.config/nvim/coc-settings.json" "$HOME/.config/nvim/init.lua" "$HOME/.config/nvim/cheatsheet.txt" "$HOME/.tmux.conf" "$HOME/.config/nvim/lua")
-link_paths=("$DOTFILES_DIR/.zshrc" "$DOTFILES_DIR/coc-settings.json" "$DOTFILES_DIR/init.lua" "$DOTFILES_DIR/cheatsheet.txt" "$DOTFILES_DIR/tmux/tmux.common.conf" "$DOTFILES_DIR/lua")
+target_paths=("$HOME/.zshrc" "$HOME/.config/nvim/coc-settings.json" "$HOME/.config/nvim/init.lua" "$HOME/.config/nvim/cheatsheet.txt" "$HOME/.tmux.conf" "$HOME/.config/nvim/lua" "$HOME/.aider.conf.yml")
+link_paths=("$DOTFILES_DIR/.zshrc" "$DOTFILES_DIR/coc-settings.json" "$DOTFILES_DIR/init.lua" "$DOTFILES_DIR/cheatsheet.txt" "$DOTFILES_DIR/tmux/tmux.common.conf" "$DOTFILES_DIR/lua" "$DOTFILES_DIR/config/aider.conf.yml")
 
 setup_symbolic_links() {
     info_echo "**** Setup symbolic links ****"
