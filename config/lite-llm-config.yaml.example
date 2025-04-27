@@ -3,6 +3,10 @@ model_list:
     litellm_params:
       model: gpt-4o
       api_key: "os.environ/OPENAI_API_KEY"
+  - model_name: gpt-4.1
+    litellm_params:
+      model: gpt-4.1
+      api_key: "os.environ/OPENAI_API_KEY"
   - model_name: claude3-5-sonnet
     litellm_params:
       model: claude-3-5-sonnet-20240620
@@ -15,11 +19,11 @@ model_list:
       api_key: "os.environ/AZURE_API_KEY"
   - model_name: vertexai-claude-3-5
     litellm_params:
-        model: vertex_ai/vertex_ai/claude-3-5-sonnet-v2@20241022
+        model: vertex_ai/claude-3-5-sonnet-v2@20241022
         vertex_project: "os.environ/VERTEXAI_PROJECT"
         vertex_location: "os.environ/VERTEXAI_LOCATION"
   - model_name: vertexai-claude-3-7
     litellm_params:
-        model: vertex_ai/vertex_ai/claude-3-7-sonnet@20250219
+        model: vertex_ai/claude-3-7-sonnet@20250219
         vertex_project: "os.environ/VERTEXAI_PROJECT"
         vertex_location: "os.environ/VERTEXAI_LOCATION" 

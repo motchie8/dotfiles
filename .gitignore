@@ -20,5 +20,6 @@ build/
 config/lite-llm-config.yaml
 config/vim-ai-roles.ini
 config/claude_desktop_config.json
+config/aider.model.settings.yml
 *.bak
 .aider*

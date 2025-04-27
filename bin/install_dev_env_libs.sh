@@ -612,6 +612,8 @@ install_aider() {
         info_echo "**** Install mcpm-aider for MCP support ****"
         npm install -g @poai/mcpm-aider
         cp "$DOTFILES_DIR"/config/claude_desktop_config.json.example "$DOTFILES_DIR"/config/claude_desktop_config.json
+        cp "$DOTFILES_DIR"/config/aider.model.settings.yml.example "$DOTFILES_DIR"/config/aider.model.settings.yml
+        ln -s "$DOTFILES_DIR/config/aider.model.settings.yml" "$HOME/.aider.model.settings.yml"
         if [ "$OS" = "$MAC_OS" ]; then
             mkdir -p ~/Library/Application\ Support/Claude
             ln -s "$DOTFILES_DIR"/config/claude_desktop_config.json ~/Library/Application\ Support/Claude/claude_desktop_config.json

@@ -1,7 +1,7 @@
 [default.chat]
 options.temperature = 1.0
 options.auth_type = none
-options.model = gpt-4o
+options.model = gpt-4.1
 options.endpoint_url = http://0.0.0.0:4000/chat/completions
 
 [claude]

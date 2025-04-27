@@ -1,6 +1,7 @@
 alias:
   - "a-gpt4o:azure/gpt-4o"
   - "o-gpt4o:openai/gpt-4o"
+  - "o-gpt4.1:openai/gpt-4.1"
   - "c-claude3.5:anthropic/claude-3-5-sonnet-latest"
   - "c-claude3.7:anthropic/claude-3-7-sonnet-latest"
   - "v-claude3.5:vertex_ai/claude-3-5-sonnet-v2@20241022"
