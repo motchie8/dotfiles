@@ -1,5 +1,0 @@
-- name: gpt-4o
-  extra_params:
-    max_tokens: 8192
-    api_key: your-key-value-here
-    api_base: http://localhost:8000/v1/

@@ -598,6 +598,14 @@ install_aider() {
         pipx install aider-install
         export PATH="$HOME/.local/bin:$PATH"
         aider-install
+        if [ ! -e "$DOTFILES_DIR"/config/aider.conf.yml ]; then
+            info_echo "**** Create aider.conf.yml using example config ****"
+            cp "$DOTFILES_DIR"/config/aider.conf.yml.example "$DOTFILES_DIR"/config/aider.conf.yml
+        fi
+        if [ ! -e "$DOTFILES_DIR"/config/mcp.json ]; then
+            info_echo "**** Create mcp.json using example config ****"
+            cp "$DOTFILES_DIR"/config/mcp.json.example "$DOTFILES_DIR"/config/mcp.json
+        fi
         info_echo "**** Install PortAudio for voice coding support ****"
         if [ "$OS" = "$MAC_OS" ]; then
             brew install portaudio
@@ -608,23 +616,6 @@ install_aider() {
             exit_with_unsupported_os
         fi
     fi
-    if ! type mcpm-aider >/dev/null 2>&1; then
-        info_echo "**** Install mcpm-aider for MCP support ****"
-        npm install -g @poai/mcpm-aider
-        cp "$DOTFILES_DIR"/config/claude_desktop_config.json.example "$DOTFILES_DIR"/config/claude_desktop_config.json
-        cp "$DOTFILES_DIR"/config/aider.model.settings.yml.example "$DOTFILES_DIR"/config/aider.model.settings.yml
-        ln -s "$DOTFILES_DIR/config/aider.model.settings.yml" "$HOME/.aider.model.settings.yml"
-        if [ "$OS" = "$MAC_OS" ]; then
-            mkdir -p ~/Library/Application\ Support/Claude
-            ln -s "$DOTFILES_DIR"/config/claude_desktop_config.json ~/Library/Application\ Support/Claude/claude_desktop_config.json
-        elif [ "$OS" = "$UBUNTU" ]; then
-            mkdir -p ~/.config/claude
-            ln -s "$DOTFILES_DIR"/config/claude_desktop_config.json ~/.config/claude/claude_desktop_config.json
-        else
-            exit_with_unsupported_os
-        fi
-    fi
-
 }
 
 cat /dev/null <<EOF
