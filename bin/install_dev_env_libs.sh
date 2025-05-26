@@ -183,6 +183,13 @@ install_pipx() {
     fi
 }
 
+install_uv() {
+    if ! type uv >/dev/null 2>&1; then
+        info_echo "**** Install uv ****"
+        pipx install uv
+    fi
+}
+
 set_zsh_as_default_shell() {
     DEFAULT_SHELL=$(echo "$SHELL" | awk -F '[/]' '{print $NF}')
     if [ "$DEFAULT_SHELL" != "zsh" ]; then
@@ -631,6 +638,8 @@ install_anyenv_and_env_libs
 install_python
 
 install_pipx
+
+install_uv
 
 setup_zsh
 

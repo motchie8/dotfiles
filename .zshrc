@@ -131,6 +131,12 @@ if [ -e /usr/bin/terraform ]; then
     complete -o nospace -C /usr/bin/terraform terraform
 fi
 
+# uv
+if type uv &>/dev/null; then
+    eval "$(uv generate-shell-completion zsh)"
+    eval "$(uvx --generate-shell-completion zsh)"
+fi
+
 # -----------------------------
 # fzf
 # -----------------------------
