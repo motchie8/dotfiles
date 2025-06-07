@@ -140,6 +140,18 @@ install_uv() {
     fi
 }
 
+install_python() {
+    if ! type python3 >/dev/null 2>&1; then
+        info_echo "**** Install python3 ****"
+        uv python install 3.12 --default --preview
+    fi
+    if [ -e "$DOTFILES_DIR"/.venv ]; then
+        info_echo """**** Setup virtual environment for dotfiles ****"""
+        cd "$DOTFILES_DIR"
+        uv sync
+    fi
+}
+
 set_zsh_as_default_shell() {
     DEFAULT_SHELL=$(echo "$SHELL" | awk -F '[/]' '{print $NF}')
     if [ "$DEFAULT_SHELL" != "zsh" ]; then
@@ -588,6 +600,8 @@ install_neovim
 install_anyenv_and_env_libs
 
 install_uv
+
+install_python
 
 setup_zsh
 
