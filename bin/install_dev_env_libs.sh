@@ -567,7 +567,7 @@ install_aider() {
         info_echo "**** Install Aider ****"
         # TMP: install aider from source for MCP support
         # uv tool install --force --python python3.12 --with pip aider-chat@latest
-        uv tool install --force --python python3.12 --with pip "git+https://github.com/quinlanjager/aider.git@feature/litellm-mcp"
+        uv tool install --force --python python3.12 --with pip --with google-cloud-aiplatform "git+https://github.com/quinlanjager/aider.git@feature/litellm-mcp"
         # Init aider configs
         cd "$DOTFILES_DIR"
         if [ ! -e "$DOTFILES_DIR"/config/aider.conf.yml ]; then
