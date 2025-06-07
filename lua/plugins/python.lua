@@ -15,7 +15,7 @@ return {
 			vim.api.nvim_set_var("jupytext_enable", 1)
 			vim.api.nvim_set_var("jupytext_fmt", "py:percent")
 			vim.api.nvim_set_var("jupytext_filetype_map", '{"py": "python"}')
-			vim.api.nvim_set_var("jupytext_command", "~/.anyenv/envs/pyenv/versions/neovim3/bin/jupytext")
+			vim.api.nvim_set_var("jupytext_command", "~/dotfiles/.venv/bin/jupytext")
 		end,
 	},
 }

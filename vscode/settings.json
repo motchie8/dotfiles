@@ -1,6 +1,6 @@
 {
   "breadcrumbs.enabled": true,
-  "dbt.dbtPythonPathOverride": "$HOME/.anyenv/envs/pyenv/versions/dbt/bin/python",
+  "dbt.dbtPythonPathOverride": "$HOME/dotfiles/.venv/bin/python",
   "debug.inlineValues": "on",
   "editor.fontFamily": "'RobotoMono Nerd Font'",
   "editor.fontSize": 14,
@@ -38,170 +38,85 @@
   "vim.incsearch": true,
   "vim.insertModeKeyBindings": [
     {
-      "before": [
-        "j",
-        "j"
-      ],
-      "after": [
-        "<Esc>"
-      ]
+      "before": ["j", "j"],
+      "after": ["<Esc>"]
     },
     // LSP features
     {
-      "before": [
-        "Ctrl+h"
-      ],
-      "after": [
-        "editor.action.showHover"
-      ]
+      "before": ["Ctrl+h"],
+      "after": ["editor.action.showHover"]
     },
     {
-      "before": [
-        "Ctrl+p"
-      ],
-      "after": [
-        "editor.action.triggerParameterHints"
-      ]
+      "before": ["Ctrl+p"],
+      "after": ["editor.action.triggerParameterHints"]
     }
   ],
   "vim.normalModeKeyBindings": [
     {
-      "before": [
-        "u"
-      ],
-      "commands": [
-        "undo"
-      ]
+      "before": ["u"],
+      "commands": ["undo"]
     },
     {
-      "before": [
-        "<C-r>"
-      ],
-      "commands": [
-        "redo"
-      ]
+      "before": ["<C-r>"],
+      "commands": ["redo"]
     },
     {
-      "before": [
-        ";"
-      ],
-      "after": [
-        ":"
-      ]
+      "before": [";"],
+      "after": [":"]
     },
     {
-      "before": [
-        "L"
-      ],
-      "after": [
-        "$"
-      ]
+      "before": ["L"],
+      "after": ["$"]
     },
     {
-      "before": [
-        "H"
-      ],
-      "after": [
-        "^"
-      ]
+      "before": ["H"],
+      "after": ["^"]
     },
     // LSP features
     {
-      "before": [
-        "g",
-        "i"
-      ],
-      "commands": [
-        "editor.action.goToImplementation"
-      ]
+      "before": ["g", "i"],
+      "commands": ["editor.action.goToImplementation"]
     },
     {
-      "before": [
-        "g",
-        "d"
-      ],
-      "commands": [
-        "editor.action.goToDeclaration"
-      ]
+      "before": ["g", "d"],
+      "commands": ["editor.action.goToDeclaration"]
     },
     {
-      "before": [
-        "Ctrl+h"
-      ],
-      "commands": [
-        "editor.action.showHover"
-      ]
+      "before": ["Ctrl+h"],
+      "commands": ["editor.action.showHover"]
     },
     {
-      "before": [
-        "Ctrl+p"
-      ],
-      "commands": [
-        "editor.action.triggerParameterHints"
-      ]
+      "before": ["Ctrl+p"],
+      "commands": ["editor.action.triggerParameterHints"]
     },
     {
-      "before": [
-        "<Space>",
-        "q",
-        "f"
-      ],
-      "commands": [
-        "editor.action.quickFix"
-      ]
+      "before": ["<Space>", "q", "f"],
+      "commands": ["editor.action.quickFix"]
     },
     // move focus between panes
     {
-      "before": [
-        "s",
-        "j"
-      ],
-      "commands": [
-        "workbench.action.terminal.focus"
-      ]
+      "before": ["s", "j"],
+      "commands": ["workbench.action.terminal.focus"]
     },
     {
-      "before": [
-        "s",
-        "k"
-      ],
-      "commands": [
-        "workbench.action.focusActiveEditorGroup"
-      ]
+      "before": ["s", "k"],
+      "commands": ["workbench.action.focusActiveEditorGroup"]
     },
     {
-      "before": [
-        "s",
-        "l"
-      ],
-      "commands": [
-        "workbench.action.navigateEditorGroups"
-      ]
+      "before": ["s", "l"],
+      "commands": ["workbench.action.navigateEditorGroups"]
     },
     {
-      "before": [
-        "s",
-        "h"
-      ],
-      "commands": [
-        "workbench.action.navigateEditorGroups"
-      ]
+      "before": ["s", "h"],
+      "commands": ["workbench.action.navigateEditorGroups"]
     },
     // show and hide file explorer
     {
-      "before": [
-        "<Space>",
-        "T"
-      ],
-      "commands": [
-        "workbench.action.focusSideBar"
-      ]
+      "before": ["<Space>", "T"],
+      "commands": ["workbench.action.focusSideBar"]
     },
     {
-      "before": [
-        "<Space>",
-        "t"
-      ],
+      "before": ["<Space>", "t"],
       "commands": [
         "workbench.action.toggleSidebarVisibility"
         //"workbench.action.focusSideBar"
@@ -209,13 +124,8 @@
     },
     // open terminal
     {
-      "before": [
-        "<Space>",
-        "c"
-      ],
-      "commands": [
-        "workbench.action.terminal.new"
-      ]
+      "before": ["<Space>", "c"],
+      "commands": ["workbench.action.terminal.new"]
     }
   ],
   "vim.sneak": true,
@@ -223,20 +133,12 @@
   "vim.useSystemClipboard": true,
   "vim.visualModeKeyBindings": [
     {
-      "before": [
-        "L"
-      ],
-      "after": [
-        "$"
-      ]
+      "before": ["L"],
+      "after": ["$"]
     },
     {
-      "before": [
-        "H"
-      ],
-      "after": [
-        "^"
-      ]
+      "before": ["H"],
+      "after": ["^"]
     }
   ],
   "vim.visualstar": true,

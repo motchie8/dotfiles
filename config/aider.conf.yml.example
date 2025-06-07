@@ -9,12 +9,14 @@ alias:
   - "v-claude4:vertex_ai/claude-sonnet-4@20250514"
   - "v-gemini2.0:vertex_ai/gemini-2.0-flash-001"
   # - "v-gemini2.5-prev:vertex_ai/gemini-2.5-flash-preview-05-20"
-model: "v-gemini2.0"
+model: "v-claude4"
+weak-model:
 dark-mode: true
 watch-files: true
 analytics-disable: true
 show-release-notes: false
 voice-language: ja
 chat-language: ja
-# architect: true
+# TMP: disable auto-update to use the fork version
+# check-update: false
 # mcp-servers-file: "$HOME/dotfiles/config/mcp.json"

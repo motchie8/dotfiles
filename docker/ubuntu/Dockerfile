@@ -27,7 +27,6 @@ RUN if [ "$BUILD_FROM_SOURCE" = "true" ]; then \
     fi
 
 COPY --chown=$user:$user bin /home/$user/dotfiles/bin
-COPY --chown=$user:$user python /home/$user/dotfiles/python
 COPY --chown=$user:$user tmux /home/$user/dotfiles/tmux
 COPY --chown=$user:$user Makefile /home/$user/dotfiles/Makefile
 COPY --chown=$user:$user config /home/$user/dotfiles/config

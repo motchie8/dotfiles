@@ -147,17 +147,12 @@ return {
 			"python3",
 		},
 		config = function()
-			require("dap-python").setup(
-				string.format("%s/.anyenv/envs/pyenv/versions/neovim3/bin/python", vim.api.nvim_eval("$HOME"))
-			)
+			require("dap-python").setup(string.format("%s/dotfiles/.venv/bin/python", vim.api.nvim_eval("$HOME")))
 			require("dap-python").test_runner = "pytest"
 			local dap = require("dap")
 			dap.adapters.python = {
 				type = "executable",
-				command = string.format(
-					"%s/.anyenv/envs/pyenv/versions/neovim3/bin/python",
-					vim.api.nvim_eval("$HOME")
-				),
+				command = string.format("%s/dotfiles/.venv/bin/python", vim.api.nvim_eval("$HOME")),
 				args = { "-m", "debugpy.adapter" },
 			}
 			dap.configurations.python = {

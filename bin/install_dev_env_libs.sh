@@ -126,16 +126,6 @@ install_anyenv_and_env_libs() {
         eval "$(anyenv init -)"
         tfenv install latest
     fi
-    if ! type pyenv >/dev/null 2>&1; then
-        info_echo "**** Install pyenv ****"
-        anyenv install pyenv
-        eval "$(anyenv init -)"
-    fi
-    if [ ! -e "$(pyenv root)"/plugins/pyenv-virtualenv ]; then
-        info_echo "**** Install pyenv virtualenv ****"
-        git clone --depth 1 https://github.com/pyenv/pyenv-virtualenv.git "$(pyenv root)"/plugins/pyenv-virtualenv
-        eval "$(pyenv virtualenv-init -)"
-    fi
     if [ ! -e "$(anyenv root)"/plugins/anyenv-update ]; then
         info_echo "**** Install anyenv-update ****"
         mkdir -p $(anyenv root)/plugins
@@ -143,50 +133,10 @@ install_anyenv_and_env_libs() {
     fi
 }
 
-install_python() {
-    # create envs and install python versions for neovim by pyenv-virtualenv
-    PYTHON2_VERSION=2.7.18
-    PYTHON3_VERSION=3.12.8
-    PYTHON_VERSIONS=("$PYTHON2_VERSION" "$PYTHON3_VERSION")
-    NEOVIM_VIRTUAL_ENVS=("neovim2" "neovim3")
-    i=0
-    for PYTHON_VERSION in "${PYTHON_VERSIONS[@]}"; do
-        NEOVIM_VIRTUAL_ENV="${NEOVIM_VIRTUAL_ENVS[i]}"
-        if ! pyenv versions | grep -q "$NEOVIM_VIRTUAL_ENV"; then
-            info_echo "**** Install python ${PYTHON_VERSION} ****"
-            pyenv install -s "$PYTHON_VERSION"
-            info_echo "**** Setup python virtualenv ${NEOVIM_VIRTUAL_ENV} ****"
-            pyenv virtualenv "$PYTHON_VERSION" "$NEOVIM_VIRTUAL_ENV"
-            PYTHON_PATH="$(pyenv root)"/versions/"$NEOVIM_VIRTUAL_ENV"/bin/python
-            eval "$PYTHON_PATH -m pip install --upgrade pip"
-            eval "$PYTHON_PATH -m pip install pynvim neovim"
-            if [ "$NEOVIM_VIRTUAL_ENV" = "neovim3" ]; then
-                eval "$PYTHON_PATH -m pip install -r $DOTFILES_DIR/python/requirements.txt"
-                pyenv global "$NEOVIM_VIRTUAL_ENV"
-            fi
-        fi
-        i=$((i + 1))
-    done
-}
-
-install_pipx() {
-    if ! type pipx >/dev/null 2>&1; then
-        info_echo "**** Install pipx ****"
-        if [ "$OS" = "$MAC_OS" ]; then
-            brew install pipx
-        elif [ "$OS" = "$UBUNTU" ]; then
-            sudo apt install pipx -y
-        else
-            exit_with_unsupported_os
-        fi
-        export PATH="$HOME/.local/bin:$PATH"
-    fi
-}
-
 install_uv() {
     if ! type uv >/dev/null 2>&1; then
         info_echo "**** Install uv ****"
-        pipx install uv
+        curl -LsSf https://astral.sh/uv/install.sh | sh
     fi
 }
 
@@ -602,9 +552,11 @@ install_vhs() {
 install_aider() {
     if ! type aider >/dev/null 2>&1; then
         info_echo "**** Install Aider ****"
-        pipx install aider-install
-        export PATH="$HOME/.local/bin:$PATH"
-        aider-install
+        # TMP: install aider from source for MCP support
+        # uv tool install --force --python python3.12 --with pip aider-chat@latest
+        uv tool install --force --python python3.12 --with pip "git+https://github.com/quinlanjager/aider.git@feature/litellm-mcp"
+        # Init aider configs
+        cd "$DOTFILES_DIR"
         if [ ! -e "$DOTFILES_DIR"/config/aider.conf.yml ]; then
             info_echo "**** Create aider.conf.yml using example config ****"
             cp "$DOTFILES_DIR"/config/aider.conf.yml.example "$DOTFILES_DIR"/config/aider.conf.yml
@@ -634,10 +586,6 @@ EOF
 install_neovim
 
 install_anyenv_and_env_libs
-
-install_python
-
-install_pipx
 
 install_uv
 

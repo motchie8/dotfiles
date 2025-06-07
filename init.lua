@@ -1,10 +1,7 @@
 local api = vim.api
 local opt = vim.opt
 
-local pyenv_root = api.nvim_eval("$PYENV_ROOT")
-
-api.nvim_set_var("python3_host_prog", string.format("%s/versions/neovim3/bin/python", pyenv_root))
-api.nvim_set_var("python_host_prog", string.format("%s/versions/neovim2/bin/python", pyenv_root))
+api.nvim_set_var("python3_host_prog", string.format("%s/dotfiles/.venv/bin/python3", api.nvim_eval("$HOME")))
 
 -- disable netrw due to race conditions at vim startup
 api.nvim_set_var("loaded_netrw", 1)
