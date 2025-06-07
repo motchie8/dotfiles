@@ -1,9 +1,4 @@
 return {
-	-- Activate/Deactivate pyenv in Vim session
-	{
-		"lambdalisue/vim-pyenv",
-		ft = { "python", "python3" },
-	},
 	-- Convert Jupyter Notebook file to python file by jupytext
 	{
 		"goerz/jupytext.vim",

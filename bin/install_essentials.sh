@@ -71,7 +71,7 @@ install_dev_libs_for_mac() {
     info_echo "**** Install dev libs for macOS ****"
     brew update
     set +e
-    # install pyenv, vim plugins and zsh
+    # install vim plugins and zsh
     brew install node yarn wget tmux zsh source-highlight gcc ripgrep
     set -e
 }

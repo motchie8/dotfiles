@@ -24,17 +24,9 @@ export PATH=$PATH:$HOME/go/bin
 export PATH="$HOME/.anyenv/bin:$PATH"
 eval "$(anyenv init -)"
 
-# pyenv-virtualenv
-eval "$(pyenv virtualenv-init -)"
-
 # npm
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-
-# for macOS x86_64
-if [ -e /Applications/SnowSQL.app/Contents/MacOS ]; then
-    export PATH="/Applications/SnowSQL.app/Contents/MacOS:$PATH"
-fi
 
 # for uv
 if [ -e $HOME/.local/bin ]; then
