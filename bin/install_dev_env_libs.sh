@@ -136,6 +136,7 @@ install_anyenv_and_env_libs() {
 install_uv() {
     if ! type uv >/dev/null 2>&1; then
         info_echo "**** Install uv ****"
+        export UV_NO_MODIFY_PATH=1
         curl -LsSf https://astral.sh/uv/install.sh | sh
         export PATH="$HOME/.local/bin:$PATH"
     fi
@@ -590,6 +591,19 @@ install_aider() {
     fi
 }
 
+install_imagemagick() {
+    if ! type convert >/dev/null 2>&1; then
+        info_echo "**** Install ImageMagick ****"
+        if [ "$OS" = "$MAC_OS" ]; then
+            brew install imagemagick
+        elif [ "$OS" = "$UBUNTU" ]; then
+            sudo apt install -y imagemagick
+        else
+            exit_with_unsupported_os
+        fi
+    fi
+}
+
 cat /dev/null <<EOF
 ------------------------------------------------------------------------
 Installation steps
@@ -645,5 +659,7 @@ install_shellcheck
 install_vhs
 
 install_aider
+
+install_imagemagick
 
 info_echo "**** Installation succeeded ****"

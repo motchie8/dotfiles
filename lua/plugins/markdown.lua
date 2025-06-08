@@ -1,19 +1,15 @@
 return {
 	-- Render Markdown View
 	{
-		"MeanderingProgrammer/markdown.nvim",
-		name = "render-markdown", -- Only needed if you have another plugin named markdown.nvim
+		"MeanderingProgrammer/render-markdown.nvim",
 		dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
 		ft = {
 			"markdown",
+			"vimwiki.markdown",
 		},
 		keys = {
-			{ "<leader>rm", "<cmd>RenderMarkdownToggle<cr>", desc = "Toggle Render Markdown View" },
+			{ "<leader>m", "<cmd>RenderMarkdown toggle<cr>", desc = "Toggle Render Markdown View" },
 		},
-		config = function()
-			require("render-markdown").setup({
-				file_types = { "markdown" },
-			})
-		end,
+		opts = {},
 	},
 }

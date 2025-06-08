@@ -134,7 +134,7 @@ return {
 				"coc-rls",
 				"coc-rust-analyzer",
 				"coc-sh",
-				"coc-snippets",
+				-- "coc-snippets",
 				--"coc-sql",
 				"coc-sqlfluff",
 				"coc-toml",

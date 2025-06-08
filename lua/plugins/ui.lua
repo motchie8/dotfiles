@@ -133,67 +133,67 @@ return {
 		"t9md/vim-quickhl",
 		config = function()
 			vim.cmd([[
-                nmap <Space>m <Plug>(quickhl-manual-this)
-                xmap <Space>m <Plug>(quickhl-manual-this)
-                nmap <Space>M <Plug>(quickhl-manual-reset)
-                xmap <Space>M <Plug>(quickhl-manual-reset)
+                nmap <Space>FF <Plug>(quickhl-manual-this)
+                xmap <Space>FF <Plug>(quickhl-manual-this)
+                nmap <Space>FFF <Plug>(quickhl-manual-reset)
+                xmap <Space>FFF <Plug>(quickhl-manual-reset)
             ]])
 		end,
 	},
 	-- highlight indent line
-	{
-		"shellRaining/hlchunk.nvim",
-		-- event = { "BufReadPre", "BufNewFile" },
-		event = "VeryLazy",
-		opts = {
-			chunk = {
-				enable = true,
-				priority = 15,
-				style = {
-					{ fg = "#806d9c" },
-					{ fg = "#c21f30" },
-				},
-				use_treesitter = true,
-				chunk = {
-					chars = {
-						horizontal_line = "─",
-						vertical_line = "│",
-						left_top = "╭",
-						left_bottom = "╰",
-						right_arrow = ">",
-					},
-					style = "#806d9c",
-				},
-				textobject = "",
-				max_file_size = 1024 * 1024,
-				error_sign = true,
-			},
-			indent = {
-				enable = true,
-				chars = {
-					"│",
-					"¦",
-					"┆",
-					"┊",
-				},
-				style = {
-					vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID("Whitespace")), "fg", "gui"),
-				},
-			},
-			line_num = {
-				enable = false,
-			},
-			blank = {
-				enable = true,
-				chars = {
-					"․",
-				},
-				style = {
-					{ vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID("Whitespace")), "fg", "gui"), "" },
-				},
-			},
-		},
-	},
+	-- {
+	-- 	"shellRaining/hlchunk.nvim",
+	-- 	-- event = { "BufReadPre", "BufNewFile" },
+	-- 	event = "VeryLazy",
+	-- 	opts = {
+	-- 		chunk = {
+	-- 			enable = true,
+	-- 			priority = 15,
+	-- 			style = {
+	-- 				{ fg = "#806d9c" },
+	-- 				{ fg = "#c21f30" },
+	-- 			},
+	-- 			use_treesitter = true,
+	-- 			chunk = {
+	-- 				chars = {
+	-- 					horizontal_line = "─",
+	-- 					vertical_line = "│",
+	-- 					left_top = "╭",
+	-- 					left_bottom = "╰",
+	-- 					right_arrow = ">",
+	-- 				},
+	-- 				style = "#806d9c",
+	-- 			},
+	-- 			textobject = "",
+	-- 			max_file_size = 1024 * 1024,
+	-- 			error_sign = true,
+	-- 		},
+	-- 		indent = {
+	-- 			enable = true,
+	-- 			chars = {
+	-- 				"│",
+	-- 				"¦",
+	-- 				"┆",
+	-- 				"┊",
+	-- 			},
+	-- 			style = {
+	-- 				vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID("Whitespace")), "fg", "gui"),
+	-- 			},
+	-- 		},
+	-- 		line_num = {
+	-- 			enable = false,
+	-- 		},
+	-- 		blank = {
+	-- 			enable = true,
+	-- 			chars = {
+	-- 				"․",
+	-- 			},
+	-- 			style = {
+	-- 				{ vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID("Whitespace")), "fg", "gui"), "" },
+	-- 			},
+	-- 		},
+	-- 	},
+	-- },
 	-- Display Tabs
 	{
 		"romgrk/barbar.nvim",
@@ -349,6 +349,24 @@ return {
 		dependencies = {
 			"junegunn/fzf.vim",
 			"nvim-treesitter/nvim-treesitter",
+		},
+	},
+	-- Various utilities
+	{
+		"folke/snacks.nvim",
+		opts = {
+			bigfile = { enabled = true },
+			git = { enabled = true },
+			gitbrowse = { enabled = true },
+			image = { enabled = true },
+			indent = { enabled = true },
+			input = { enabled = true },
+			notifier = { enabled = true },
+			quickfile = { enabled = true },
+			scope = { enabled = true },
+			scroll = { enabled = true },
+			statuscolumn = { enabled = true },
+			words = { enabled = true },
 		},
 	},
 }
