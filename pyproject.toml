@@ -10,6 +10,7 @@ dependencies = [
   "debugpy>=1.8.14",
   "flake8>=7.2.0",
   "flake8-import-order>=0.18.2",
+  "google-cloud-aiplatform>=1.96.0",
   "google-generativeai>=0.8.5",
   "isort>=6.0.1",
   "jedi>=0.19.2",

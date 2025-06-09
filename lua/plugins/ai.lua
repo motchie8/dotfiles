@@ -103,7 +103,9 @@ return {
 			-- Start litellm proxy if not running
 			vim.api.nvim_create_user_command("AIProxyStart", function()
 				if not is_litellm_running() then
-					vim.fn.system("litellm --config ~/dotfiles/config/lite-llm-config.yaml --port 4000 &")
+					vim.fn.system(
+						"~/dotfiles/.venv/bin/litellm --config ~/dotfiles/config/lite-llm-config.yaml --port 4000 &"
+					)
 					print("Started LiteLLM Proxy.")
 				else
 					print("LiteLLM Proxy is already running.")
