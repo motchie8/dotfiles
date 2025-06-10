@@ -86,38 +86,7 @@ install_dev_libs() {
     fi
 }
 
-install_cmake() {
-    if ! type cmake >/dev/null 2>&1; then
-        info_echo "**** Install cmake ****"
-        if [ "$BUILD_FROM_SOURCE" = true ]; then
-            info_echo "**** Build cmake from source ****"
-            CMAKE_VERSION=3.29.3
-            mkdir -p "$BUILD_DIR"/cmake
-            cd "$BUILD_DIR"/cmake
-            wget https://github.com/Kitware/CMake/archive/refs/tags/v"${CMAKE_VERSION}".tar.gz
-            tar zxvf v"${CMAKE_VERSION}".tar.gz
-            cd CMake-"${CMAKE_VERSION}"
-            ./bootstrap
-            make
-            sudo make install
-            cd "$DOTFILES_DIR"
-        elif [ "$OS" = "$MAC_OS" ]; then
-            info_echo "**** Install cmake by brew ****"
-            brew install cmake
-        elif [ "$OS" = "$UBUNTU" ]; then
-            info_echo "**** Install cmake by apt ****"
-            sudo apt install cmake -y
-        else
-            exit_with_unsupported_os
-        fi
-    else
-        info_echo "**** cmake is already installed ****"
-    fi
-}
-
 mkdir -p "$HOME/bin"
 export PATH="$HOME/bin:$PATH"
 
 install_dev_libs
-
-install_cmake

@@ -154,6 +154,13 @@ install_python() {
     fi
 }
 
+install_cmake() {
+    if ! type cmake >/dev/null 2>&1; then
+        info_echo "**** Install cmake ****"
+        uv tool install cmake
+    fi
+}
+
 set_zsh_as_default_shell() {
     DEFAULT_SHELL=$(echo "$SHELL" | awk -F '[/]' '{print $NF}')
     if [ "$DEFAULT_SHELL" != "zsh" ]; then
@@ -591,6 +598,13 @@ install_aider() {
     fi
 }
 
+install_claude_code() {
+    if ! type claude >/dev/null 2>&1; then
+        info_echo "**** Install Claude Code ****"
+        npm install -g @anthropic-ai/claude-code
+    fi
+}
+
 install_imagemagick() {
     if ! type convert >/dev/null 2>&1; then
         info_echo "**** Install ImageMagick ****"
@@ -610,13 +624,15 @@ Installation steps
 ------------------------------------------------------------------------
 EOF
 
-install_neovim
-
-install_anyenv_and_env_libs
-
 install_uv
 
 install_python
+
+install_cmake
+
+install_neovim
+
+install_anyenv_and_env_libs
 
 setup_zsh
 
@@ -659,6 +675,8 @@ install_shellcheck
 install_vhs
 
 install_aider
+
+install_claude_code
 
 install_imagemagick
 
