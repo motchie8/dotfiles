@@ -133,10 +133,10 @@ return {
 		"t9md/vim-quickhl",
 		config = function()
 			vim.cmd([[
-                nmap <Space>FF <Plug>(quickhl-manual-this)
-                xmap <Space>FF <Plug>(quickhl-manual-this)
-                nmap <Space>FFF <Plug>(quickhl-manual-reset)
-                xmap <Space>FFF <Plug>(quickhl-manual-reset)
+                nmap <Space>M <Plug>(quickhl-manual-this)
+                xmap <Space>M <Plug>(quickhl-manual-this)
+                nmap <Space>MM <Plug>(quickhl-manual-reset)
+                xmap <Space>MM <Plug>(quickhl-manual-reset)
             ]])
 		end,
 	},

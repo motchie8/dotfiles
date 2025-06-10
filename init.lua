@@ -87,6 +87,7 @@ api.nvim_set_keymap("x", ">", ">gv", { noremap = true })
 -- ## terminal mode ##
 api.nvim_set_keymap("t", "<esc>", [[<C-\><C-n>]], { noremap = true })
 api.nvim_set_keymap("t", "jj", [[<C-\><C-n>]], { noremap = true })
+api.nvim_set_keymap("t", "JJ", "<esc>", { noremap = true })
 api.nvim_set_keymap("t", "<C-h>", [[<C-\><C-n><C-W>h]], { noremap = true })
 api.nvim_set_keymap("t", "<C-j>", [[<C-\><C-n><C-W>j]], { noremap = true })
 api.nvim_set_keymap("t", "<C-k>", [[<C-\><C-n><C-W>k]], { noremap = true })
