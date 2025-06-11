@@ -8,7 +8,7 @@ return {
 			"vimwiki.markdown",
 		},
 		keys = {
-			{ "<leader>m", "<cmd>RenderMarkdown toggle<cr>", desc = "Toggle Render Markdown View" },
+			{ "<leader>rm", "<cmd>RenderMarkdown toggle<cr>", desc = "Toggle Render Markdown View" },
 		},
 		opts = {},
 	},
