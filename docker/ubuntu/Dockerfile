@@ -14,6 +14,7 @@ RUN apt update -y && apt install -y sudo
 # Change user and workdir
 USER $user
 WORKDIR /home/$user/dotfiles
+ENV PATH="${HOME}/.local/bin:${PATH}"
 
 # Install essential libs for the first utilize cache layer
 COPY --chown=$user:$user \
