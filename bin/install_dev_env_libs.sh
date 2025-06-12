@@ -575,7 +575,7 @@ install_aider() {
         info_echo "**** Install Aider ****"
         # TMP: install aider from source for MCP support
         # uv tool install --force --python python3.12 --with pip aider-chat@latest
-        uv tool install --force --reinstall --python python3.12 --with pip --with google-cloud-aiplatform "git+https://github.com/quinlanjager/aider.git@feature/litellm-mcp"
+        uv tool install --force --reinstall --python python3.12 --with pip --with google-cloud-aiplatform --with httpx --with playwright "git+https://github.com/quinlanjager/aider.git@feature/litellm-mcp"
         # Init aider configs
         cd "$DOTFILES_DIR"
         if [ ! -e "$DOTFILES_DIR"/config/aider.conf.yml ]; then
@@ -595,13 +595,6 @@ install_aider() {
         else
             exit_with_unsupported_os
         fi
-    fi
-}
-
-install_claude_code() {
-    if ! type claude >/dev/null 2>&1; then
-        info_echo "**** Install Claude Code ****"
-        npm install -g @anthropic-ai/claude-code
     fi
 }
 
@@ -675,8 +668,6 @@ install_shellcheck
 install_vhs
 
 install_aider
-
-install_claude_code
 
 install_imagemagick
 
