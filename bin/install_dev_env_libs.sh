@@ -580,11 +580,11 @@ install_aider() {
         cd "$DOTFILES_DIR"
         if [ ! -e "$DOTFILES_DIR"/config/aider.conf.yml ]; then
             info_echo "**** Create aider.conf.yml using example config ****"
-            cp "$DOTFILES_DIR"/config/aider.conf.yml.example "$DOTFILES_DIR"/config/aider.conf.yml
+            cp "$DOTFILES_DIR"/config/aider.conf.example.yml "$DOTFILES_DIR"/config/aider.conf.yml
         fi
         if [ ! -e "$DOTFILES_DIR"/config/mcp.json ]; then
             info_echo "**** Create mcp.json using example config ****"
-            cp "$DOTFILES_DIR"/config/mcp.json.example "$DOTFILES_DIR"/config/mcp.json
+            cp "$DOTFILES_DIR"/config/mcp.example.json "$DOTFILES_DIR"/config/mcp.json
         fi
         info_echo "**** Install PortAudio for voice coding support ****"
         if [ "$OS" = "$MAC_OS" ]; then
