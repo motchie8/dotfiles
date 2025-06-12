@@ -7,14 +7,14 @@
         "@modelcontextprotocol/server-sequential-thinking"
       ]
     },
-    "filesystem": {
-      "disabled": true,
-      "command": "npx",
+    "markitdown": {
+      "command": "/path/to/your/dotfiles/.venv/bin/markitdown-mcp",
       "args": [
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
-        "/path/to/your/dir"
       ]
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
     },
     "github": {
       "disabled": true,
