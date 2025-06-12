@@ -22,9 +22,9 @@ COPY --chown=$user:$user \
     bin/common.sh \
     /home/$user/dotfiles/bin/
 RUN if [ "$BUILD_FROM_SOURCE" = "true" ]; then \
-        /home/$user/dotfiles/bin/install_essentials.sh -b; \
+        export PATH="~/.local/bin:${PATH} && "/home/$user/dotfiles/bin/install_essentials.sh -b; \
     else \
-        /home/$user/dotfiles/bin/install_essentials.sh; \
+        export PATH="~/.local/bin:${PATH} && /home/$user/dotfiles/bin/install_essentials.sh; \
     fi
 
 COPY --chown=$user:$user bin /home/$user/dotfiles/bin
