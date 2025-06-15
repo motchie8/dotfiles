@@ -55,3 +55,41 @@ BUILD_DIR=$DOTFILES_DIR/build
 ARCH=$(uname -m)
 
 export DOTFILES_DIR BUILD_DIR ARCH
+
+cat /dev/null <<EOF
+------------------------------------------------------------------------
+Utility functions.
+------------------------------------------------------------------------
+EOF
+
+setup_path() {
+    if ! echo "$PATH" | grep -q "$HOME/bin:"; then
+        export PATH="$HOME/bin:$PATH"
+    fi
+    if ! echo "$PATH" | grep -q "$HOME/.local/bin:"; then
+        export PATH="$HOME/.local/bin:$PATH"
+    fi
+    if ! echo "$PATH" | grep -q "/usr/local/go/bin:"; then
+        export PATH="$PATH:/usr/local/go/bin"
+    fi
+    if ! echo "$PATH" | grep -q "$HOME/go/bin:"; then
+        export PATH="$PATH:$HOME/go/bin"
+    fi
+    if ! echo "$PATH" | grep -q "$HOME/.anyenv/bin:"; then
+        export PATH="$PATH:$HOME/.anyenv/bin"
+    fi
+    if ! echo "$PATH" | grep -q "$HOME/.cargo/bin:"; then
+        export PATH="$PATH:$HOME/.cargo/bin"
+    fi
+    if [ -z "${NVIM_DIR:-}" ]; then
+        export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+        if [ -s "$NVM_DIR/nvm.sh" ]; then
+            set +e
+            # shellcheck source=/dev/null
+            \. "$NVM_DIR/nvm.sh"
+            set -e
+        fi
+    fi
+}
+
+setup_path

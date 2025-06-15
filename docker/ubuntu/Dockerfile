@@ -14,18 +14,13 @@ RUN apt update -y && apt install -y sudo
 # Change user and workdir
 USER $user
 WORKDIR /home/$user/dotfiles
-ENV PATH="${HOME}/.local/bin:${PATH}"
 
 # Install essential libs for the first utilize cache layer
 COPY --chown=$user:$user \
     bin/install_essentials.sh \
     bin/common.sh \
     /home/$user/dotfiles/bin/
-RUN if [ "$BUILD_FROM_SOURCE" = "true" ]; then \
-        export PATH="~/.local/bin:${PATH} && "/home/$user/dotfiles/bin/install_essentials.sh -b; \
-    else \
-        export PATH="~/.local/bin:${PATH} && /home/$user/dotfiles/bin/install_essentials.sh; \
-    fi
+RUN /home/$user/dotfiles/bin/install_essentials.sh
 
 COPY --chown=$user:$user bin /home/$user/dotfiles/bin
 COPY --chown=$user:$user tmux /home/$user/dotfiles/tmux

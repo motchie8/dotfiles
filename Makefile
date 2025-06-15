@@ -5,7 +5,7 @@ install-from-source: install-base-from-source install-taskwarrior
 install-by-package-manager: install-base-by-package-manager install-taskwarrior
 
 install-base-from-source:
-	./bin/install_essentials.sh -b
+	./bin/install_essentials.sh
 	./bin/install_dev_env_libs.sh -b -t n
 	./bin/setup_symbolic_links.sh
 

@@ -6,9 +6,7 @@ cat /dev/null <<EOF
 Source common functions and variables.
 ------------------------------------------------------------------------
 EOF
-# source "$(dirname "$(realpath "$0")")/common.sh"
 source "bin/common.sh"
-export PATH="$HOME/bin:$PATH"
 
 cat /dev/null <<EOF
 ------------------------------------------------------------------------
@@ -133,34 +131,6 @@ install_anyenv_and_env_libs() {
     fi
 }
 
-install_uv() {
-    if ! type uv >/dev/null 2>&1; then
-        info_echo "**** Install uv ****"
-        export UV_NO_MODIFY_PATH=1
-        curl -LsSf https://astral.sh/uv/install.sh | sh
-        export PATH="$HOME/.local/bin:$PATH"
-    fi
-}
-
-install_python() {
-    if ! type python3 >/dev/null 2>&1; then
-        info_echo "**** Install python3 ****"
-        uv python install 3.12 --default --preview
-    fi
-    if [ -e "$DOTFILES_DIR"/.venv ]; then
-        info_echo """**** Setup virtual environment for dotfiles ****"""
-        cd "$DOTFILES_DIR"
-        uv sync
-    fi
-}
-
-install_cmake() {
-    if ! type cmake >/dev/null 2>&1; then
-        info_echo "**** Install cmake ****"
-        uv tool install cmake
-    fi
-}
-
 set_zsh_as_default_shell() {
     DEFAULT_SHELL=$(echo "$SHELL" | awk -F '[/]' '{print $NF}')
     if [ "$DEFAULT_SHELL" != "zsh" ]; then
@@ -214,24 +184,6 @@ install_iceberg_tmux_conf() {
     fi
 }
 
-install_node() {
-    # install or update npm and node for coc-nvim
-    if ! type nvm >/dev/null 2>&1; then
-        info_echo "**** Install nvm ****"
-        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-        export NVM_DIR="$HOME/.nvm"
-        # shellcheck disable=SC1091
-        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-    fi
-    if ! type node >/dev/null 2>&1; then
-        info_echo "**** Install node ****"
-        NODE_VERSION=22.14.0
-        nvm install "$NODE_VERSION"
-        nvm alias default "$NODE_VERSION"
-        nvm use "$NODE_VERSION"
-    fi
-}
-
 create_tmux_user_conf() {
     # create .tmux.user.conf for custom prefix key
     info_echo "**** Create or update .tmux.user.conf to set prefix key****"
@@ -265,31 +217,6 @@ install_tmux_mem_cpu_load() {
     fi
 }
 
-install_go() {
-    if ! type go >/dev/null 2>&1; then
-        info_echo "**** Install go****"
-        if type brew >/dev/null 2>&1; then
-            brew install go
-        else
-            go_version="1.21.1"
-
-            if [ "$ARCH" == "arm64" ] || [ "$ARCH" == "aarch64" ]; then
-                wget -O go.tar.gz https://go.dev/dl/go"${go_version}.linux-arm64.tar.gz"
-            elif [ "$ARCH" == "x86_64" ]; then
-                wget -O go.tar.gz https://go.dev/dl/go"${go_version}.linux-amd64.tar.gz"
-            else
-                echo "Unsupported architecture: $ARCH"
-                exit 1
-            fi
-            sudo rm -rf /usr/local/go
-            sudo tar -C /usr/local -xzf go.tar.gz
-            rm go.tar.gz
-        fi
-        # setup PATH to use go lang to install modules in the following steps
-        export PATH=$PATH:/usr/local/go/bin
-    fi
-}
-
 install_act() {
     if ! type act >/dev/null 2>&1; then
         info_echo "**** Install act ***"
@@ -309,16 +236,6 @@ install_act() {
         else
             exit_with_unsupported_os
         fi
-    fi
-}
-
-install_rust() {
-    if ! type cargo >/dev/null 2>&1; then
-        info_echo "**** Install rust ****"
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs >rustup-init.sh
-        sh rustup-init.sh -y --no-modify-path
-        rm rustup-init.sh
-        export PATH="$HOME/.cargo/bin:$PATH"
     fi
 }
 
@@ -628,12 +545,6 @@ Installation steps
 ------------------------------------------------------------------------
 EOF
 
-install_uv
-
-install_python
-
-install_cmake
-
 install_neovim
 
 install_anyenv_and_env_libs
@@ -642,13 +553,7 @@ setup_zsh
 
 install_iceberg_tmux_conf
 
-install_node
-
-install_go
-
 install_act
-
-install_rust
 
 install_formatter
 
