@@ -161,6 +161,17 @@ opt.sh = "zsh"
 -- vim.cmd('autocmd BufWritePost *.py ')
 -- vim.cmd('autocmd!')
 -- vim.cmd('autocmd!')
+-- Keymap for help file
+api.nvim_create_autocmd("FileType", {
+	pattern = "help",
+	callback = function(ev)
+		local opts = { buffer = ev.buf, noremap = true, silent = true }
+		-- Jump to tag
+		vim.keymap.set("n", "<Leader>jt", "<C-]>", opts)
+		-- Jump back
+		vim.keymap.set("n", "<Leader>jb", "<C-T>", opts)
+	end,
+})
 
 -- Bootstrapping for lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
