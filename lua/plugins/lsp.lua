@@ -1,7 +1,29 @@
 return {
+	-- Previw code with code actions applied
+	{
+		"aznhe21/actions-preview.nvim",
+		event = "VeryLazy",
+		opts = {
+			telescope = {
+				sorting_strategy = "ascending",
+				layout_strategy = "vertical",
+				layout_config = {
+					width = 0.8,
+					height = 0.9,
+					prompt_position = "top",
+					preview_cutoff = 20,
+					preview_height = function(_, _, max_lines)
+						return max_lines - 15
+					end,
+				},
+			},
+		},
+		config = function()
+			vim.keymap.set("n", "<leader>ca", require("actions-preview").code_actions)
+		end,
+	},
 	{
 		"mason-org/mason.nvim",
-		enabled = false,
 		opts = {
 			ui = {
 				icons = {
@@ -14,16 +36,15 @@ return {
 	},
 	{
 		"mason-org/mason-lspconfig.nvim",
-		enabled = false,
 		dependencies = {
-			{ "mason-org/mason.nvim", opts = {} },
+			"mason-org/mason.nvim",
 			"neovim/nvim-lspconfig",
 		},
 		opts = {
 			automatic_enable = true,
 			ensure_installed = {
 				-- [LSP] Lua
-				"lua-language-server",
+				"lua_ls", -- "lua-language-server",
 				-- [LSP] Python
 				"pyright",
 				-- [Linter] [Formatter] [LSP] Python
@@ -33,10 +54,12 @@ return {
 				-- [Formatter] Markdown, YAML, JSON, CSS, HTML, JSX, Javascript, Typescript
 				-- "prettier",
 				-- [Linter] Markdown, Text
+				-- for formatting: setup none-ls.nvim: https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md#textlint-2
 				-- "textlint",
 				-- [Formatter] dbt, SQL
 				"sqlfmt",
 				-- [Linter] dbt, SQL
+				-- for formatting: setup none-ls.nvim: https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md#textlint-2
 				"sqlfluff",
 				-- [LSP] [Formatter] toml
 				"taplo",
@@ -55,31 +78,28 @@ return {
 	},
 	{
 		"neovim/nvim-lspconfig",
-		enabled = false,
 		dependencies = { "saghen/blink.cmp" },
-		config = function()
-			local capabilities = vim.lsp.protocol.make_client_capabilities()
-			capabilities = vim.tbl_deep_extend(
-				"force",
-				capabilities,
-				require("blink.cmp").get_lsp_capabilities({}, false)
-			)
-			capabilities = vim.tbl_deep_extend("force", capabilities, {
-				textDocument = {
-					foldingRange = {
-						dynamicRegistration = false,
-						lineFoldingOnly = true,
-					},
-				},
-			})
+		opts = {
+			servers = {},
+		},
+		config = function(_, opts)
+			local lspconfig = require("lspconfig")
+			for server, config in pairs(opts.servers) do
+				-- passing config.capabilities to blink.cmp merges with the capabilities in your
+				-- `opts[server].capabilities, if you've defined it
+				config.capabilities = require("blink.cmp").get_lsp_capabilities(config.capabilities)
+				lspconfig[server].setup(config)
+			end
 		end,
 	},
 	{
 		"saghen/blink.cmp",
-		enabled = false,
 		event = { "InsertEnter", "CmdlineEnter" },
 		-- optional: provides snippets for the snippet source
-		dependencies = { "rafamadriz/friendly-snippets" },
+		dependencies = {
+			"rafamadriz/friendly-snippets",
+			"L3MON4D3/LuaSnip",
+		},
 
 		-- use a release tag to download pre-built binaries
 		version = "1.*",
@@ -103,7 +123,26 @@ return {
 			-- C-k: Toggle signature help (if signature.enabled = true)
 			--
 			-- See :h blink-cmp-config-keymap for defining your own keymap
-			keymap = { preset = "enter" },
+			keymap = {
+				preset = "none",
+				["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
+				-- ["<C-e>"] = { "hide", "fallback" },
+				["<CR>"] = { "accept", "fallback" },
+				-- ["<Tab>"] = { "snippet_forward", "fallback" },
+				-- ["<S-Tab>"] = { "snippet_backward", "fallback" },
+
+				["<Up>"] = { "select_prev", "fallback" },
+				["<Down>"] = { "select_next", "fallback" },
+				-- ["<C-p>"] = { "select_prev", "fallback_to_mappings" },
+				-- ["<C-n>"] = { "select_next", "fallback_to_mappings" },
+
+				["<C-b>"] = { "scroll_documentation_up", "fallback" },
+				["<C-f>"] = { "scroll_documentation_down", "fallback" },
+
+				["<C-k>"] = { "show_signature", "hide_signature", "fallback" },
+			},
+
+			snippets = { preset = "luasnip" },
 
 			appearance = {
 				-- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
@@ -112,12 +151,12 @@ return {
 			},
 
 			-- (Default) Only show the documentation popup when manually triggered
-			completion = { documentation = { auto_show = true } },
+			completion = { documentation = { auto_show = true, auto_show_delay_ms = 500 } },
 
 			-- Default list of enabled providers defined so that you can extend it
 			-- elsewhere in your config, without redefining it, due to `opts_extend`
 			sources = {
-				default = { "lsp", "path", "snippets", "buffer" },
+				default = { "snippets", "lsp", "path", "buffer" },
 			},
 
 			-- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
@@ -135,17 +174,19 @@ return {
 		event = "VeryLazy",
 		dependencies = { "nvim-lua/plenary.nvim" },
 		config = function()
-			local null_ls = require("null-ls")
-			null_ls.setup({
-				sources = {
-					-- フォーマッタ
-					null_ls.builtins.formatting.prettier,
-					null_ls.builtins.formatting.black,
-					-- リンター
-					null_ls.builtins.diagnostics.eslint,
-				},
+			local none_ls = require("none-ls")
+			none_ls.setup({
+				sources = {},
 			})
 		end,
+	},
+	{
+		"L3MON4D3/LuaSnip",
+		-- follow latest release.
+		version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+		-- install jsregexp (optional!).
+		build = "make install_jsregexp",
+		config = function() end,
 	},
 	{
 		"ray-x/lsp_signature.nvim",
@@ -181,7 +222,7 @@ return {
 	},
 	{
 		"neoclide/coc.nvim",
-		enabled = true,
+		enabled = false,
 		branch = "release",
 		config = function()
 			-- https://raw.githubusercontent.com/neoclide/coc.nvim/master/doc/coc-example-config.lua
@@ -342,7 +383,7 @@ return {
 	-- Preview results from coc.nvim
 	{
 		"fannheyward/telescope-coc.nvim",
-		enabled = true,
+		enabled = false,
 		dependencies = { "neoclide/coc.nvim", "nvim-telescope/telescope.nvim" },
 		event = "VeryLazy",
 		config = function()
