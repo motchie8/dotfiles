@@ -54,10 +54,10 @@ build_neovim() {
     info_echo "**** Build Neovim from source****"
     # install prerequisites
     if [ "$OS" = "$UBUNTU" ]; then
-        sudo apt-get install -y ninja-build gettext unzip curl
+        sudo apt-get install -y ninja-build gettext unzip curl luarocks
     elif [ "$OS" = "$MAC_OS" ]; then
         set +e
-        brew install ninja gettext curl
+        brew install ninja gettext curl luarocks
         set -e
     else
         exit_with_unsupported_os
