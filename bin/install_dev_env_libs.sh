@@ -67,13 +67,13 @@ build_neovim() {
         git clone --depth 1 https://github.com/neovim/neovim "$BUILD_DIR/neovim"
         cd "$BUILD_DIR/neovim"
         make CMAKE_BUILD_TYPE=RelWithDebInfo
-        sudo make install
+        sudo PATH="$PATH" make install
     else
         cd "$BUILD_DIR/neovim"
         if ! git pull | grep -q "Already up to date"; then
             make distclean
             make CMAKE_BUILD_TYPE=RelWithDebInfo
-            sudo make install
+            sudo PATH="$PATH" make install
         fi
     fi
     cd "$DOTFILES_DIR"
