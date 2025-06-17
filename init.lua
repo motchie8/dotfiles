@@ -8,8 +8,7 @@ api.nvim_set_var("loaded_netrw", 1)
 api.nvim_set_var("loaded_netrwPlugin", 1)
 
 -- # keymapping #
-vim.g.mapleader = " "
-vim.g.maplocalleader = "\\" -- Same for `maplocalleader`
+api.nvim_set_var("mapleader", " ") -- Set leader key to space
 
 -- ## insert mode ##
 api.nvim_set_keymap("i", "jj", "<ESC>", { noremap = true })
