@@ -61,9 +61,8 @@ return {
 	},
 	-- Autocomplete brackets
 	{
-		"jiangmiao/auto-pairs",
-		config = function()
-			vim.g.AutoPairsMapSpace = 0
-		end,
+		"windwp/nvim-autopairs",
+		event = "InsertEnter",
+		config = true,
 	},
 }

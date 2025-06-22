@@ -354,6 +354,9 @@ return {
 	-- Various utilities
 	{
 		"folke/snacks.nvim",
+		priority = 1000,
+		lazy = false,
+		dependencies = { "nvim-tree/nvim-web-devicons" },
 		opts = {
 			bigfile = { enabled = true },
 			git = { enabled = true },
@@ -361,11 +364,51 @@ return {
 			image = { enabled = true },
 			indent = { enabled = true },
 			input = { enabled = true },
-			-- notifier = { enabled = true },
+			notifier = { enabled = true },
 			quickfile = { enabled = true },
 			scope = { enabled = true },
 			statuscolumn = { enabled = true },
+			toggle = { enabled = true },
 			words = { enabled = true },
+		},
+		keys = {
+			-- Notifier
+			{
+				"<leader>sh",
+				function()
+					Snacks.notifier.show_history()
+				end,
+				desc = "Notification History",
+			},
+			-- Picker
+			{
+				"sd",
+				function()
+					Snacks.picker.diagnostics()
+				end,
+				desc = "Diagnostics",
+			},
+			{
+				"sD",
+				function()
+					Snacks.picker.diagnostics_buffer()
+				end,
+				desc = "Buffer Diagnostics",
+			},
+			{
+				"sp",
+				function()
+					Snacks.picker.pickers()
+				end,
+				desc = "Pickers",
+			},
+			{
+				"sm",
+				function()
+					Snacks.picker.keymaps()
+				end,
+				desc = "Keymaps",
+			},
 		},
 	},
 }

@@ -1,4 +1,241 @@
 return {
+	-- Package manager for LSP, DAP, Linter, Formatter, etc.
+	{
+		"mason-org/mason.nvim",
+		opts = {
+			ui = {
+				icons = {
+					package_installed = "✓",
+					package_pending = "➜",
+					package_uninstalled = "✗",
+				},
+				border = "single",
+			},
+		},
+	},
+	-- Make it easier to user lspconfig with mason.nvim
+	{
+		"mason-org/mason-lspconfig.nvim",
+		dependencies = {
+			"mason-org/mason.nvim",
+			"neovim/nvim-lspconfig",
+		},
+		opts = {
+			automatic_enable = true,
+			ensure_installed = {
+				-- [LSP] Lua
+				"lua_ls", -- "lua-language-server",
+				-- [LSP] Python
+				"pyright",
+				-- [Linter] [Formatter] [LSP] Python
+				-- NOTE: Disabled due to an error: ~/.local/share/nvim/mason/packages/ruff/venv/bin/python3 not found
+				-- "ruff",
+				-- [LSP] [Formatter] [Linter] JSON, Javascript, Typescript, JSX, CSS, GraphQL
+				"biome",
+				-- [Formatter] Markdown, YAML, JSON, CSS, HTML, JSX, Javascript, Typescript
+				-- "prettier",
+				-- [Linter] Markdown, Text
+				-- for formatting: setup none-ls.nvim: https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md#textlint-2
+				-- "textlint",
+				-- [Formatter] dbt, SQL
+				-- NOTE: Disabled due to a warning: Server "sqlfluff" is not valid entry in ensure_installed.
+				-- "sqlfmt",
+				-- [Linter] dbt, SQL
+				-- for formatting: setup none-ls.nvim: https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md#textlint-2
+				-- NOTE: Disabled due to a warning: Server "sqlfluff" is not valid entry in ensure_installed.
+				-- "sqlfluff",
+				-- [LSP] [Formatter] toml
+				"taplo",
+				-- [Formatter] [Linter] [Runtime] terraform
+				-- NOTE: Disabled due to a warning: Server "sqlfluff" is not valid entry in ensure_installed.
+				-- "terraform",
+				-- [LSP] terraform
+				"terraformls",
+				-- [LSP] bash, zsh
+				"bashls",
+				-- [Linter] bash
+				-- NOTE: Disabled due to a warning: Server "sqlfluff" is not valid entry in ensure_installed.
+				-- "shellcheck",
+				-- [LSP] Docker
+				"docker_compose_language_service",
+			},
+		},
+	},
+	-- LSP configuration
+	{
+		"neovim/nvim-lspconfig",
+		dependencies = { "saghen/blink.cmp" },
+		config = function()
+			vim.api.nvim_create_autocmd("LspAttach", {
+				group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+				callback = function(ev)
+					-- Buffer local mappings.
+					-- See `:help vim.lsp.*` for documentation on any of the below functions
+					local opts = { buffer = ev.buf }
+
+					vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+					vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+					vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+					vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+					vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
+					vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, opts)
+					vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, opts)
+					-- Use actions-preview.nvim plugin for code actions
+					-- vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, opts)
+					vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+					vim.keymap.set("n", "<space>fm", function()
+						vim.lsp.buf.format({ async = true })
+					end, opts)
+				end,
+			})
+		end,
+	},
+	{
+		"saghen/blink.cmp",
+		event = { "InsertEnter", "CmdlineEnter" },
+		dependencies = {
+			"rafamadriz/friendly-snippets",
+			"L3MON4D3/LuaSnip",
+			"nvim-tree/nvim-web-devicons",
+			"onsails/lspkind.nvim",
+		},
+		version = "1.*",
+		opts = {
+			-- See :h blink-cmp-config-keymap for defining your own keymap
+			keymap = {
+				preset = "none",
+				["<C-space>"] = { "show", "hide" },
+				["<CR>"] = { "accept", "fallback" },
+				["<Up>"] = { "select_prev", "fallback" },
+				["<Down>"] = { "select_next", "fallback" },
+				["K"] = { "show_documentation", "hide_documentation", "fallback" },
+				["<C-d>"] = { "scroll_documentation_down", "fallback" },
+				["<C-u>"] = { "scroll_documentation_up", "fallback" },
+				["<C-k>"] = { "show_signature", "hide_signature", "fallback" },
+				["<C-h>"] = { "snippet_backward", "fallback" },
+				["<C-l>"] = { "snippet_forward", "fallback" },
+			},
+
+			snippets = { preset = "luasnip" },
+
+			appearance = {
+				-- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+				-- Adjusts spacing to ensure icons are aligned
+				nerd_font_variant = "normal",
+			},
+			completion = {
+				documentation = { auto_show = true, auto_show_delay_ms = 250 },
+				-- Completion menu drawing: nvim-web-devicons + lspkind
+				-- ref. https://cmp.saghen.dev/recipes.html#nvim-web-devicons-lspkind
+				menu = {
+					draw = {
+						components = {
+							kind_icon = {
+								text = function(ctx)
+									local icon = ctx.kind_icon
+									if vim.tbl_contains({ "Path" }, ctx.source_name) then
+										local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label)
+										if dev_icon then
+											icon = dev_icon
+										end
+									else
+										icon = require("lspkind").symbolic(ctx.kind, {
+											mode = "symbol",
+										})
+									end
+
+									return icon .. ctx.icon_gap
+								end,
+
+								-- Optionally, use the highlight groups from nvim-web-devicons
+								-- You can also add the same function for `kind.highlight` if you want to
+								-- keep the highlight groups in sync with the icons.
+								highlight = function(ctx)
+									local hl = ctx.kind_hl
+									if vim.tbl_contains({ "Path" }, ctx.source_name) then
+										local dev_icon, dev_hl = require("nvim-web-devicons").get_icon(ctx.label)
+										if dev_icon then
+											hl = dev_hl
+										end
+									end
+									return hl
+								end,
+							},
+						},
+					},
+				},
+			},
+			sources = {
+				-- Snippets as the first source
+				default = { "snippets", "lsp", "path", "buffer" },
+				providers = {
+					lsp = {
+						name = "LSP",
+						module = "blink.cmp.sources.lsp",
+						enabled = true,
+						transform_items = function(_, items)
+							-- Filter out text items from LSP to reduce noise
+							return vim.tbl_filter(function(item)
+								return item.kind ~= require("blink.cmp.types").CompletionItemKind.Text
+							end, items)
+						end,
+					},
+					buffer = {
+						opts = {
+							get_bufnrs = function()
+								return vim.tbl_filter(function(bufnr)
+									return vim.bo[bufnr].buftype == ""
+								end, vim.api.nvim_list_bufs())
+							end,
+						},
+					},
+				},
+			},
+			-- Terminal completions may not be stable yet
+			term = {
+				enabled = true,
+			},
+			-- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
+			fuzzy = { implementation = "prefer_rust_with_warning" },
+		},
+		opts_extend = { "sources.default" },
+	},
+	{
+		"nvimtools/none-ls.nvim",
+		enabled = false,
+		event = "VeryLazy",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		config = function()
+			local none_ls = require("none-ls")
+			none_ls.setup({
+				sources = {},
+			})
+		end,
+	},
+	-- Snippet engine
+	{
+		"hrsh7th/nvim-cmp",
+		dependencies = { "L3MON4D3/LuaSnip", "rafamadriz/friendly-snippets" },
+		config = function(_, opts)
+			require("blink.cmp").setup(opts)
+		end,
+	},
+	-- vscode-like pictograms for lsp completion items
+	{
+		"onsails/lspkind.nvim",
+		event = "VeryLazy",
+	},
+	-- Snippet
+	{
+		"L3MON4D3/LuaSnip",
+		-- follow latest release.
+		version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+		-- install jsregexp (optional!).
+		build = "make install_jsregexp",
+		config = function()
+			require("luasnip.loaders.from_lua").load({ paths = { "~/dotfiles/snippets/luasnip" } })
+		end,
+	},
 	-- Previw code with code actions applied
 	{
 		"aznhe21/actions-preview.nvim",
@@ -22,172 +259,17 @@ return {
 			vim.keymap.set("n", "<leader>ca", require("actions-preview").code_actions)
 		end,
 	},
+	-- Inline diagnostics
 	{
-		"mason-org/mason.nvim",
-		opts = {
-			ui = {
-				icons = {
-					package_installed = "✓",
-					package_pending = "➜",
-					package_uninstalled = "✗",
-				},
-			},
-		},
-	},
-	{
-		"mason-org/mason-lspconfig.nvim",
-		dependencies = {
-			"mason-org/mason.nvim",
-			"neovim/nvim-lspconfig",
-		},
-		opts = {
-			automatic_enable = true,
-			ensure_installed = {
-				-- [LSP] Lua
-				"lua_ls", -- "lua-language-server",
-				-- [LSP] Python
-				"pyright",
-				-- [Linter] [Formatter] [LSP] Python
-				"ruff",
-				-- [LSP] [Formatter] [Linter] JSON, Javascript, Typescript, JSX, CSS, GraphQL
-				"biome",
-				-- [Formatter] Markdown, YAML, JSON, CSS, HTML, JSX, Javascript, Typescript
-				-- "prettier",
-				-- [Linter] Markdown, Text
-				-- for formatting: setup none-ls.nvim: https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md#textlint-2
-				-- "textlint",
-				-- [Formatter] dbt, SQL
-				"sqlfmt",
-				-- [Linter] dbt, SQL
-				-- for formatting: setup none-ls.nvim: https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md#textlint-2
-				"sqlfluff",
-				-- [LSP] [Formatter] toml
-				"taplo",
-				-- [Formatter] [Linter] [Runtime] terraform
-				"terraform",
-				-- [LSP] terraform
-				"terraform-ls",
-				-- [LSP] bash, zsh
-				"bash-language-server",
-				-- [Linter] bash
-				"shellcheck",
-				-- [LSP] Docker
-				"docker-compose-language-service",
-			},
-		},
-	},
-	{
-		"neovim/nvim-lspconfig",
-		dependencies = { "saghen/blink.cmp" },
-		opts = {
-			servers = {},
-		},
-		config = function(_, opts)
-			local lspconfig = require("lspconfig")
-			for server, config in pairs(opts.servers) do
-				-- passing config.capabilities to blink.cmp merges with the capabilities in your
-				-- `opts[server].capabilities, if you've defined it
-				config.capabilities = require("blink.cmp").get_lsp_capabilities(config.capabilities)
-				lspconfig[server].setup(config)
-			end
-		end,
-	},
-	{
-		"saghen/blink.cmp",
-		event = { "InsertEnter", "CmdlineEnter" },
-		-- optional: provides snippets for the snippet source
-		dependencies = {
-			"rafamadriz/friendly-snippets",
-			"L3MON4D3/LuaSnip",
-		},
-
-		-- use a release tag to download pre-built binaries
-		version = "1.*",
-		-- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
-		-- build = 'cargo build --release',
-		-- If you use nix, you can build from source using latest nightly rust with:
-		-- build = 'nix run .#build-plugin',
-
-		---@module 'blink.cmp'
-		---@type blink.cmp.Config
-		opts = {
-			-- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
-			-- 'super-tab' for mappings similar to vscode (tab to accept)
-			-- 'enter' for enter to accept
-			-- 'none' for no mappings
-			--
-			-- All presets have the following mappings:
-			-- C-space: Open menu or open docs if already open
-			-- C-n/C-p or Up/Down: Select next/previous item
-			-- C-e: Hide menu
-			-- C-k: Toggle signature help (if signature.enabled = true)
-			--
-			-- See :h blink-cmp-config-keymap for defining your own keymap
-			keymap = {
-				preset = "none",
-				["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
-				-- ["<C-e>"] = { "hide", "fallback" },
-				["<CR>"] = { "accept", "fallback" },
-				-- ["<Tab>"] = { "snippet_forward", "fallback" },
-				-- ["<S-Tab>"] = { "snippet_backward", "fallback" },
-
-				["<Up>"] = { "select_prev", "fallback" },
-				["<Down>"] = { "select_next", "fallback" },
-				-- ["<C-p>"] = { "select_prev", "fallback_to_mappings" },
-				-- ["<C-n>"] = { "select_next", "fallback_to_mappings" },
-
-				["<C-b>"] = { "scroll_documentation_up", "fallback" },
-				["<C-f>"] = { "scroll_documentation_down", "fallback" },
-
-				["<C-k>"] = { "show_signature", "hide_signature", "fallback" },
-			},
-
-			snippets = { preset = "luasnip" },
-
-			appearance = {
-				-- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
-				-- Adjusts spacing to ensure icons are aligned
-				nerd_font_variant = "mono",
-			},
-
-			-- (Default) Only show the documentation popup when manually triggered
-			completion = { documentation = { auto_show = true, auto_show_delay_ms = 500 } },
-
-			-- Default list of enabled providers defined so that you can extend it
-			-- elsewhere in your config, without redefining it, due to `opts_extend`
-			sources = {
-				default = { "snippets", "lsp", "path", "buffer" },
-			},
-
-			-- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
-			-- You may use a lua implementation instead by using `implementation = "lua"` or fallback to the lua implementation,
-			-- when the Rust fuzzy matcher is not available, by using `implementation = "prefer_rust"`
-			--
-			-- See the fuzzy documentation for more information
-			fuzzy = { implementation = "prefer_rust_with_warning" },
-		},
-		opts_extend = { "sources.default" },
-	},
-	{
-		"nvimtools/none-ls.nvim",
-		enabled = false,
-		event = "VeryLazy",
-		dependencies = { "nvim-lua/plenary.nvim" },
+		"rachartier/tiny-inline-diagnostic.nvim",
+		event = "LspAttach",
+		priority = 1000, -- needs to be loaded in first
 		config = function()
-			local none_ls = require("none-ls")
-			none_ls.setup({
-				sources = {},
-			})
+			require("tiny-inline-diagnostic").setup()
+			vim.diagnostic.config({ virtual_text = false }) -- Only if needed in your configuration, if you already have native LSP diagnostics
 		end,
 	},
-	{
-		"L3MON4D3/LuaSnip",
-		-- follow latest release.
-		version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
-		-- install jsregexp (optional!).
-		build = "make install_jsregexp",
-		config = function() end,
-	},
+	--- Currently disabled ---
 	{
 		"ray-x/lsp_signature.nvim",
 		enabled = false,
@@ -204,11 +286,6 @@ return {
 		config = function()
 			require("fidget").setup({})
 		end,
-	},
-	{
-		"onsails/lspkind.nvim",
-		enabled = false,
-		event = "VeryLazy",
 	},
 	{
 		"folke/trouble.nvim",

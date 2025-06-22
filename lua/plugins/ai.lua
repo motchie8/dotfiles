@@ -165,10 +165,11 @@ return {
 			"folke/snacks.nvim",
 			--- The below dependencies are optional
 			"catppuccin/nvim",
-			"nvim-tree/nvim-tree.lua",
+			{ "nvim-tree/nvim-tree.lua", version = "^3.30" },
 			--- Neo-tree integration
 			{
 				"nvim-neo-tree/neo-tree.nvim",
+
 				opts = function(_, opts)
 					-- Example mapping configuration (already set by default)
 					opts.window = {

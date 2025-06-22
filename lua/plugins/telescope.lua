@@ -33,28 +33,6 @@ return {
 			require("telescope").load_extension("fzf")
 		end,
 	},
-	-- Intelligent prioritization for telescope
-	{
-		"nvim-telescope/telescope-frecency.nvim",
-		dependencies = {
-			"nvim-telescope/telescope.nvim",
-			"nvim-tree/nvim-web-devicons",
-		},
-		event = "VeryLazy",
-		config = function()
-			require("telescope").load_extension("frecency")
-			vim.api.nvim_set_keymap("n", "sp", "<cmd>Telescope frecency<cr>", { noremap = true })
-		end,
-		-- keys = {
-		-- 	{
-		-- 		"sp",
-		-- 		function()
-		-- 			require("telescope").extensions.frecency.frecency()
-		-- 		end,
-		-- 		desc = "Intelligent prioritization",
-		-- 	},
-		-- },
-	},
 	-- quickfix + telescope
 	{
 		"atusy/qfscope.nvim",
