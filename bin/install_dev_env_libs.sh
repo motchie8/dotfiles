@@ -264,10 +264,23 @@ install_formatter() {
     #    cargo install taplo-cli
     #fi
 
+    # install sql formatter
+    if ! type sqlfmt >/dev/null 2>&1; then
+        info_echo "**** Install sqlfmt ****"
+        uv tool install 'shandy-sqlfmt[jinjafmt]'
+    fi
+
     # install formatter for various filetypes
     if ! type prettier >/dev/null 2>&1; then
         info_echo "**** Install prettier for formatter for various filetypes ***"
         npm -g install prettier
+    fi
+}
+
+install_linter() {
+    if ! type sqlfluff >/dev/null 2>&1; then
+        info_echo "**** Install sqlfluff ****"
+        uv tool install sqlfluff
     fi
 }
 
@@ -556,6 +569,8 @@ install_iceberg_tmux_conf
 install_act
 
 install_formatter
+
+install_linter
 
 install_fzf
 

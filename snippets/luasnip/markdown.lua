@@ -8,8 +8,12 @@ local function get_today_date()
 end
 local function get_weekday()
 	local today = os.date("*t")
-	local weekdays = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" }
+	local weekdays = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" }
 	return weekdays[today.wday]
+end
+local function get_hhmm()
+	local today = os.date("*t")
+	return string.format("%02d:%02d", today.hour, today.min)
 end
 return {
 	s(
@@ -54,4 +58,5 @@ return {
 			{ i(1, "task"), i(2, "min") }
 		)
 	),
+	s("now", fmt("{}", { i(1, get_hhmm()) })),
 }

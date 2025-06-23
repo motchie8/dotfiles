@@ -66,6 +66,7 @@ return {
 		"neovim/nvim-lspconfig",
 		dependencies = { "saghen/blink.cmp" },
 		config = function()
+			-- Setup
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 				callback = function(ev)
@@ -200,24 +201,43 @@ return {
 		},
 		opts_extend = { "sources.default" },
 	},
+	-- Provide a way for non-LSP sources to hook into Neovim's LSP client
 	{
 		"nvimtools/none-ls.nvim",
-		enabled = false,
 		event = "VeryLazy",
 		dependencies = { "nvim-lua/plenary.nvim" },
 		config = function()
-			local none_ls = require("none-ls")
-			none_ls.setup({
-				sources = {},
+			local null_ls = require("null-ls")
+			null_ls.setup({
+				sources = {
+					null_ls.builtins.formatting.sqlfmt.with({
+						extra_filetypes = { "dbt" },
+					}),
+					null_ls.builtins.diagnostics.sqlfluff.with({
+						extra_args = { "--dialect", "bigquery" },
+						extra_filetypes = { "dbt" },
+					}),
+				},
 			})
 		end,
 	},
-	-- Snippet engine
+	-- Auto formatting on save
 	{
-		"hrsh7th/nvim-cmp",
-		dependencies = { "L3MON4D3/LuaSnip", "rafamadriz/friendly-snippets" },
-		config = function(_, opts)
-			require("blink.cmp").setup(opts)
+		"lukas-reineke/lsp-format.nvim",
+		config = function()
+			require("lsp-format").setup({})
+
+			vim.api.nvim_create_autocmd("LspAttach", {
+				group = vim.api.nvim_create_augroup("LspFormat", {}),
+				desc = "Enable LSP formatting on LspAttach",
+				pattern = "*",
+				-- This will run after the LSP client is attached to the buffer
+				-- and will set up the formatter for that client.
+				callback = function(args)
+					local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+					require("lsp-format").on_attach(client, args.buf)
+				end,
+			})
 		end,
 	},
 	-- vscode-like pictograms for lsp completion items
