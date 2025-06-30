@@ -280,7 +280,7 @@ install_formatter() {
 install_linter() {
     if ! type sqlfluff >/dev/null 2>&1; then
         info_echo "**** Install sqlfluff ****"
-        uv tool install sqlfluff
+        uv tool install sqlfluff --with sqlfluff-templater-dbt
     fi
 }
 
