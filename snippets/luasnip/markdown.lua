@@ -58,5 +58,4 @@ return {
 			{ i(1, "task"), i(2, "min") }
 		)
 	),
-	s("now", fmt("{}", { i(1, get_hhmm()) })),
 }
