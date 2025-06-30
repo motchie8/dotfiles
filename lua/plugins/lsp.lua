@@ -210,7 +210,8 @@ return {
 			local null_ls = require("null-ls")
 			null_ls.setup({
 				sources = {
-					null_ls.builtins.formatting.sqlfmt.with({
+					null_ls.builtins.formatting.sqlfluff.with({
+						extra_args = { "--dialect", "bigquery" },
 						extra_filetypes = { "dbt" },
 					}),
 					null_ls.builtins.diagnostics.sqlfluff.with({
