@@ -602,4 +602,15 @@ install_aider
 
 install_imagemagick
 
+install_gemini_cli() {
+    if ! type gemini >/dev/null 2>&1; then
+        info_echo "**** Install Gemini CLI ****"
+        npm install -g @google/gemini-cli
+    else
+        info_echo "Gemini CLI is already installed"
+    fi
+}
+
+install_gemini_cli
+
 info_echo "**** Installation succeeded ****"
