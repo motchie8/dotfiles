@@ -43,12 +43,13 @@ Main functions.
 ------------------------------------------------------------------------
 EOF
 
-target_paths=("$HOME/.zshrc" "$HOME/.config/nvim/coc-settings.json" "$HOME/.config/nvim/init.lua" "$HOME/.config/nvim/cheatsheet.txt" "$HOME/.tmux.conf" "$HOME/.config/nvim/lua" "$HOME/.aider.conf.yml" "$HOME/mcp.json")
-link_paths=("$DOTFILES_DIR/.zshrc" "$DOTFILES_DIR/coc-settings.json" "$DOTFILES_DIR/init.lua" "$DOTFILES_DIR/cheatsheet.txt" "$DOTFILES_DIR/tmux/tmux.common.conf" "$DOTFILES_DIR/lua" "$DOTFILES_DIR/config/aider.conf.yml" "$DOTFILES_DIR/config/mcp.json")
+target_paths=("$HOME/.zshrc" "$HOME/.config/nvim/coc-settings.json" "$HOME/.config/nvim/init.lua" "$HOME/.config/nvim/cheatsheet.txt" "$HOME/.tmux.conf" "$HOME/.config/nvim/lua" "$HOME/.aider.conf.yml" "$HOME/mcp.json" "$HOME/.cursor/mcp.json")
+link_paths=("$DOTFILES_DIR/.zshrc" "$DOTFILES_DIR/coc-settings.json" "$DOTFILES_DIR/init.lua" "$DOTFILES_DIR/cheatsheet.txt" "$DOTFILES_DIR/tmux/tmux.common.conf" "$DOTFILES_DIR/lua" "$DOTFILES_DIR/config/aider.conf.yml" "$DOTFILES_DIR/config/mcp.json" "$DOTFILES_DIR/config/mcp.json")
 
 setup_symbolic_links() {
     info_echo "**** Setup symbolic links ****"
     mkdir -p ~/.config/nvim
+    mkdir -p ~/.cursor
     for i in "${!target_paths[@]}"; do
         if [ ! -L "${target_paths[i]}" ]; then
             if [ -e "${target_paths[i]}" ]; then
