@@ -3,7 +3,6 @@ local opt = vim.opt
 
 -- # keymapping #
 api.nvim_set_var("mapleader", " ") -- Set leader key to space
-
 api.nvim_set_var("python3_host_prog", string.format("%s/dotfiles/.venv/bin/python3", api.nvim_eval("$HOME")))
 
 -- disable netrw due to race conditions at vim startup
@@ -13,10 +12,10 @@ api.nvim_set_var("loaded_netrwPlugin", 1)
 -- ## insert mode ##
 api.nvim_set_keymap("i", "jj", "<ESC>", { noremap = true })
 -- move cursor
-api.nvim_set_keymap("i", "<C-j>", "<down>", { noremap = true })
-api.nvim_set_keymap("i", "<C-k>", "<up>", { noremap = true })
-api.nvim_set_keymap("i", "<C-h>", "<left>", { noremap = true })
-api.nvim_set_keymap("i", "<C-l>", "<right>", { noremap = true })
+-- api.nvim_set_keymap("i", "<C-j>", "<down>", { noremap = true })
+-- api.nvim_set_keymap("i", "<C-k>", "<up>", { noremap = true })
+-- api.nvim_set_keymap("i", "<C-h>", "<left>", { noremap = true })
+-- api.nvim_set_keymap("i", "<C-l>", "<right>", { noremap = true })
 api.nvim_set_keymap("n", "<S-h>", "^", { noremap = true })
 api.nvim_set_keymap("n", "<S-l>", "$", { noremap = true })
 
