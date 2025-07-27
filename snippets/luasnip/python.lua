@@ -1,66 +1,96 @@
-snippet args "Initialize argument parser"
+local ls = require("luasnip")
+local s = ls.snippet
+local i = ls.insert_node
+local fmt = require("luasnip.extras.fmt").fmt
+
+return {
+	s(
+		"args",
+		fmt(
+			[[
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument(
-	"--${1:key}",
-	type=${2:type},
+	"--{}",
+	type={},
 )
 args = parser.parse_args()
-endsnippet
-
-snippet arg "Add argument parser"
+            ]],
+			{ i(1, "key"), i(2, "type") }
+		)
+	),
+	s(
+		"arg",
+		fmt(
+			[[
 parser.add_argument(
-	"--${1:key}",
-	type=${2:type},
+	"--{}",
+	type={},
 )
-endsnippet
-
-snippet def "Definition with Google Style Docstring"
-def ${1:func}(${2:arg1}: ${3:type}) -> ${4:type}:
+            ]],
+			{ i(1, "key"), i(2, "type") }
+		)
+	),
+	s(
+		"def",
+		fmt(
+			[[
+def {}({}: {}) -> {}:
 	"""description
 
 	Args:
-		$2 ($3): description
+		{} ({}): description
 
 	Returns:
-		$4: description
+		{}: description
 
 	Examples:
-		>>> $1($2=...)
+		>>> {}({}=...)
 		"value"
 	"""
-endsnippet
-
-snippet defn "Definition with Numpy Style Docstring"
-def ${1:func}(${2:arg1}: ${3:type}) -> ${4:type}:
+            ]],
+			{ i(1, "func"), i(2, "arg1"), i(3, "type"), i(4, "type"), i(2), i(3), i(4), i(1), i(2) }
+		)
+	),
+	s(
+		"defn",
+		fmt(
+			[[
+def {}({}: {}) -> {}:
 	"""description
 
 	Parameters
 	-------
-	$2 : $3
+	{} : {}
 		description
 
 	Returns
 	-------
-	$4
+	{}
 		description
 
 	Examples
 	------
-	>>> $1($2=...)
+	>>> {}({}=...)
 	"value"
 	"""
-endsnippet
-
-snippet assert "Assert Dict Equals"
-unittest.TestCase().assertDictEqual(${1:expected}, ${2:actual})
-endsnippet
-
-snippet assert "Assert List Equals"
-unittest.TestCase().assertListEqual(${1:expected}, ${2:actual})
-endsnippet
-
-snippet unionfind "UnionFind"
+            ]],
+			{ i(1, "func"), i(2, "arg1"), i(3, "type"), i(4, "type"), i(2), i(3), i(4), i(1), i(2) }
+		)
+	),
+	s(
+		"assert",
+		fmt(
+			[[
+unittest.TestCase().assertDictEqual({}, {})
+            ]],
+			{ i(1, "expected"), i(2, "actual") }
+		)
+	),
+	s(
+		"unionfind",
+		fmt(
+			[[
 from dataclasses import dataclass, field
 from typing import List
 @dataclass
@@ -97,9 +127,14 @@ class UnionFind:
 		a_root = self.root(idx=idx_a)
 		b_root = self.root(idx=idx_b)
 		return a_root == b_root
-endsnippet
-
-snippet binary_search "Binary Search to get index or None"
+            ]],
+			{}
+		)
+	),
+	s(
+		"binary_search",
+		fmt(
+			[[
 from typing import List, Optional
 
 def binary_search(sorted_array: List[int], value: int, left: Optional[int]=None, right: Optional[int]=None) -> Optional[int]:
@@ -116,28 +151,14 @@ def binary_search(sorted_array: List[int], value: int, left: Optional[int]=None,
 		return binary_search(sorted_array=sorted_array, value=value, left=left, right=pivot)
 	else:
 		return binary_search(sorted_array=sorted_array, value=value, left=pivot+1, right=right)
-endsnippet
-
-snippet binary_search "Binary Search to get lower bound index"
-from typing import List
-
-def binary_search(sorted_array: List[int], value: int) -> int:
-	left = 0
-	if sorted_array[left] >= value:
-		return left
-	right = len(sorted_array) - 1
-	if sorted_array[right] < value:
-		raise ValueError(f"given value {value} is greater than all elements of given sorted_array")
-	while right - left != 1:
-		pivot = left + int((right - left) / 2)
-		if sorted_array[pivot] >= value:
-			right = pivot
-		else:
-			left = pivot
-	return right
-endsnippet
-
-snippet spark "Initialize Spark Session"
+            ]],
+			{}
+		)
+	),
+	s(
+		"spark",
+		fmt(
+			[[
 from pyspark.sql import SparkSession
 
 spark = (SparkSession
@@ -146,23 +167,37 @@ spark = (SparkSession
     .appName("MyApp")
     .getOrCreate()
 )
-endsnippet
-
-snippet dummy_input "Dummy input function for programing contest"
+            ]],
+			{}
+		)
+	),
+	s(
+		"dummy_input",
+		fmt(
+			[[
 from collections import deque
 from pathlib import Path
 input_queue = deque()
 
 def input(n: int = 1) -> str:
 	if len(input_queue) == 0:
-		test_input_path = Path(__file__).parent / 'test' / f'sample-{n}.in'
+		test_input_path = Path(__file__).parent / 'test' / f'sample-{{}}.in'
 		lines = test_input_path.read_text().split('\n')
 		for l in lines:
 			input_queue.append(l)
 	return input_queue.popleft()
-endsnippet
-
-snippet recursion_limit "Increase the maximum number of recursions"
+            ]],
+			{ i(1, "n") }
+		)
+	),
+	s(
+		"recursion_limit",
+		fmt(
+			[[
 import sys
 sys.setrecursionlimit(100000)
-endsnippet
+            ]],
+			{}
+		)
+	),
+}
