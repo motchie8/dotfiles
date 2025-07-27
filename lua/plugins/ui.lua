@@ -409,6 +409,13 @@ return {
 				end,
 				desc = "Keymaps",
 			},
+			{
+				"<leader>c",
+				function()
+					Snacks.terminal.toggle()
+				end,
+				desc = "Toggle Terminal",
+			},
 		},
 	},
 }

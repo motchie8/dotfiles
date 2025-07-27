@@ -6,10 +6,11 @@ return {
 		version = "*",
 		config = function()
 			require("toggleterm").setup({
-				size = 16,
+				size = 20,
 				shade_terminals = false,
 			})
 			vim.api.nvim_set_keymap("n", "<Leader>c", "<Cmd>ToggleTerm<CR>", { noremap = true, silent = true })
+			vim.api.nvim_set_keymap("n", "<Leader>cc", "<Cmd>2ToggleTerm<CR>", { noremap = true, silent = true })
 			vim.api.nvim_set_keymap(
 				"n",
 				-- float
@@ -19,16 +20,16 @@ return {
 			)
 			vim.api.nvim_set_keymap(
 				"n",
-				-- below
-				"<Leader>cb",
+				-- horizontal
+				"<Leader>ch",
 				"<Cmd>ToggleTerm direction=horizontal<CR>",
 				{ noremap = true, silent = true }
 			)
 			vim.api.nvim_set_keymap(
 				"n",
-				-- horizontal
-				"<Leader>ch",
-				"<Cmd>ToggleTerm direction=horizontal<CR>",
+				-- vertical
+				"<Leader>cv",
+				"<Cmd>ToggleTerm direction=vertical size=70<CR>",
 				{ noremap = true, silent = true }
 			)
 			vim.api.nvim_set_keymap(
