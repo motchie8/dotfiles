@@ -22,7 +22,7 @@ eval set -- "$OPT"
 while true
 do
     case $1 in
-        --key) KEY=$2 
+        --key) KEY=$2
             shift 2
             ;;
         -h | --help) usage_exit

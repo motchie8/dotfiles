@@ -1,6 +1,7 @@
 local ls = require("luasnip")
 local s = ls.snippet
 local i = ls.insert_node
+local t = ls.text_node
 local fmt = require("luasnip.extras.fmt").fmt
 
 return {
@@ -89,9 +90,7 @@ unittest.TestCase().assertDictEqual({}, {})
 	),
 	s(
 		"unionfind",
-		fmt(
-			[[
-from dataclasses import dataclass, field
+		t([[from dataclasses import dataclass, field
 from typing import List
 @dataclass
 class UnionFind:
@@ -126,16 +125,11 @@ class UnionFind:
 	def issame(self, idx_a: int, idx_b: int) -> bool:
 		a_root = self.root(idx=idx_a)
 		b_root = self.root(idx=idx_b)
-		return a_root == b_root
-            ]],
-			{}
-		)
+		return a_root == b_root]])
 	),
 	s(
 		"binary_search",
-		fmt(
-			[[
-from typing import List, Optional
+		t([[from typing import List, Optional
 
 def binary_search(sorted_array: List[int], value: int, left: Optional[int]=None, right: Optional[int]=None) -> Optional[int]:
 	if left is None:
@@ -150,26 +144,18 @@ def binary_search(sorted_array: List[int], value: int, left: Optional[int]=None,
 	elif sorted_array[pivot] > value:
 		return binary_search(sorted_array=sorted_array, value=value, left=left, right=pivot)
 	else:
-		return binary_search(sorted_array=sorted_array, value=value, left=pivot+1, right=right)
-            ]],
-			{}
-		)
+		return binary_search(sorted_array=sorted_array, value=value, left=pivot+1, right=right)]])
 	),
 	s(
 		"spark",
-		fmt(
-			[[
-from pyspark.sql import SparkSession
+		t([[from pyspark.sql import SparkSession
 
 spark = (SparkSession
     .builder
     .master("local")
     .appName("MyApp")
     .getOrCreate()
-)
-            ]],
-			{}
-		)
+)]])
 	),
 	s(
 		"dummy_input",
@@ -181,7 +167,7 @@ input_queue = deque()
 
 def input(n: int = 1) -> str:
 	if len(input_queue) == 0:
-		test_input_path = Path(__file__).parent / 'test' / f'sample-{{}}.in'
+		test_input_path = Path(__file__).parent / 'test' / f'sample-{}.in'
 		lines = test_input_path.read_text().split('\n')
 		for l in lines:
 			input_queue.append(l)
@@ -192,12 +178,7 @@ def input(n: int = 1) -> str:
 	),
 	s(
 		"recursion_limit",
-		fmt(
-			[[
-import sys
-sys.setrecursionlimit(100000)
-            ]],
-			{}
-		)
+		t([[import sys
+sys.setrecursionlimit(100000)]])
 	),
 }
