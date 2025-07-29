@@ -552,6 +552,22 @@ install_imagemagick() {
     fi
 }
 
+install_gemini_cli() {
+    if ! type gemini >/dev/null 2>&1; then
+        info_echo "**** Install Gemini CLI ****"
+        npm install -g @google/gemini-cli
+    fi
+    if [ ! -e "$DOTFILES_DIR"/config/gemini-cli/settings.json ]; then
+        info_echo "**** Create Gemini CLI config file using example config ****"
+        cp "$DOTFILES_DIR"/config/gemini-cli/settings.example.json "$DOTFILES_DIR"/config/gemini-cli/settings.json
+    fi
+    if [ ! -e "$HOME"/.gemini/settings.json ]; then
+        info_echo "**** Create symlink to Gemini CLI config file ****"
+        mkdir -p "$HOME"/.gemini
+        ln -s "$DOTFILES_DIR"/config/gemini-cli/settings.json "$HOME"/.gemini/settings.json
+    fi
+}
+
 cat /dev/null <<EOF
 ------------------------------------------------------------------------
 Installation steps
@@ -601,15 +617,6 @@ install_vhs
 install_aider
 
 install_imagemagick
-
-install_gemini_cli() {
-    if ! type gemini >/dev/null 2>&1; then
-        info_echo "**** Install Gemini CLI ****"
-        npm install -g @google/gemini-cli
-    else
-        info_echo "Gemini CLI is already installed"
-    fi
-}
 
 install_gemini_cli
 

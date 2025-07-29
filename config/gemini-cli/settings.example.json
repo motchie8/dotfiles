@@ -1,0 +1,29 @@
+{
+    "mcpServers": {
+        "markitdown": {
+            # TODO: Update the path to your markitdown-mcp executable
+            "command": "/path/to/your/dotfiles/.venv/bin/markitdown-mcp",
+            "args": []
+        },
+        "context7": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@upstash/context7-mcp"
+            ]
+        },
+        "github": {
+            "command": "docker",
+            "args": [
+                "run",
+                "-i",
+                "--rm",
+                "--env-file",
+                "/path/to/your/dotfiles/.env.github",
+                "ghcr.io/github/github-mcp-server"
+            ]
+        }
+    },
+    "sandbox": true,
+    "usageStatisticsEnabled": false
+}
