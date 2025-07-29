@@ -8,6 +8,7 @@
       ]
     },
     "markitdown": {
+      # Update the path to your markitdown-mcp executable
       "command": "/path/to/your/dotfiles/.venv/bin/markitdown-mcp",
       "args": [
       ]
@@ -17,46 +18,15 @@
       "args": ["-y", "@upstash/context7-mcp"]
     },
     "github": {
-      "disabled": true,
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"],
-      "env": { "GITHUB_TOKEN": "your-token-here" }
-    },
-    "brave-search": {
-      "disabled": true,
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
-      "env": { "BRAVE_API_KEY": "your-key-here" }
-    },
-    "awslabs.core-mcp-server": {
-      "disabled": true,
-      "command": "uvx",
+      "command": "docker",
       "args": [
-        "awslabs.core-mcp-server@latest"
-      ],
-      "env": {
-        "FASTMCP_LOG_LEVEL": "ERROR"
-      },
-      "autoApprove": []
-    },
-    "awslabs.terraform-mcp-server": {
-      "disabled": true,
-      "command": "uvx",
-      "args": ["awslabs.terraform-mcp-server@latest"],
-      "env": {
-        "FASTMCP_LOG_LEVEL": "ERROR"
-      },
-      "autoApprove": []
-    },
-    "awslabs.aws-documentation-mcp-server": {
-        "disabled": true,
-        "command": "uvx",
-        "args": ["awslabs.aws-documentation-mcp-server@latest"],
-        "env": {
-          "FASTMCP_LOG_LEVEL": "ERROR"
-        },
-        
-        "autoApprove": []
-    }
+        "run",
+        "-i",
+        "--rm",
+        "--env-file",
+        "/path/to/your/dotfiles/.env.github",
+        "ghcr.io/github/github-mcp-server"
+      ]
+    } 
   }
 }
