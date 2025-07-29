@@ -508,24 +508,24 @@ install_aider() {
         # uv tool install --force --reinstall --python python3.12 --with pip --with google-cloud-aiplatform --with httpx --with playwright "git+https://github.com/quinlanjager/aider.git@feature/litellm-mcp"
         uv tool install --force --reinstall --python python3.12 --with pip --with google-cloud-aiplatform --with httpx --with playwright "git+https://github.com/arosov/aider.git@mcp"
         # TMP: create a mcp profile from example config
-        if [ ! -e "$DOTFILES_DIR"/config/aider.mcp.profiles.yml ]; then
+        if [ ! -e "$DOTFILES_DIR"/config/aider/aider.mcp.profiles.yml ]; then
             info_echo "**** Create aider.mcp.profiles.yml using example config ****"
-            cp "$DOTFILES_DIR"/config/aider.mcp.profiles.example.yml "$DOTFILES_DIR"/config/aider.mcp.profiles.yml
+            cp "$DOTFILES_DIR"/config/aider/aider.mcp.profiles.example.yml "$DOTFILES_DIR"/config/aider/aider.mcp.profiles.yml
         fi
         # TMP: create a symlink to the mcp profile
         if [ ! -e "$HOME"/.aider.mcp.profiles.yml ]; then
             info_echo "**** Create symlink to mcp profile ****"
-            ln -s "$DOTFILES_DIR"/config/aider.mcp.profiles.yml "$HOME"/.aider.mcp.profiles.yml
+            ln -s "$DOTFILES_DIR"/config/aider/aider.mcp.profiles.yml "$HOME"/.aider.mcp.profiles.yml
         fi
         # Init aider configs
         cd "$DOTFILES_DIR"
-        if [ ! -e "$DOTFILES_DIR"/config/aider.conf.yml ]; then
+        if [ ! -e "$DOTFILES_DIR"/config/aider/aider.conf.yml ]; then
             info_echo "**** Create aider.conf.yml using example config ****"
-            cp "$DOTFILES_DIR"/config/aider.conf.example.yml "$DOTFILES_DIR"/config/aider.conf.yml
+            cp "$DOTFILES_DIR"/config/aider/aider.conf.example.yml "$DOTFILES_DIR"/config/aider/aider.conf.yml
         fi
-        if [ ! -e "$DOTFILES_DIR"/config/mcp.json ]; then
+        if [ ! -e "$DOTFILES_DIR"/config/mcp/mcp.json ]; then
             info_echo "**** Create mcp.json using example config ****"
-            cp "$DOTFILES_DIR"/config/mcp.example.json "$DOTFILES_DIR"/config/mcp.json
+            cp "$DOTFILES_DIR"/config/mcp/mcp.example.json "$DOTFILES_DIR"/config/mcp/mcp.json
         fi
         info_echo "**** Install PortAudio for voice coding support ****"
         if [ "$OS" = "$MAC_OS" ]; then

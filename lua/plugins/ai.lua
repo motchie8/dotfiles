@@ -5,7 +5,7 @@ return {
 		event = "VeryLazy",
 		config = function()
 			-- Custom roles file location
-			vim.g.vim_ai_roles_config_file = "~/dotfiles/config/vim-ai-roles.ini"
+			vim.g.vim_ai_roles_config_file = "~/dotfiles/config/vim-ai/vim-ai-roles.ini"
 			local default_model = os.getenv("VIM_AI_DEFAULT_MODEL") or "azure"
 			local default_endpoint = os.getenv("VIM_AI_DEFAULT_ENDPOINT") or "http://0.0.0.0:4000/chat/completions"
 
@@ -104,7 +104,7 @@ return {
 			vim.api.nvim_create_user_command("AIProxyStart", function()
 				if not is_litellm_running() then
 					vim.fn.system(
-						"~/dotfiles/.venv/bin/litellm --config ~/dotfiles/config/lite-llm-config.yaml --port 4000 &"
+						"~/dotfiles/.venv/bin/litellm --config ~/dotfiles/config/litellm/lite-llm-config.yaml --port 4000 &"
 					)
 					print("Started LiteLLM Proxy.")
 				else

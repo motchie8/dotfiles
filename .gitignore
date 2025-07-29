@@ -12,7 +12,7 @@ node_modules/
 devcontainer/
 build/
 config/
-!config/*example*
+!config/**/*example*
 *.bak
 .venv/
 .aider*
