@@ -561,10 +561,18 @@ install_gemini_cli() {
         info_echo "**** Create Gemini CLI config file using example config ****"
         cp "$DOTFILES_DIR"/config/gemini-cli/settings.example.json "$DOTFILES_DIR"/config/gemini-cli/settings.json
     fi
-    if [ ! -e "$HOME"/.gemini/settings.json ]; then
-        info_echo "**** Create symlink to Gemini CLI config file ****"
-        mkdir -p "$HOME"/.gemini
-        ln -s "$DOTFILES_DIR"/config/gemini-cli/settings.json "$HOME"/.gemini/settings.json
+}
+
+install_github_cli() {
+    if ! type gh >/dev/null 2>&1; then
+        info_echo "**** Install GitHub CLI ****"
+        if [ "$OS" = "$MAC_OS" ]; then
+            brew install gh
+        elif [ "$OS" = "$UBUNTU" ]; then
+            sudo apt install -y gh
+        else
+            exit_with_unsupported_os
+        fi
     fi
 }
 
@@ -619,5 +627,7 @@ install_aider
 install_imagemagick
 
 install_gemini_cli
+
+install_github_cli
 
 info_echo "**** Installation succeeded ****"
