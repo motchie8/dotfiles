@@ -22,8 +22,18 @@
                 "/path/to/your/dotfiles/.env.github",
                 "ghcr.io/github/github-mcp-server"
             ]
+        },
+        "serena": {
+            "disabled": true,
+            "command": "uvx",
+            "args": [
+                "--from",
+                "git+https://github.com/oraios/serena",
+                "serena-mcp-server"
+            ]
         }
     },
-    "sandbox": true,
+    "sandbox": false,
+    "preferredEditor": "neovim",
     "usageStatisticsEnabled": false
 }
