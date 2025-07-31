@@ -12,7 +12,12 @@ node_modules/
 devcontainer/
 build/
 config/
-!config/**/*example*
+!config/aider/aider.conf.example.yml
+!config/aider/aider.mcp.profiles.example.yml
+!config/gemini-cli/settings.example.json
+!config/litellm/lite-llm-config.example.yaml
+!config/mcp/mcp.example.json
+!config/vim-ai/vim-ai-roles.ini.example
 *.bak
 .venv/
 .aider*
