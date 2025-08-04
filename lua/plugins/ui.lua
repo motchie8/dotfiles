@@ -278,7 +278,8 @@ return {
 				vim.keymap.set("n", "u", api.fs.rename_full, opts("Rename: Full Path"))
 				vim.keymap.set("n", "W", api.tree.collapse_all, opts("Collapse"))
 				vim.keymap.set("n", "x", api.fs.cut, opts("Cut"))
-				vim.keymap.set("n", "y", api.fs.copy.filename, opts("Copy Name"))
+				-- vim.keymap.set("n", "y", api.fs.copy.filename, opts("Copy Name"))
+				vim.keymap.set("n", "y", api.fs.copy.relative_path, opts("Copy Relative Path"))
 				vim.keymap.set("n", "Y", api.fs.copy.absolute_path, opts("Copy Absolute Path"))
 				vim.keymap.set("n", "?", api.tree.toggle_help, opts("Help"))
 			end
@@ -307,8 +308,8 @@ return {
 				on_attach = my_on_attach,
 			})
 			-- custom mappings
-			vim.api.nvim_set_keymap("n", "<Leader>t", "<Cmd>NvimTreeToggle<CR>", { noremap = true })
-			vim.api.nvim_set_keymap("n", "<Leader>T", "<Cmd>NvimTreeRefresh<CR>", { noremap = true })
+			vim.api.nvim_set_keymap("n", "<Leader>e", "<Cmd>NvimTreeToggle<CR>", { noremap = true })
+			vim.api.nvim_set_keymap("n", "<Leader>E", "<Cmd>NvimTreeRefresh<CR>", { noremap = true })
 		end,
 	},
 	-- Easymotion
