@@ -73,12 +73,33 @@ return {
 				claude_code_term:toggle()
 			end
 
-			vim.api.nvim_set_keymap(
-				"n",
-				"<Leader>c",
-				"<Cmd>lua toggle_claude_code_term()<CR>",
-				{ noremap = true, silent = true }
-			)
+			function toggle_cursor_cli_term(opts)
+				local cursor_cli_term = Terminal:new({
+					cmd = "cursor-agent",
+					name = "Cursor CLI",
+					dir = "git_dir",
+					direction = "vertical",
+					shade_terminals = false,
+					close_on_exit = true,
+					count = 12,
+				})
+				cursor_cli_term:toggle()
+			end
+
+			local use_claude_code = os.getenv("USE_CLAUDE_CODE") or "0"
+			local use_cursor_cli = os.getenv("USE_CURSOR_CLI") or "0"
+
+			function toggle_c_term(opts)
+				if use_claude_code == "1" then
+					toggle_claude_code_term(opts)
+				elseif use_cursor_cli == "1" then
+					toggle_cursor_cli_term(opts)
+				else
+					print("Both USE_CLAUDE_CODE and USE_CURSOR_CLI are not set to 1. Please set one of them.")
+				end
+			end
+
+			vim.api.nvim_set_keymap("n", "<Leader>c", "<Cmd>lua toggle_c_term()<CR>", { noremap = true, silent = true })
 		end,
 	},
 }
