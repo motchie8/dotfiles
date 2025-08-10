@@ -1,32 +1,110 @@
 {
-  "mcpServers": { 
-    "sequential-thinking": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-sequential-thinking"
-      ]
-    },
-    "markitdown": {
-      # Update the path to your markitdown-mcp executable
-      "command": "/path/to/your/dotfiles/.venv/bin/markitdown-mcp",
-      "args": [
-      ]
-    },
-    "context7": {
-      "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
-    },
-    "github": {
-      "command": "docker",
-      "args": [
-        "run",
-        "-i",
-        "--rm",
-        "--env-file",
-        "/path/to/your/dotfiles/.env.github",
-        "ghcr.io/github/github-mcp-server"
-      ]
-    } 
-  }
+    "mcpServers": {
+        "sequential-thinking": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-sequential-thinking"
+            ]
+        },
+        "markitdown": {
+            # Update the path to your markitdown-mcp executable
+            "command": "/path/to/your/dotfiles/.venv/bin/markitdown-mcp",
+            "args": []
+        },
+        "context7": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@upstash/context7-mcp"
+            ]
+        },
+        "brave-search": {
+            "command": "docker",
+            "args": [
+                "run",
+                "-i",
+                "--rm",
+                "-e",
+                "BRAVE_API_KEY",
+                "mcp/brave-search"
+            ],
+            "env": {
+                "BRAVE_API_KEY": "${BRAVE_API_KEY}"
+            }
+        },
+        "mcp-atlassian": {
+            "command": "docker",
+            "args": [
+                "run",
+                "-i",
+                "--rm",
+                "-e",
+                "CONFLUENCE_URL",
+                "-e",
+                "CONFLUENCE_USERNAME",
+                "-e",
+                "CONFLUENCE_API_TOKEN",
+                "-e",
+                "READ_ONLY_MODE",
+                "-e",
+                "ENABLED_TOOLS",
+                "ghcr.io/sooperset/mcp-atlassian:latest"
+            ],
+            "env": {
+                "CONFLUENCE_URL": "${CONFLUENCE_URL}",
+                "CONFLUENCE_USERNAME": "${CONFLUENCE_USERNAME}",
+                "CONFLUENCE_API_TOKEN": "${CONFLUENCE_API_TOKEN}",
+                "READ_ONLY_MODE": "${READ_ONLY_MODE}",
+                "ENABLED_TOOLS": "${ENABLED_TOOLS}"
+            }
+        },
+        "github": {
+            "command": "docker",
+            "args": [
+                "run",
+                "-i",
+                "--rm",
+                "-e",
+                "GITHUB_PERSONAL_ACCESS_TOKEN",
+                "-e",
+                "GITHUB_TOOLSETS",
+                "ghcr.io/github/github-mcp-server"
+            ],
+            "env": {
+                "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}",
+                "GITHUB_TOOLSETS": "${GITHUB_TOOLSETS}"
+            }
+        },
+        "awslabs.core-mcp-server": {
+            "command": "uvx",
+            "args": [
+                "awslabs.core-mcp-server@latest"
+            ],
+            "env": {
+                "FASTMCP_LOG_LEVEL": "ERROR"
+            },
+            "autoApprove": []
+        },
+        "awslabs.terraform-mcp-server": {
+            "command": "uvx",
+            "args": [
+                "awslabs.terraform-mcp-server@latest"
+            ],
+            "env": {
+                "FASTMCP_LOG_LEVEL": "ERROR"
+            },
+            "autoApprove": []
+        },
+        "awslabs.aws-documentation-mcp-server": {
+            "command": "uvx",
+            "args": [
+                "awslabs.aws-documentation-mcp-server@latest"
+            ],
+            "env": {
+                "FASTMCP_LOG_LEVEL": "ERROR"
+            },
+            "autoApprove": []
+        }
+    }
 }

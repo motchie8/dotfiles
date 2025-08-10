@@ -318,5 +318,7 @@ if [ -e $DOTFILES_DIR/.zshrc.local ]; then
 fi
 # load .env if exists
 if [ -e $DOTFILES_DIR/.env ]; then
-    source $DOTFILES_DIR/.env
+    set -o allexport
+    source <(grep -vE '^\s*#|^\s*$' "$DOTFILES_DIR/.env")
+    set +o allexport
 fi
