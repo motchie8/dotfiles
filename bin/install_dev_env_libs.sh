@@ -576,6 +576,21 @@ install_github_cli() {
     fi
 }
 
+install_cursor_cli() {
+    # install Cursor CLI only on MacOS
+    if [ "$OS" = "$MAC_OS" ]; then
+        if ! type cursor-agent >/dev/null 2>&1; then
+            info_echo "**** Install Cursor CLI ****"
+            curl https://cursor.com/install -fsS | bash
+        fi
+        if [ ! -e "$DOTFILES_DIR"/config/cursor/mcp.json ]; then
+            info_echo "**** Create Cursor MCP config file using example config ****"
+            cp "$DOTFILES_DIR"/config/cursor/mcp.example.json "$DOTFILES_DIR"/config/cursor/mcp.json
+            mkdir -p "$HOME"/.cursor
+        fi
+    fi
+}
+
 cat /dev/null <<EOF
 ------------------------------------------------------------------------
 Installation steps
@@ -629,5 +644,7 @@ install_imagemagick
 install_gemini_cli
 
 install_github_cli
+
+install_cursor_cli
 
 info_echo "**** Installation succeeded ****"
