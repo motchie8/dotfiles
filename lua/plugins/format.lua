@@ -14,7 +14,8 @@ return {
 			vim.api.nvim_create_user_command("DisableNeoFormat", function()
 				vim.api.nvim_del_augroup_by_name("neofmt")
 			end, {})
-			vim.api.nvim_command("EnableNeoFormat")
+			-- Enable Neoformat by default
+			-- vim.api.nvim_command("EnableNeoFormat")
 			-- for zsh
 			vim.api.nvim_set_var("shfmt_opt", "-ci --indent 4")
 			-- for markdown
