@@ -226,7 +226,7 @@ return {
     {
         "lukas-reineke/lsp-format.nvim",
         config = function()
-            require("lsp-format").setup({})
+            require("lsp-format").setup()
 
             vim.api.nvim_create_autocmd("LspAttach", {
                 group = vim.api.nvim_create_augroup("LspFormat", {}),
@@ -239,6 +239,8 @@ return {
                     require("lsp-format").on_attach(client, args.buf)
                 end,
             })
+            -- Format on save synchronously
+            vim.cmd [[cabbrev wq execute "Format sync" <bar> wq]]
         end,
     },
     -- vscode-like pictograms for lsp completion items
