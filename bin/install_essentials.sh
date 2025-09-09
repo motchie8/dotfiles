@@ -21,14 +21,14 @@ show_help() {
 
 while getopts "::h" option; do
     case "${option}" in
-        h)
-            show_help
-            exit 0
-            ;;
-        *)
-            show_help
-            exit 1
-            ;;
+    h)
+        show_help
+        exit 0
+        ;;
+    *)
+        show_help
+        exit 1
+        ;;
     esac
 done
 
@@ -52,10 +52,15 @@ install_dev_libs_for_ubuntu() {
     sudo apt-get install -y language-pack-ja
     sudo update-locale LANG=ja_JP.UTF-8
     # install dev dependencies
-    sudo apt install -y curl git file zlib1g-dev libssl-dev \
+    sudo apt install -y curl file zlib1g-dev libssl-dev \
         libreadline-dev libbz2-dev libsqlite3-dev wget \
         pkg-config unzip libtool libtool-bin m4 automake gettext \
         zsh x11-apps libffi-dev yarn liblzma-dev gpg
+    # install newer git for diffview.nvim
+    sudo apt-add-repository ppa:git-core/ppa -y
+    sudo apt-get update -y
+    sudo apt-get install git -y
+
     # install ripgrep for telescope
     sudo apt-get install ripgrep -y
     # install xdg-utils for opening browser
