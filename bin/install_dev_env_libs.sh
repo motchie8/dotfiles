@@ -26,16 +26,16 @@ show_help() {
 
 while getopts ":t:hb" option; do
     case "${option}" in
-        t) TMUX_PREFIX_KEY="${OPTARG}" ;;
-        b) BUILD_NEOVIM=true ;;
-        h)
-            show_help
-            exit 0
-            ;;
-        *)
-            show_help
-            exit 1
-            ;;
+    t) TMUX_PREFIX_KEY="${OPTARG}" ;;
+    b) BUILD_NEOVIM=true ;;
+    h)
+        show_help
+        exit 0
+        ;;
+    *)
+        show_help
+        exit 1
+        ;;
     esac
 done
 
@@ -389,11 +389,11 @@ install_heml() {
         if [ "$OS" = "$MAC_OS" ]; then
             brew install helm
         elif [ "$OS" = "$UBUNTU" ]; then
-            curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg >/dev/null
-            sudo apt-get install apt-transport-https --yes
-            echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+            sudo apt-get install curl gpg apt-transport-https --yes
+            curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg >/dev/null
+            echo "deb [signed-by=/usr/share/keyrings/helm.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
             sudo apt-get update -y
-            sudo apt-get install -y helm
+            sudo apt-get install helm -y
         else
             exit_with_unsupported_os
         fi
