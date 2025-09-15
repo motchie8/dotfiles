@@ -57,6 +57,7 @@ install_dev_libs_for_ubuntu() {
         pkg-config unzip libtool libtool-bin m4 automake gettext \
         zsh x11-apps libffi-dev yarn liblzma-dev gpg
     # install newer git for diffview.nvim
+    sudo apt install software-properties-common -y
     sudo apt-add-repository ppa:git-core/ppa -y
     sudo apt-get update -y
     sudo apt-get install git -y
