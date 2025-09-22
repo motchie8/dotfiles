@@ -375,45 +375,38 @@ return {
             -- Notifier
             {
                 "<leader>sh",
-                function()
-                    Snacks.notifier.show_history()
-                end,
+                "<cmd>lua Snacks.notifier.show_history()<CR>",
                 desc = "Notification History",
             },
             -- Picker
             {
                 "sd",
-                function()
-                    Snacks.picker.diagnostics()
-                end,
+                "<cmd>lua Snacks.picker.diagnostics()<CR>",
                 desc = "Diagnostics",
             },
             {
                 "sD",
-                function()
-                    Snacks.picker.diagnostics_buffer()
-                end,
+                "<cmd>lua Snacks.picker.diagnostics_buffer()<CR>",
                 desc = "Buffer Diagnostics",
             },
             {
                 "sp",
-                function()
-                    Snacks.picker.pickers()
-                end,
+                "<cmd>lua Snacks.picker.pickers()<CR>",
                 desc = "Pickers",
             },
             {
                 "sm",
-                function()
-                    Snacks.picker.keymaps()
-                end,
+                "<cmd>lua Snacks.picker.keymaps()<CR>",
                 desc = "Keymaps",
+            },
+            {
+                "sn",
+                "<cmd>lua Snacks.picker.notifications()<CR>",
+                desc = "Notification History",
             },
             -- {
             --     "<leader>c",
-            --     function()
-            --         Snacks.terminal.toggle()
-            --     end,
+            --         "<cmd>lua Snacks.terminal.toggle()<CR>",
             --     desc = "Toggle Terminal",
             -- },
         },

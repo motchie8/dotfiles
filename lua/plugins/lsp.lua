@@ -34,30 +34,20 @@ return {
                 "biome",
                 -- [Formatter] Markdown, YAML, JSON, CSS, HTML, JSX, Javascript, Typescript
                 -- "prettier",
-                -- [Linter] Markdown, Text
-                -- for formatting: setup none-ls.nvim: https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md#textlint-2
-                -- "textlint",
-                -- [Formatter] dbt, SQL
-                -- NOTE: Disabled due to a warning: Server "sqlfluff" is not valid entry in ensure_installed.
-                -- "sqlfmt",
-                -- [Linter] dbt, SQL
-                -- for formatting: setup none-ls.nvim: https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md#textlint-2
-                -- NOTE: Disabled due to a warning: Server "sqlfluff" is not valid entry in ensure_installed.
-                -- "sqlfluff",
                 -- [LSP] [Formatter] toml
                 "taplo",
-                -- [Formatter] [Linter] [Runtime] terraform
-                -- NOTE: Disabled due to a warning: Server "sqlfluff" is not valid entry in ensure_installed.
-                -- "terraform",
                 -- [LSP] terraform
                 "terraformls",
                 -- [LSP] bash, zsh
                 "bashls",
-                -- [Linter] bash
-                -- NOTE: Disabled due to a warning: Server "sqlfluff" is not valid entry in ensure_installed.
-                -- "shellcheck",
                 -- [LSP] Docker
                 "docker_compose_language_service",
+                -- [LSP] helm charts
+                "helm_ls",
+                -- [LSP] Vim script
+                "vimls",
+                -- [LSP] yaml
+                "yamlls",
             },
         },
     },
@@ -66,30 +56,28 @@ return {
         "neovim/nvim-lspconfig",
         dependencies = { "saghen/blink.cmp" },
         config = function()
-            -- Setup
-            vim.api.nvim_create_autocmd("LspAttach", {
-                group = vim.api.nvim_create_augroup("UserLspConfig", {}),
-                callback = function(ev)
-                    -- Buffer local mappings.
-                    -- See `:help vim.lsp.*` for documentation on any of the below functions
-                    local opts = { buffer = ev.buf }
-
-                    vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-                    vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-                    vim.keymap.set("n", "<C-k>", vim.lsp.buf.hover, opts)
-                    vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-                    vim.keymap.set("n", "<C-s>", vim.lsp.buf.signature_help, opts)
-                    vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, opts)
-                    vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, opts)
-                    -- Use actions-preview.nvim plugin for code actions
-                    -- vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, opts)
-                    vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-                    vim.keymap.set("n", "<space>fm", function()
-                        vim.lsp.buf.format({ async = true })
-                    end, opts)
-                end,
-            })
-        end,
+            vim.keymap.set('n', 'gh', "<cmd>lua vim.lsp.buf.hover()<CR>", { desc = "LSP Hover" })
+            vim.keymap.set('n', 'K', "<cmd>lua vim.lsp.buf.hover()<CR>", { desc = "LSP Hover" })
+            vim.keymap.set('n', 'gf', "<cmd>lua vim.lsp.buf.formatting()<CR>", { desc = "LSP Format" })
+            vim.keymap.set('n', 'gr', "<cmd>lua vim.lsp.buf.references()<CR>", { desc = "LSP References" })
+            vim.keymap.set('n', 'gd', "<cmd>lua vim.lsp.buf.definition()<CR>", { desc = "LSP Definition" })
+            vim.keymap.set('n', 'gD', "<cmd>lua vim.lsp.buf.declaration()<CR>", { desc = "LSP Declaration" })
+            vim.keymap.set('n', 'gi', "<cmd>lua vim.lsp.buf.implementation()<CR>", { desc = "LSP Implementation" })
+            vim.keymap.set('n', 'gt', "<cmd>lua vim.lsp.buf.type_definition()<CR>", { desc = "LSP Type Definition" })
+            vim.keymap.set("n", "<space>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>",
+                { desc = "LSP Type Definition" })
+            vim.keymap.set('n', 'gn', "<cmd>lua vim.lsp.buf.rename()<CR>", { desc = "LSP Rename" })
+            vim.keymap.set("n", "<space>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", { desc = "LSP Rename" })
+            vim.keymap.set('n', 'ga', "<cmd>lua vim.lsp.buf.code_action()<CR>", { desc = "LSP Code Action" })
+            vim.keymap.set("n", 'gs', "<cmd>lua vim.lsp.buf.signature_help()<CR>", { desc = "LSP Signature Help" })
+            vim.keymap.set("n", "<C-s>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", { desc = "LSP Signature Help" })
+            vim.keymap.set('n', 'ge', "<cmd>lua vim.diagnostic.open_float()<CR>", { desc = "LSP Show Line Diagnostics" })
+            vim.keymap.set('n', 'g]', "<cmd>lua vim.diagnostic.goto_next()<CR>", { desc = "LSP Next Diagnostic" })
+            vim.keymap.set('n', 'g[', "<cmd>lua vim.diagnostic.goto_prev()<CR>", { desc = "LSP Previous Diagnostic" })
+            vim.keymap.set("n", 'gf', "<cmd>lua vim.lsp.buf.format({ async = false })<CR>", { desc = "LSP Format" })
+            vim.keymap.set("n", "<space>fm", "<cmd>lua vim.lsp.buf.format({ async = false })<CR>",
+                { desc = "LSP Format" })
+        end
     },
     {
         "saghen/blink.cmp",

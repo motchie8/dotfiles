@@ -214,7 +214,7 @@ return {
             require("claudecode").setup({})
             -- Key mappings for Gemini CLI
             local Terminal = require("toggleterm.terminal").Terminal
-            function toggle_gemini_cli_term(opts)
+            local function toggle_gemini_cli_term()
                 local gemini_cli_term = Terminal:new({
                     cmd = "gemini",
                     name = "Gemini CLI",
@@ -227,10 +227,12 @@ return {
                 gemini_cli_term:toggle()
             end
 
-            vim.api.nvim_set_keymap(
+            vim.keymap.set(
                 "n",
                 "<Leader>g",
-                "<Cmd>lua toggle_gemini_cli_term()<CR>",
+                function()
+                    toggle_gemini_cli_term()
+                end,
                 { noremap = true, silent = true }
             )
 
@@ -242,20 +244,21 @@ return {
                 vim.api.nvim_set_keymap("v", "<Leader>cs", "<Cmd>ClaudeCodeSend<CR>", { noremap = true, silent = true })
             end
 
-            function toggle_claude_code_term(opts)
-                local cursor_cli_term = Terminal:new({
-                    cmd = "claude",
-                    name = "Claude Code",
-                    dir = "git_dir",
-                    direction = "vertical",
-                    shade_terminals = false,
-                    close_on_exit = true,
-                    count = 11,
-                })
-                cursor_cli_term:toggle()
-            end
+            -- NOTE: Use claudecode.nvim for Claude Code integration
+            -- local function toggle_claude_code_term()
+            --     local cursor_cli_term = Terminal:new({
+            --         cmd = "claude",
+            --         name = "Claude Code",
+            --         dir = "git_dir",
+            --         direction = "vertical",
+            --         shade_terminals = false,
+            --         close_on_exit = true,
+            --         count = 11,
+            --     })
+            --     cursor_cli_term:toggle()
+            -- end
 
-            function toggle_cursor_cli_term(opts)
+            local function toggle_cursor_cli_term()
                 local cursor_cli_term = Terminal:new({
                     cmd = "cursor-agent",
                     name = "Cursor CLI",
@@ -268,18 +271,24 @@ return {
                 cursor_cli_term:toggle()
             end
 
-            function toggle_c_term(opts)
+            local function toggle_c_term()
                 if use_claude_code == "1" then
-                    -- toggle_claude_code_term(opts)
+                    -- toggle_claude_code_term()
                     vim.cmd("ClaudeCode")
                 elseif use_cursor_cli == "1" then
-                    toggle_cursor_cli_term(opts)
+                    toggle_cursor_cli_term()
                 else
                     print("Both USE_CLAUDE_CODE and USE_CURSOR_CLI are not set to 1. Please set one of them.")
                 end
             end
 
-            vim.api.nvim_set_keymap("n", "<Leader>c", "<Cmd>lua toggle_c_term()<CR>", { noremap = true, silent = true })
+            vim.keymap.set(
+                "n",
+                "<Leader>c",
+                function()
+                    toggle_c_term()
+                end,
+                { noremap = true, silent = true })
         end,
     }
 }

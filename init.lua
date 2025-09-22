@@ -161,27 +161,27 @@ opt.sh = "zsh"
 -- vim.cmd('autocmd!')
 -- Keymap for help file
 api.nvim_create_autocmd("FileType", {
-	pattern = "help",
-	callback = function(ev)
-		local opts = { buffer = ev.buf, noremap = true, silent = true }
-		-- Jump to tag
-		vim.keymap.set("n", "<Leader>jt", "<C-]>", opts)
-		-- Jump back
-		vim.keymap.set("n", "<Leader>jb", "<C-T>", opts)
-	end,
+    pattern = "help",
+    callback = function(ev)
+        local opts = { buffer = ev.buf, noremap = true, silent = true }
+        -- Jump to tag
+        vim.keymap.set("n", "<Leader>jt", "<C-]>", opts)
+        -- Jump back
+        vim.keymap.set("n", "<Leader>jb", "<C-T>", opts)
+    end,
 })
 
 -- Bootstrapping for lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
-	vim.fn.system({
-		"git",
-		"clone",
-		"--filter=blob:none",
-		"https://github.com/folke/lazy.nvim.git",
-		"--branch=stable", -- latest stable release
-		lazypath,
-	})
+    vim.fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable", -- latest stable release
+        lazypath,
+    })
 end
 vim.opt.rtp:prepend(lazypath)
 require("lazy").setup("plugins")
