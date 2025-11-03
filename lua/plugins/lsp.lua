@@ -199,11 +199,11 @@ return {
             null_ls.setup({
                 sources = {
                     null_ls.builtins.formatting.sqlfluff.with({
-                        extra_args = { "--dialect", "bigquery" },
+                        extra_args = { "--dialect", "bigquery", "--templater", "jinja" },
                         filetypes = { "sql", "dbt" },
                     }),
                     null_ls.builtins.diagnostics.sqlfluff.with({
-                        extra_args = { "--dialect", "bigquery" },
+                        extra_args = { "--dialect", "bigquery", "--templater", "jinja" },
                         filetypes = { "sql", "dbt" },
                     }),
                 },
