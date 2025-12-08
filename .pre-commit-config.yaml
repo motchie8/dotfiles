@@ -1,12 +1,59 @@
 repos:
+  # Unified linting and formatting using local scripts
+  - repo: local
+    hooks:
+      # Shell linting
+      - id: lint-shell
+        name: lint shell scripts
+        entry: ./bin/lint.sh --shell
+        language: system
+        files: '\.sh$'
+        require_serial: true
+
+      # Lua formatting
+      - id: format-lua
+        name: format lua files
+        entry: ./bin/format.sh --lua
+        language: system
+        files: '\.lua$'
+        require_serial: true
+
+      # JSON, YAML, Markdown formatting
+      - id: format-json-yaml-md
+        name: format json/yaml/markdown files
+        entry: ./bin/format.sh --json-yaml
+        language: system
+        files: '\.(json|ya?ml|md)$'
+        require_serial: true
+
+      # TOML formatting
+      - id: format-toml
+        name: format toml files
+        entry: ./bin/format.sh --toml
+        language: system
+        files: '\.toml$'
+        require_serial: true
+
+      # Python formatting and linting
+      - id: format-python
+        name: format python files
+        entry: ./bin/format.sh --python
+        language: system
+        files: '\.py$'
+        require_serial: true
+
+      - id: lint-python
+        name: lint python files
+        entry: ./bin/lint.sh --python
+        language: system
+        files: '\.py$'
+        require_serial: true
+
+  # General file checks (keep these for basic validation)
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.3.0
+    rev: v4.6.0
     hooks:
-      - id: check-yaml
       - id: end-of-file-fixer
+        exclude: '(\.git/|\.venv/|build/|\.zprezto/|config/claude/shell-snapshots/|tsumiki/)'
       - id: trailing-whitespace
-  - repo: https://github.com/koalaman/shellcheck-precommit
-    rev: v0.7.2
-    hooks:
-      - id: shellcheck
-        args: ["--severity=warning", "--external-sources"]
+        exclude: '(\.git/|\.venv/|build/|\.zprezto/|config/claude/shell-snapshots/|tsumiki/)'

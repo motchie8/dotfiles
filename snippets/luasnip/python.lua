@@ -1,14 +1,14 @@
-local ls = require("luasnip")
+local ls = require "luasnip"
 local s = ls.snippet
 local i = ls.insert_node
 local t = ls.text_node
 local fmt = require("luasnip.extras.fmt").fmt
 
 return {
-	s(
-		"args",
-		fmt(
-			[[
+  s(
+    "args",
+    fmt(
+      [[
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -17,25 +17,25 @@ parser.add_argument(
 )
 args = parser.parse_args()
             ]],
-			{ i(1, "key"), i(2, "type") }
-		)
-	),
-	s(
-		"arg",
-		fmt(
-			[[
+      { i(1, "key"), i(2, "type") }
+    )
+  ),
+  s(
+    "arg",
+    fmt(
+      [[
 parser.add_argument(
 	"--{}",
 	type={},
 )
             ]],
-			{ i(1, "key"), i(2, "type") }
-		)
-	),
-	s(
-		"def",
-		fmt(
-			[[
+      { i(1, "key"), i(2, "type") }
+    )
+  ),
+  s(
+    "def",
+    fmt(
+      [[
 def {}({}: {}) -> {}:
 	"""description
 
@@ -50,13 +50,13 @@ def {}({}: {}) -> {}:
 		"value"
 	"""
             ]],
-			{ i(1, "func"), i(2, "arg1"), i(3, "type"), i(4, "type"), i(2), i(3), i(4), i(1), i(2) }
-		)
-	),
-	s(
-		"defn",
-		fmt(
-			[[
+      { i(1, "func"), i(2, "arg1"), i(3, "type"), i(4, "type"), i(2), i(3), i(4), i(1), i(2) }
+    )
+  ),
+  s(
+    "defn",
+    fmt(
+      [[
 def {}({}: {}) -> {}:
 	"""description
 
@@ -76,21 +76,21 @@ def {}({}: {}) -> {}:
 	"value"
 	"""
             ]],
-			{ i(1, "func"), i(2, "arg1"), i(3, "type"), i(4, "type"), i(2), i(3), i(4), i(1), i(2) }
-		)
-	),
-	s(
-		"assert",
-		fmt(
-			[[
+      { i(1, "func"), i(2, "arg1"), i(3, "type"), i(4, "type"), i(2), i(3), i(4), i(1), i(2) }
+    )
+  ),
+  s(
+    "assert",
+    fmt(
+      [[
 unittest.TestCase().assertDictEqual({}, {})
             ]],
-			{ i(1, "expected"), i(2, "actual") }
-		)
-	),
-	s(
-		"unionfind",
-		t([[from dataclasses import dataclass, field
+      { i(1, "expected"), i(2, "actual") }
+    )
+  ),
+  s(
+    "unionfind",
+    t [[from dataclasses import dataclass, field
 from typing import List
 @dataclass
 class UnionFind:
@@ -125,11 +125,11 @@ class UnionFind:
 	def issame(self, idx_a: int, idx_b: int) -> bool:
 		a_root = self.root(idx=idx_a)
 		b_root = self.root(idx=idx_b)
-		return a_root == b_root]])
-	),
-	s(
-		"binary_search",
-		t([[from typing import List, Optional
+		return a_root == b_root]]
+  ),
+  s(
+    "binary_search",
+    t [[from typing import List, Optional
 
 def binary_search(sorted_array: List[int], value: int, left: Optional[int]=None, right: Optional[int]=None) -> Optional[int]:
 	if left is None:
@@ -144,23 +144,23 @@ def binary_search(sorted_array: List[int], value: int, left: Optional[int]=None,
 	elif sorted_array[pivot] > value:
 		return binary_search(sorted_array=sorted_array, value=value, left=left, right=pivot)
 	else:
-		return binary_search(sorted_array=sorted_array, value=value, left=pivot+1, right=right)]])
-	),
-	s(
-		"spark",
-		t([[from pyspark.sql import SparkSession
+		return binary_search(sorted_array=sorted_array, value=value, left=pivot+1, right=right)]]
+  ),
+  s(
+    "spark",
+    t [[from pyspark.sql import SparkSession
 
 spark = (SparkSession
     .builder
     .master("local")
     .appName("MyApp")
     .getOrCreate()
-)]])
-	),
-	s(
-		"dummy_input",
-		fmt(
-			[[
+)]]
+  ),
+  s(
+    "dummy_input",
+    fmt(
+      [[
 from collections import deque
 from pathlib import Path
 input_queue = deque()
@@ -173,12 +173,12 @@ def input(n: int = 1) -> str:
 			input_queue.append(l)
 	return input_queue.popleft()
             ]],
-			{ i(1, "n") }
-		)
-	),
-	s(
-		"recursion_limit",
-		t([[import sys
-sys.setrecursionlimit(100000)]])
-	),
+      { i(1, "n") }
+    )
+  ),
+  s(
+    "recursion_limit",
+    t [[import sys
+sys.setrecursionlimit(100000)]]
+  ),
 }

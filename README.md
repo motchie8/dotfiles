@@ -2,10 +2,9 @@
 
 This repository contains my personal collection of configuration files.
 
-## Requirements 
+## Requirements
 
-* The supported operating systems are MacOS and Ubuntu.
-
+- The supported operating systems are MacOS and Ubuntu.
 
 ## Installation
 
@@ -18,6 +17,7 @@ $ make install
 ### Optional
 
 Install TaskWarrior for task management.
+
 ```sh
 $ make install-taskwarrior
 ```
@@ -29,6 +29,7 @@ $ make install-tasksync
 ```
 
 Set up the system to mount Google Drive. Currently, only Ubuntu is supported.
+
 ```sh
 $ make install-google-drive-fuse
 ```
@@ -46,8 +47,9 @@ $ docker run -it --rm -v $(pwd):/mnt/host motchie8/dotfiles:master zsh
 ```
 
 ### Build Image
+
 Build the docker image locally.
 
 ```sh
 $ make build
-`````
+```

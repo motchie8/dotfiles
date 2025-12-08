@@ -126,8 +126,8 @@ install_anyenv_and_env_libs() {
     fi
     if [ ! -e "$(anyenv root)"/plugins/anyenv-update ]; then
         info_echo "**** Install anyenv-update ****"
-        mkdir -p $(anyenv root)/plugins
-        git clone https://github.com/znz/anyenv-update.git $(anyenv root)/plugins/anyenv-update
+        mkdir -p "$(anyenv root)/plugins"
+        git clone https://github.com/znz/anyenv-update.git "$(anyenv root)/plugins/anyenv-update"
     fi
 }
 
@@ -136,9 +136,9 @@ set_zsh_as_default_shell() {
     if [ "$DEFAULT_SHELL" != "zsh" ]; then
         info_echo "**** Change default shell from ${DEFAULT_SHELL} to zsh ****"
         if ! grep -q "zsh" /etc/shells; then
-            which zsh >>/etc/shells
+            command -v zsh >>/etc/shells
         fi
-        sudo chsh -s "$(which zsh)" "$(whoami)"
+        sudo chsh -s "$(command -v zsh)" "$(whoami)"
     fi
 }
 

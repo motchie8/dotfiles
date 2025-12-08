@@ -26,4 +26,4 @@ model_list:
     litellm_params:
         model: vertex_ai/claude-3-7-sonnet@20250219
         vertex_project: "os.environ/VERTEXAI_PROJECT"
-        vertex_location: "os.environ/VERTEXAI_LOCATION" 
+        vertex_location: "os.environ/VERTEXAI_LOCATION"

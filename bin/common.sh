@@ -82,7 +82,8 @@ setup_path() {
         export PATH="$PATH:$HOME/.cargo/bin"
     fi
     if [ -z "${NVIM_DIR:-}" ]; then
-        export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+        NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+        export NVM_DIR
         if [ -s "$NVM_DIR/nvm.sh" ]; then
             set +e
             # shellcheck source=/dev/null

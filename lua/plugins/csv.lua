@@ -1,7 +1,7 @@
 return {
-	-- CSV viewer
-	{
-		"emmanueltouzery/decisive.nvim",
-		ft = "csv",
-	},
+  -- CSV viewer
+  {
+    "emmanueltouzery/decisive.nvim",
+    ft = "csv",
+  },
 }

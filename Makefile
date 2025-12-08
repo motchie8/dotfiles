@@ -37,7 +37,22 @@ build-docker-image-using-package-manager:
 	 docker build -f docker/ubuntu/Dockerfile --build-arg BUILD_FROM_SOURCE=false -t motchie8/dotfiles:use-package-manager .
 
 lint:
-	shellcheck bin/*.sh --external-sources
+	./bin/lint.sh --shell
+
+format:
+	./bin/format.sh
+
+lint-all:
+	./bin/lint.sh
+
+pre-commit-install:
+	@echo "Installing pre-commit dependencies..."
+	uv sync
+	@echo "Setting up pre-commit hooks..."
+	uv run pre-commit install
+
+pre-commit-run:
+	uv run pre-commit run --all-files
 
 test:
 	act -P ubuntu-latest=catthehacker/ubuntu:act-latest -W .github/workflows/build_and_push_docker_image.yml
@@ -45,7 +60,7 @@ test:
 auth-gdrive:
 	./bin/setup_google_drive_ocamlfuse.sh -a
 
-clean:	
+clean:
 	for rcfile_name in zlogin zlogout zpreztorc zprofile zshenv; do \
         if [ -L "$$HOME/.$$rcfile_name" ]; then \
             unlink "$$HOME/.$$rcfile_name"; \
@@ -59,4 +74,4 @@ clean:
 	rm -rf build
 	./bin/setup_symbolic_links.sh -d
 
-.PHONY: install install-from-source install-by-package-manager install-base-from-source install-base-by-package-manager install-taskwarrior-from-source install-taskwarrior-by-package-manager install-tasksync install-google-drive-fuse build build-docker-image-build-from-source build-docker-image-using-package-manager lint test clean install-taskwarrior auth-gdrive
+.PHONY: install install-from-source install-by-package-manager install-base-from-source install-base-by-package-manager install-taskwarrior-from-source install-taskwarrior-by-package-manager install-tasksync install-google-drive-fuse build build-docker-image-build-from-source build-docker-image-using-package-manager lint lint-all format pre-commit-install pre-commit-run test clean install-taskwarrior auth-gdrive
