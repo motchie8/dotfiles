@@ -9,8 +9,17 @@ return {
                 size = 20,
                 shade_terminals = false,
             })
+            local Terminal = require("toggleterm.terminal").Terminal
             vim.api.nvim_set_keymap("n", "<Leader>t", "<Cmd>ToggleTerm<CR>", { noremap = true, silent = true })
-            vim.api.nvim_set_keymap("n", "<Leader>tt", "<Cmd>2ToggleTerm<CR>", { noremap = true, silent = true })
+            vim.keymap.set(
+                "n",
+                "<Leader>tt",
+                function()
+                    local term = Terminal:new({ direction = "horizontal", count = 3 })
+                    term:toggle()
+                end,
+                { noremap = true, silent = true }
+            )
             vim.api.nvim_set_keymap(
                 "n",
                 -- float
