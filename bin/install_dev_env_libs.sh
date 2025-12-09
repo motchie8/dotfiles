@@ -400,35 +400,6 @@ install_heml() {
     fi
 }
 
-install_snowsql() {
-    if ! type snowsql >/dev/null 2>&1; then
-        info_echo "**** Install SnowSQL ****"
-        if [ "$OS" = "$MAC_OS" ]; then
-            if [ "$ARCH" == "x86_64" ]; then
-                brew install --cask snowflake-snowsql
-            else
-                err_echo "Currently, for MacOS with arm64, SnowSQL needs to be installed using pkg."
-                err_echo "cf. https://developers.snowflake.com/snowsql/"
-            fi
-        elif [ "$OS" = "$UBUNTU" ]; then
-            if [ "$ARCH" == "x86_64" ]; then
-                mkdir -p "$BUILD_DIR/snowsql/bin"
-                cd "$BUILD_DIR/snowsql"
-                VERSION=1.2.28
-                BOOTSTRAP_VERSION=1.2
-                curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/"${BOOTSTRAP_VERSION}"/linux_x86_64/snowsql-${VERSION}-linux_x86_64.bash
-                touch "$DOTFILES_DIR"/.zshrc.tmp
-                SNOWSQL_DEST="$HOME"/bin SNOWSQL_LOGIN_SHELL="$DOTFILES_DIR"/.zshrc.tmp bash snowsql-${VERSION}-linux_x86_64.bash
-                rm -rf "$DOTFILES_DIR"/.zshrc.tmp
-            else
-                err_echo "Currently, SnowSQL is not supported on arm64 Linux."
-            fi
-        else
-            exit_with_unsupported_os
-        fi
-    fi
-}
-
 install_devcontainer_cli() {
     if ! type devcontainer >/dev/null 2>&1; then
         info_echo "**** Install devcontainer cli ****"
@@ -626,8 +597,6 @@ install_aws_cli
 install_heml
 
 install_terraform_libs
-
-install_snowsql
 
 install_devcontainer_cli
 
