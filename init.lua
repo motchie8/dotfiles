@@ -4,8 +4,8 @@ local opt = vim.opt
 -- # keymapping #
 api.nvim_set_var("mapleader", " ") -- Set leader key to space
 api.nvim_set_var(
-  "python3_host_prog",
-  string.format("%s/dotfiles/.venv/bin/python3", api.nvim_eval "$HOME")
+    "python3_host_prog",
+    string.format("%s/dotfiles/.venv/bin/python3", api.nvim_eval("$HOME"))
 )
 
 -- disable netrw due to race conditions at vim startup
@@ -47,10 +47,10 @@ api.nvim_set_keymap("n", "<Leader>bb", "<Cmd>b#<CR>", { noremap = true })
 api.nvim_set_keymap("n", "<Leader>bd", "<Cmd>bdelete<CR>", { noremap = true })
 -- search and replace
 api.nvim_set_keymap(
-  "n",
-  "<Leader>F",
-  [["zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>]],
-  { noremap = true }
+    "n",
+    "<Leader>F",
+    [["zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>]],
+    { noremap = true }
 )
 vim.keymap.set("n", "<leader>R", 'yiw:%s/<C-r><C-r>"//g<Left><Left>')
 api.nvim_set_keymap("n", "<Esc><Esc>", "<Cmd>set nohlsearch!<CR>", { noremap = true })
@@ -150,7 +150,7 @@ opt.cmdheight = 2
 opt.laststatus = 3
 
 -- clipboard
-opt.clipboard:append "unnamedplus"
+opt.clipboard:append("unnamedplus")
 
 -- color schema
 opt.syntax = "on"
@@ -169,27 +169,27 @@ opt.sh = "zsh"
 -- vim.cmd('autocmd!')
 -- Keymap for help file
 api.nvim_create_autocmd("FileType", {
-  pattern = "help",
-  callback = function(ev)
-    local opts = { buffer = ev.buf, noremap = true, silent = true }
-    -- Jump to tag
-    vim.keymap.set("n", "<Leader>jt", "<C-]>", opts)
-    -- Jump back
-    vim.keymap.set("n", "<Leader>jb", "<C-T>", opts)
-  end,
+    pattern = "help",
+    callback = function(ev)
+        local opts = { buffer = ev.buf, noremap = true, silent = true }
+        -- Jump to tag
+        vim.keymap.set("n", "<Leader>jt", "<C-]>", opts)
+        -- Jump back
+        vim.keymap.set("n", "<Leader>jb", "<C-T>", opts)
+    end,
 })
 
 -- Bootstrapping for lazy.nvim
-local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
-  vim.fn.system {
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
-    lazypath,
-  }
+    vim.fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable", -- latest stable release
+        lazypath,
+    })
 end
 vim.opt.rtp:prepend(lazypath)
-require("lazy").setup "plugins"
+require("lazy").setup("plugins")

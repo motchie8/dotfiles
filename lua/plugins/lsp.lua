@@ -289,19 +289,19 @@ return {
         event = "VeryLazy",
         dependencies = { "nvim-lua/plenary.nvim" },
         config = function()
-            local null_ls = require "null-ls"
-            null_ls.setup {
+            local null_ls = require("null-ls")
+            null_ls.setup({
                 sources = {
-                    null_ls.builtins.formatting.sqlfluff.with {
+                    null_ls.builtins.formatting.sqlfluff.with({
                         extra_args = { "--dialect", "bigquery", "--templater", "jinja" },
                         filetypes = { "sql", "dbt" },
-                    },
-                    null_ls.builtins.diagnostics.sqlfluff.with {
+                    }),
+                    null_ls.builtins.diagnostics.sqlfluff.with({
                         extra_args = { "--dialect", "bigquery", "--templater", "jinja" },
                         filetypes = { "sql", "dbt" },
-                    },
+                    }),
                 },
-            }
+            })
         end,
     },
     -- Auto formatting on save
@@ -322,7 +322,7 @@ return {
                 end,
             })
             -- Format on save synchronously
-            vim.cmd [[cabbrev wq execute "Format sync" <bar> wq]]
+            vim.cmd([[cabbrev wq execute "Format sync" <bar> wq]])
         end,
     },
     -- vscode-like pictograms for lsp completion items
@@ -338,7 +338,7 @@ return {
         -- install jsregexp (optional!).
         build = "make install_jsregexp",
         config = function()
-            require("luasnip.loaders.from_lua").load { paths = { "~/dotfiles/snippets/luasnip" } }
+            require("luasnip.loaders.from_lua").load({ paths = { "~/dotfiles/snippets/luasnip" } })
         end,
     },
     -- Previw code with code actions applied
@@ -371,7 +371,7 @@ return {
         priority = 1000, -- needs to be loaded in first
         config = function()
             require("tiny-inline-diagnostic").setup()
-            vim.diagnostic.config { virtual_text = false } -- Only if needed in your configuration, if you already have native LSP diagnostics
+            vim.diagnostic.config({ virtual_text = false }) -- Only if needed in your configuration, if you already have native LSP diagnostics
         end,
     },
 }

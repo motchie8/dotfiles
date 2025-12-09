@@ -1,13 +1,13 @@
-local ls = require "luasnip"
+local ls = require("luasnip")
 local s = ls.snippet
 local i = ls.insert_node
 local fmt = require("luasnip.extras.fmt").fmt
 
 return {
-  s(
-    "args",
-    fmt(
-      [[
+    s(
+        "args",
+        fmt(
+            [[
 usage_exit() {{
     echo -e "Usage: $0\n    --key value" 1>&2
     exit 1
@@ -37,7 +37,7 @@ do
     esac
 done
             ]],
-      {}
-    )
-  ),
+            {}
+        )
+    ),
 }
