@@ -158,7 +158,7 @@ install_rust() {
     if ! type cargo >/dev/null 2>&1; then
         info_echo "**** Install rust ****"
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs >rustup-init.sh
-        sh rustup-init.sh -y --no-modify-path
+        sh rustup-init.sh -y --no-modify-path --profile minimal
         rm rustup-init.sh
     fi
 }
