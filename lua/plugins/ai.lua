@@ -137,65 +137,100 @@ return {
             },
         },
     },
-    -- Aider
+    -- For Claude Code, Cursor CLI and Gemini CLI by sidedeck.nvim
     {
-        "GeorgesAlkhouri/nvim-aider",
-        cmd = "Aider",
-        -- Example key mappings for common actions:
-        keys = {
-            { "<leader>a", "<cmd>Aider toggle<cr>", desc = "Toggle Aider" },
-            -- { "<leader>as", "<cmd>Aider send<cr>", desc = "Send to Aider", mode = { "n", "v" } },
-            -- { "<leader>ac", "<cmd>Aider command<cr>", desc = "Aider Commands" },
-            -- { "<leader>ab", "<cmd>Aider buffer<cr>", desc = "Send Buffer" },
-            -- { "<leader>a+", "<cmd>Aider add<cr>", desc = "Add File" },
-            -- { "<leader>a-", "<cmd>Aider drop<cr>", desc = "Drop File" },
-            -- { "<leader>ar", "<cmd>Aider add readonly<cr>", desc = "Add Read-Only" },
-            -- Example nvim-tree.lua integration if needed
-            {
-                "<leader>a+",
-                "<cmd>AiderTreeAddFile<cr>",
-                desc = "Add File from Tree to Aider",
-                ft = "NvimTree",
-            },
-            {
-                "<leader>a-",
-                "<cmd>AiderTreeDropFile<cr>",
-                desc = "Drop File from Tree from Aider",
-                ft = "NvimTree",
-            },
-        },
-        dependencies = {
-            "folke/snacks.nvim",
-            --- The below dependencies are optional
-            "catppuccin/nvim",
-            { "nvim-tree/nvim-tree.lua", version = "^3.30" },
-            --- Neo-tree integration
-            {
-                "nvim-neo-tree/neo-tree.nvim",
-
-                opts = function(_, opts)
-                    -- Example mapping configuration (already set by default)
-                    opts.window = {
-                        mappings = {
-                            ["+"] = { "nvim_aider_add", desc = "add to aider" },
-                            ["-"] = { "nvim_aider_drop", desc = "drop from aider" },
-                        },
-                    }
-                    require("nvim_aider.neo_tree").setup(opts)
-                end,
-            },
-        },
-        config = true,
+        "folke/sidekick.nvim",
         opts = {
-            args = {
-                "--no-auto-commits",
-                "--pretty",
-                "--stream",
-                "--watch-files",
+            -- add any options here
+        },
+        keys = {
+            {
+                "<tab>",
+                function()
+                    -- if there is a next edit, jump to it, otherwise apply it if any
+                    if not require("sidekick").nes_jump_or_apply() then
+                        return "<Tab>" -- fallback to normal tab
+                    end
+                end,
+                expr = true,
+                desc = "Goto/Apply Next Edit Suggestion",
+            },
+            {
+                "<leader>aa",
+                function()
+                    require("sidekick.cli").toggle()
+                end,
+                desc = "Sidekick Toggle CLI",
+                mode = { "n", "t", "i", "x" },
+            },
+            {
+                "<leader>as",
+                function()
+                    require("sidekick.cli").select()
+                end,
+                -- Or to select only installed tools:
+                -- require("sidekick.cli").select({ filter = { installed = true } })
+                desc = "Select CLI",
+            },
+            {
+                "<leader>ad",
+                function()
+                    require("sidekick.cli").close()
+                end,
+                desc = "Detach a CLI Session",
+            },
+            {
+                "<leader>at",
+                function()
+                    require("sidekick.cli").send({ msg = "{this}" })
+                end,
+                mode = { "x", "n" },
+                desc = "Send This",
+            },
+            {
+                "<leader>af",
+                function()
+                    require("sidekick.cli").send({ msg = "{file}" })
+                end,
+                desc = "Send File",
+            },
+            {
+                "<leader>av",
+                function()
+                    require("sidekick.cli").send({ msg = "{selection}" })
+                end,
+                mode = { "x" },
+                desc = "Send Visual Selection",
+            },
+            {
+                "<leader>ap",
+                function()
+                    require("sidekick.cli").prompt()
+                end,
+                mode = { "n", "x" },
+                desc = "Sidekick Select Prompt",
+            },
+            -- Example of a keybinding to open Claude directly
+            {
+                "<leader>ac",
+                function()
+                    local use_claude_code = os.getenv("USE_CLAUDE_CODE") or "0"
+                    local use_cursor_cli = os.getenv("USE_CURSOR_CLI") or "0"
+                    if use_claude_code == "1" then
+                        require("sidekick.cli").toggle({ name = "claude", focus = true })
+                    elseif use_cursor_cli == "1" then
+                        require("sidekick.cli").toggle({ name = "cursor", focus = true })
+                    else
+                        print(
+                            "Both USE_CLAUDE_CODE and USE_CURSOR_CLI are not set to 1. Please set one of them."
+                        )
+                    end
+                end,
+                desc = "Sidekick Toggle Claude/Cursor CLI",
             },
         },
     },
-    -- For Claude Code, Cursor CLI and Gemini CLI
+    -- For Claude Code, Cursor CLI and Gemini CLI by toggleterm.nvim
     {
         "coder/claudecode.nvim",
         dependencies = { "folke/snacks.nvim", "akinsho/toggleterm.nvim" },

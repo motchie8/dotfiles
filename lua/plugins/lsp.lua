@@ -23,6 +23,8 @@ return {
         opts = {
             automatic_enable = true,
             ensure_installed = {
+                -- [LSP] Copilot
+                "copilot",
                 -- [LSP] Lua
                 "lua_ls", -- "lua-language-server",
                 -- [LSP] Python

@@ -471,45 +471,6 @@ install_vhs() {
     fi
 }
 
-install_aider() {
-    if ! type aider >/dev/null 2>&1; then
-        info_echo "**** Install Aider ****"
-        # TMP: install aider from source for MCP support
-        # uv tool install --force --python python3.12 --with pip aider-chat@latest
-        # uv tool install --force --reinstall --python python3.12 --with pip --with google-cloud-aiplatform --with httpx --with playwright "git+https://github.com/quinlanjager/aider.git@feature/litellm-mcp"
-        uv tool install --force --reinstall --python python3.12 --with pip --with google-cloud-aiplatform --with httpx --with playwright "git+https://github.com/arosov/aider.git@mcp"
-        # TMP: create a mcp profile from example config
-        if [ ! -e "$DOTFILES_DIR"/config/aider/aider.mcp.profiles.yml ]; then
-            info_echo "**** Create aider.mcp.profiles.yml using example config ****"
-            cp "$DOTFILES_DIR"/config/aider/aider.mcp.profiles.example.yml "$DOTFILES_DIR"/config/aider/aider.mcp.profiles.yml
-        fi
-        # TMP: create a symlink to the mcp profile
-        if [ ! -e "$HOME"/.aider.mcp.profiles.yml ]; then
-            info_echo "**** Create symlink to mcp profile ****"
-            ln -s "$DOTFILES_DIR"/config/aider/aider.mcp.profiles.yml "$HOME"/.aider.mcp.profiles.yml
-        fi
-        # Init aider configs
-        cd "$DOTFILES_DIR"
-        if [ ! -e "$DOTFILES_DIR"/config/aider/aider.conf.yml ]; then
-            info_echo "**** Create aider.conf.yml using example config ****"
-            cp "$DOTFILES_DIR"/config/aider/aider.conf.example.yml "$DOTFILES_DIR"/config/aider/aider.conf.yml
-        fi
-        if [ ! -e "$DOTFILES_DIR"/config/mcp/mcp.json ]; then
-            info_echo "**** Create mcp.json using example config ****"
-            cp "$DOTFILES_DIR"/config/mcp/mcp.example.json "$DOTFILES_DIR"/config/mcp/mcp.json
-        fi
-        info_echo "**** Install PortAudio for voice coding support ****"
-        if [ "$OS" = "$MAC_OS" ]; then
-            brew install portaudio
-        elif [ "$OS" = "$UBUNTU" ]; then
-            sudo apt-get install libportaudio2 -y
-            sudo apt install libasound2-plugins -y
-        else
-            exit_with_unsupported_os
-        fi
-    fi
-}
-
 install_imagemagick() {
     if ! type convert >/dev/null 2>&1; then
         info_echo "**** Install ImageMagick ****"
@@ -605,8 +566,6 @@ install_lua_language_server
 install_shellcheck
 
 install_vhs
-
-install_aider
 
 install_imagemagick
 
