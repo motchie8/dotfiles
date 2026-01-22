@@ -29,6 +29,7 @@ return {
                 "lua_ls", -- "lua-language-server",
                 -- [LSP] Python
                 "pyright",
+                -- "ty",
                 -- [Linter] [Formatter] [LSP] Python
                 -- NOTE: Disabled due to an error: ~/.local/share/nvim/mason/packages/ruff/venv/bin/python3 not found
                 -- "ruff",
@@ -157,7 +158,7 @@ return {
                 "<cmd>lua vim.lsp.buf.format({ async = false })<CR>",
                 { desc = "LSP Format" }
             )
-            -- set python path for pyright if a .venv folder is present in the project root
+            -- set python path if a .venv folder is present in the project root
             if vim.fn.filereadable(vim.fn.getcwd() .. "/.venv/bin/python") == 1 then
                 vim.lsp.config("pyright", {
                     settings = {
@@ -167,6 +168,15 @@ return {
                     },
                 })
             end
+            -- if vim.fn.filereadable(vim.fn.getcwd() .. "/.venv/bin/python") == 1 then
+            --     vim.lsp.config("ty", {
+            --         settings = {
+            --             python = {
+            --                 pythonPath = vim.fn.getcwd() .. "/.venv/bin/python",
+            --             },
+            --         },
+            --     })
+            -- end
         end,
     },
     {
@@ -182,17 +192,19 @@ return {
         opts = {
             -- See :h blink-cmp-config-keymap for defining your own keymap
             keymap = {
+                -- preset = 'enter'
                 preset = "none",
                 ["<C-space>"] = { "show", "hide" },
                 ["<CR>"] = { "accept", "fallback" },
                 ["<Up>"] = { "select_prev", "fallback" },
                 ["<Down>"] = { "select_next", "fallback" },
-                ["K"] = { "show_documentation", "hide_documentation", "fallback" },
+                -- ["K"] = { "show_documentation", "hide_documentation", "fallback" },
                 ["<C-d>"] = { "scroll_documentation_down", "fallback" },
                 ["<C-u>"] = { "scroll_documentation_up", "fallback" },
                 ["<C-k>"] = { "show_signature", "hide_signature", "fallback" },
-                ["<C-h>"] = { "snippet_backward", "fallback" },
-                ["<C-l>"] = { "snippet_forward", "fallback" },
+                ["<C-l>"] = { "show_documentation", "hide_documentation", "fallback" },
+                -- ["<C-h>"] = { "snippet_backward", "fallback" },
+                -- ["<C-l>"] = { "snippet_forward", "fallback" },
             },
 
             snippets = { preset = "luasnip" },
@@ -204,54 +216,10 @@ return {
             },
             completion = {
                 documentation = { auto_show = true, auto_show_delay_ms = 250 },
-                -- Completion menu drawing: nvim-web-devicons + lspkind
-                -- ref. https://cmp.saghen.dev/recipes.html#nvim-web-devicons-lspkind
-                menu = {
-                    draw = {
-                        components = {
-                            kind_icon = {
-                                text = function(ctx)
-                                    local icon = ctx.kind_icon
-                                    if vim.tbl_contains({ "Path" }, ctx.source_name) then
-                                        local dev_icon, _ = require("nvim-web-devicons").get_icon(
-                                            ctx.label
-                                        )
-                                        if dev_icon then
-                                            icon = dev_icon
-                                        end
-                                    else
-                                        icon = require("lspkind").symbolic(ctx.kind, {
-                                            mode = "symbol",
-                                        })
-                                    end
-
-                                    return icon .. ctx.icon_gap
-                                end,
-
-                                -- Optionally, use the highlight groups from nvim-web-devicons
-                                -- You can also add the same function for `kind.highlight` if you want to
-                                -- keep the highlight groups in sync with the icons.
-                                highlight = function(ctx)
-                                    local hl = ctx.kind_hl
-                                    if vim.tbl_contains({ "Path" }, ctx.source_name) then
-                                        local dev_icon, dev_hl =
-                                            require("nvim-web-devicons").get_icon(
-                                                ctx.label
-                                            )
-                                        if dev_icon then
-                                            hl = dev_hl
-                                        end
-                                    end
-                                    return hl
-                                end,
-                            },
-                        },
-                    },
-                },
             },
             sources = {
                 -- Snippets as the first source
-                default = { "snippets", "lsp", "path", "buffer" },
+                default = { "lsp", "snippets", "path", "buffer" },
                 providers = {
                     lsp = {
                         name = "LSP",
@@ -277,9 +245,9 @@ return {
                 },
             },
             -- Terminal completions may not be stable yet
-            term = {
-                enabled = true,
-            },
+            -- term = {
+            --     enabled = true,
+            -- },
             -- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
             fuzzy = { implementation = "prefer_rust_with_warning" },
         },
