@@ -217,6 +217,20 @@ install_tmux_mem_cpu_load() {
     fi
 }
 
+install_tmux_plugin_manager() {
+    if [ ! -e "$DOTFILES_DIR"/tmux/plugins/tpm ]; then
+        info_echo "**** Install tmux plugin manager ****"
+        git clone https://github.com/tmux-plugins/tpm "$DOTFILES_DIR"/tmux/plugins/tpm
+    fi
+}
+
+install_tmux_thumbs() {
+    if [ ! -e "$DOTFILES_DIR"/tmux/plugins/tmux-thumbs ]; then
+        info_echo "**** Install tmux-thumbs ****"
+        git clone https://github.com/fcsonline/tmux-thumbs "$DOTFILES_DIR"/tmux/plugins/tmux-thumbs
+    fi
+}
+
 install_act() {
     if ! type act >/dev/null 2>&1; then
         info_echo "**** Install act ***"
@@ -548,6 +562,10 @@ install_fzf
 install_tmux_mem_cpu_load
 
 create_tmux_user_conf
+
+install_tmux_plugin_manager
+
+install_tmux_thumbs
 
 install_nerd_fonts
 
