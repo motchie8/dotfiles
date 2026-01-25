@@ -529,10 +529,28 @@ install_cursor_cli() {
             info_echo "**** Install Cursor CLI ****"
             curl https://cursor.com/install -fsS | bash
         fi
+        if ! type cursor-agent-acp >/dev/null 2>&1; then
+            info_echo "**** Install Cursor Agent ACP ****"
+            npm i -g @blowmage/cursor-agent-acp
+        fi
         if [ ! -e "$DOTFILES_DIR"/config/cursor/mcp.json ]; then
             info_echo "**** Create Cursor MCP config file using example config ****"
             cp "$DOTFILES_DIR"/config/cursor/mcp.example.json "$DOTFILES_DIR"/config/cursor/mcp.json
             mkdir -p "$HOME"/.cursor
+        fi
+    fi
+}
+
+install_claude_code() {
+    # install Claude Code only on Ubuntu
+    if [ "$OS" = "$UBUNTU" ]; then
+        if ! type claude >/dev/null 2>&1; then
+            info_echo "**** Install Claude Code ****"
+            curl -fsSL https://claude.ai/install.sh | bash
+        fi
+        if ! type claude-code-acp >/dev/null 2>&1; then
+            info_echo "**** Install Claude Code ACP ****"
+            npm i -g @zed-industries/claude-code-acp
         fi
     fi
 }
@@ -592,5 +610,7 @@ install_gemini_cli
 install_github_cli
 
 install_cursor_cli
+
+install_claude_code
 
 info_echo "**** Installation succeeded ****"
