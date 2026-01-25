@@ -187,51 +187,57 @@ return {
             "L3MON4D3/LuaSnip",
             "nvim-tree/nvim-web-devicons",
             "onsails/lspkind.nvim",
+            "fang2hou/blink-copilot",
         },
         version = "1.*",
         opts = {
             -- See :h blink-cmp-config-keymap for defining your own keymap
             keymap = {
-                -- preset = 'enter'
                 preset = "none",
-                ["<C-space>"] = { "show", "hide" },
+                ["<C-space>"] = { "show", "show_documentation", "hide" },
                 ["<CR>"] = { "accept", "fallback" },
                 ["<Up>"] = { "select_prev", "fallback" },
                 ["<Down>"] = { "select_next", "fallback" },
-                -- ["K"] = { "show_documentation", "hide_documentation", "fallback" },
                 ["<C-d>"] = { "scroll_documentation_down", "fallback" },
                 ["<C-u>"] = { "scroll_documentation_up", "fallback" },
                 ["<C-k>"] = { "show_signature", "hide_signature", "fallback" },
-                ["<C-l>"] = { "show_documentation", "hide_documentation", "fallback" },
-                -- ["<C-h>"] = { "snippet_backward", "fallback" },
-                -- ["<C-l>"] = { "snippet_forward", "fallback" },
+                ["<Tab>"] = {
+                    function(cmp)
+                        if cmp.snippet_active() then
+                            return cmp.accept()
+                        else
+                            return cmp.select_and_accept()
+                        end
+                    end,
+                    "snippet_forward",
+                    "fallback",
+                },
+                ["<S-Tab>"] = { "snippet_backward", "fallback" },
             },
-
             snippets = { preset = "luasnip" },
-
             appearance = {
                 -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
                 -- Adjusts spacing to ensure icons are aligned
                 nerd_font_variant = "normal",
             },
             completion = {
-                documentation = { auto_show = true, auto_show_delay_ms = 250 },
+                documentation = { auto_show = true, auto_show_delay_ms = 200 },
+                ghost_text = { enabled = true, auto_show = true },
             },
             sources = {
-                -- Snippets as the first source
-                default = { "lsp", "snippets", "path", "buffer" },
+                default = { "copilot", "lsp", "path", "snippets", "buffer" },
                 providers = {
                     lsp = {
                         name = "LSP",
                         module = "blink.cmp.sources.lsp",
                         enabled = true,
-                        transform_items = function(_, items)
-                            -- Filter out text items from LSP to reduce noise
-                            return vim.tbl_filter(function(item)
-                                return item.kind
-                                    ~= require("blink.cmp.types").CompletionItemKind.Text
-                            end, items)
-                        end,
+                        -- transform_items = function(_, items)
+                        --     -- Filter out text items from LSP to reduce noise
+                        --     return vim.tbl_filter(function(item)
+                        --         return item.kind
+                        --             ~= require("blink.cmp.types").CompletionItemKind.Text
+                        --     end, items)
+                        -- end,
                     },
                     buffer = {
                         opts = {
@@ -242,12 +248,13 @@ return {
                             end,
                         },
                     },
+                    copilot = {
+                        name = "copilot",
+                        module = "blink-copilot",
+                        async = true,
+                    },
                 },
             },
-            -- Terminal completions may not be stable yet
-            -- term = {
-            --     enabled = true,
-            -- },
             -- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
             fuzzy = { implementation = "prefer_rust_with_warning" },
         },
