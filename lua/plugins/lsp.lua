@@ -158,6 +158,10 @@ return {
                 "<cmd>lua vim.lsp.buf.format({ async = false })<CR>",
                 { desc = "LSP Format" }
             )
+            vim.api.nvim_set_hl(0, "BlinkCmpGhostText", {
+                fg = "#808080",
+                default = true,
+            })
             -- set python path if a .venv folder is present in the project root
             if vim.fn.filereadable(vim.fn.getcwd() .. "/.venv/bin/python") == 1 then
                 vim.lsp.config("pyright", {
@@ -195,24 +199,17 @@ return {
             keymap = {
                 preset = "none",
                 ["<C-space>"] = { "show", "show_documentation", "hide" },
+                -- use copilot.lua for ghost text
+                -- ["<Tab>"] = { "select_and_accept", "fallback" },
                 ["<CR>"] = { "accept", "fallback" },
+                ["JJ"] = { "cancel", "fallback" },
                 ["<Up>"] = { "select_prev", "fallback" },
                 ["<Down>"] = { "select_next", "fallback" },
                 ["<C-d>"] = { "scroll_documentation_down", "fallback" },
                 ["<C-u>"] = { "scroll_documentation_up", "fallback" },
                 ["<C-k>"] = { "show_signature", "hide_signature", "fallback" },
-                ["<Tab>"] = {
-                    function(cmp)
-                        if cmp.snippet_active() then
-                            return cmp.accept()
-                        else
-                            return cmp.select_and_accept()
-                        end
-                    end,
-                    "snippet_forward",
-                    "fallback",
-                },
-                ["<S-Tab>"] = { "snippet_backward", "fallback" },
+                ["<C-l>"] = { "snippet_forward", "fallback" },
+                ["<C-h>"] = { "snippet_backward", "fallback" },
             },
             snippets = { preset = "luasnip" },
             appearance = {
@@ -222,22 +219,23 @@ return {
             },
             completion = {
                 documentation = { auto_show = true, auto_show_delay_ms = 200 },
-                ghost_text = { enabled = true, auto_show = true },
+                -- use copilot.lua for ghost_text
+                ghost_text = { enabled = false },
             },
             sources = {
-                default = { "copilot", "lsp", "path", "snippets", "buffer" },
+                default = { "copilot", "lsp", "path", "buffer", "snippets" },
                 providers = {
                     lsp = {
                         name = "LSP",
                         module = "blink.cmp.sources.lsp",
                         enabled = true,
-                        -- transform_items = function(_, items)
-                        --     -- Filter out text items from LSP to reduce noise
-                        --     return vim.tbl_filter(function(item)
-                        --         return item.kind
-                        --             ~= require("blink.cmp.types").CompletionItemKind.Text
-                        --     end, items)
-                        -- end,
+                        transform_items = function(_, items)
+                            -- Filter out text items from LSP to reduce noise
+                            return vim.tbl_filter(function(item)
+                                return item.kind
+                                    ~= require("blink.cmp.types").CompletionItemKind.Text
+                            end, items)
+                        end,
                     },
                     buffer = {
                         opts = {
