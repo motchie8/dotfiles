@@ -1,5 +1,4 @@
-return {
-    -- Copilot(Lua)
+return { -- Copilot(Lua)
     {
         "zbirenbaum/copilot.lua",
         event = "InsertEnter",
@@ -19,11 +18,6 @@ return {
                 markdown = true,
                 gitcommit = true,
                 gitrebase = true,
-            },
-            diff_preview = {
-                enabled = true,
-                layout = "split",
-                center_on_navigate_hunks = true,
             },
             -- for agentic.nvim
             should_attach = function(bufnr, bufname)
@@ -75,17 +69,32 @@ return {
                     end
                 end,
             }
+            local diff_preview = {
+                enabled = true,
+                layout = "split",
+                center_on_navigate_hunks = true,
+            }
+            local keymaps = {
+                diff_preview = {
+                    next_hunk = "<C-j>",
+                    prev_hunk = "<C-k>",
+                },
+            }
             if use_claude_code == "1" then
                 require("agentic").setup({
                     provider = "claude-acp",
                     acp_providers = acp_providers,
                     hooks = hooks,
+                    diff_preview = diff_preview,
+                    keymaps = keymaps,
                 })
             elseif use_cursor_cli == "1" then
                 require("agentic").setup({
                     provider = "cursor-acp",
                     acp_providers = acp_providers,
                     hooks = hooks,
+                    diff_preview = diff_preview,
+                    keymaps = keymaps,
                 })
             else
                 print(
