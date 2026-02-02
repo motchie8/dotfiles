@@ -11,18 +11,12 @@ local function get_weekday()
     local weekdays = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" }
     return weekdays[today.wday]
 end
-local function get_hhmm()
-    local today = os.date("*t")
-    return string.format("%02d:%02d", today.hour, today.min)
-end
 return {
     s(
         "schedule",
         fmt(
             [[
 # Diary for {date}({weekday})
-
-## Current active tasks | status.not:Completed and +ACTIVE
 
 ## Events
 
