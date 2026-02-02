@@ -20,6 +20,11 @@ return {
                 gitcommit = true,
                 gitrebase = true,
             },
+            diff_preview = {
+                enabled = true,
+                layout = "split",
+                center_on_navigate_hunks = true,
+            },
             -- for agentic.nvim
             should_attach = function(bufnr, bufname)
                 local filetype = vim.bo[bufnr].filetype
@@ -99,12 +104,20 @@ return {
                 desc = "Toggle Agentic Chat",
             },
             {
-                "<Leader>a",
+                "<Leader>ca",
                 function()
                     require("agentic").add_selection_or_file_to_context()
                 end,
                 mode = { "n", "v" },
                 desc = "Add file or selection to Agentic to Context",
+            },
+            {
+                "<Leader>cs",
+                function()
+                    require("agentic").stop_generation()
+                end,
+                mode = { "n" },
+                desc = "Stop current generation or tool execution",
             },
             {
                 "<Leader>C",

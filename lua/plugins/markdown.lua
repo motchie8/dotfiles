@@ -6,6 +6,14 @@ return {
         ft = {
             "markdown",
             "vimwiki.markdown",
+            "md",
+            "AgenticChat",
+        },
+        file_types = {
+            "markdown",
+            "vimwiki.markdown",
+            "md",
+            "AgenticChat",
         },
         keys = {
             {
