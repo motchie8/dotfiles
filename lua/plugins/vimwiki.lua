@@ -19,7 +19,6 @@ return {
             })
             vim.api.nvim_set_var("vimwiki_global_ext", 1)
             vim.api.nvim_set_var("vimwiki_markdown_link_ext", 1)
-            vim.api.nvim_set_var("taskwiki_markup_syntax", "markdown")
             vim.api.nvim_set_var("markdown_folding", 0)
 
             -- register markdown files to vimwiki
@@ -45,66 +44,6 @@ return {
                 pattern = { "*" },
                 callback = setup_swap,
             })
-        end,
-    },
-    -- task management
-    {
-        "tools-life/taskwiki",
-        dependencies = {
-            "vimwiki/vimwiki",
-            -- color support in charts
-            "powerman/vim-plugin-AnsiEsc",
-            -- taskwiki file navigation
-            "preservim/tagbar",
-            -- grid view
-            "blindFS/vim-taskwarrior",
-        },
-        config = function()
-            vim.api.nvim_set_keymap(
-                "n",
-                "td",
-                "<Cmd>TaskWikiDone<CR>",
-                { noremap = true, silent = true }
-            )
-            vim.api.nvim_set_keymap(
-                "n",
-                "tdd",
-                "<Cmd>TaskWikiDelete<CR>",
-                { noremap = true, silent = true }
-            )
-            vim.api.nvim_set_keymap(
-                "n",
-                "tt",
-                "<Cmd>TaskWikiToggle<CR>",
-                { noremap = true, silent = true }
-            )
-            vim.api.nvim_set_keymap(
-                "n",
-                "te",
-                "<Cmd>TaskWikiEdit<CR>",
-                { noremap = true, silent = true }
-            )
-            vim.api.nvim_set_keymap(
-                "n",
-                "tm",
-                "<Cmd>TaskWikiMod<CR>",
-                { noremap = true, silent = true }
-            )
-            -- Custom keymaps
-            -- Clear taskwiki lines
-            vim.api.nvim_set_keymap(
-                "n",
-                "tc",
-                "<Cmd>%s/\\v^ *\\* \\[.\\] .* !{1,3} *\\(\\d{4}-\\d{2}-\\d{2}\\) *#\\w{8} *\\n//g<CR>",
-                { noremap = true, silent = true }
-            )
-            -- Convert taskwiki lines to markdown list
-            vim.api.nvim_set_keymap(
-                "n",
-                "tl",
-                "<Cmd>%s/\\v^ *\\* \\[.\\]( ---) (.*) !{1,3} *\\(\\d{4}-\\d{2}-\\d{2}\\)? *#\\w{8} *\\n//g<CR><BAR><Cmd>%s/\\v^ *\\* \\[.\\] (.*) !{1,3} *\\(\\d{4}-\\d{2}-\\d{2}\\) *#\\w{8} */- \\[ \\] \\1/g<CR>",
-                { noremap = true, silent = true }
-            )
         end,
     },
 }

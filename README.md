@@ -16,18 +16,6 @@ $ make install
 
 ### Optional
 
-Install TaskWarrior for task management.
-
-```sh
-$ make install-taskwarrior
-```
-
-Set up TaskWarrior for file synchronization. GCS bucket and a GCP service account are required. Copy `.env.example` to create `.env` and set your variables.
-
-```sh
-$ make install-tasksync
-```
-
 Set up the system to mount Google Drive. Currently, only Ubuntu is supported.
 
 ```sh

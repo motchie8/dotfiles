@@ -1,8 +1,8 @@
 install: install-from-source
 
-install-from-source: install-base-from-source install-taskwarrior
+install-from-source: install-base-from-source
 
-install-by-package-manager: install-base-by-package-manager install-taskwarrior
+install-by-package-manager: install-base-by-package-manager
 
 install-base-from-source:
 	./bin/install_essentials.sh
@@ -13,17 +13,6 @@ install-base-by-package-manager:
 	./bin/install_essentials.sh
 	./bin/install_dev_env_libs.sh -t n
 	./bin/setup_symbolic_links.sh
-
-install-taskwarrior: install-taskwarrior-from-source
-
-install-taskwarrior-from-source:
-	./bin/setup_taskwarrior.sh -b
-
-install-taskwarrior-by-package-manager:
-	./bin/setup_taskwarrior.sh
-
-install-tasksync:
-	./bin/setup_task_sync.sh
 
 install-google-drive-fuse:
 	./bin/setup_google_drive_ocamlfuse.sh
@@ -74,4 +63,4 @@ clean:
 	rm -rf build
 	./bin/setup_symbolic_links.sh -d
 
-.PHONY: install install-from-source install-by-package-manager install-base-from-source install-base-by-package-manager install-taskwarrior-from-source install-taskwarrior-by-package-manager install-tasksync install-google-drive-fuse build build-docker-image-build-from-source build-docker-image-using-package-manager lint lint-all format pre-commit-install pre-commit-run test clean install-taskwarrior auth-gdrive
+.PHONY: install install-from-source install-by-package-manager install-base-from-source install-base-by-package-manager install-google-drive-fuse build build-docker-image-build-from-source build-docker-image-using-package-manager lint lint-all format pre-commit-install pre-commit-run test clean auth-gdrive
