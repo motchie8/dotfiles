@@ -236,12 +236,18 @@ api.nvim_create_user_command("Hsc", function()
     end)
 end, {})
 
+-- Hse: horizontal split (above, 4 lines height) + open tmp.md, cursor moves to new window
+api.nvim_create_user_command("Hse", function()
+    vim.cmd("aboveleft 4split tmp.md")
+end, {})
+
 -- Command abbreviations for lowercase usage
 vim.cmd("cnoreabbrev vst Vst")
 vim.cmd("cnoreabbrev vsc Vsc")
 vim.cmd("cnoreabbrev hs Hs")
 vim.cmd("cnoreabbrev hst Hst")
 vim.cmd("cnoreabbrev hsc Hsc")
+vim.cmd("cnoreabbrev hse Hse")
 
 -- Bootstrapping for lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
