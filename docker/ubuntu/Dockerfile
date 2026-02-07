@@ -37,12 +37,14 @@ COPY --chown=$user:$user dap /home/$user/dotfiles/dap
 COPY --chown=$user:$user lua /home/$user/dotfiles/lua
 COPY --chown=$user:$user snippets /home/$user/dotfiles/snippets
 COPY --chown=$user:$user vscode /home/$user/dotfiles/vscode
+COPY --chown=$user:$user vim /home/$user/dotfiles/vim
 COPY --chown=$user:$user \
     .vimspector.json \
     .zshrc \
     cheatsheet.txt \
-    coc-settings.json \
     init.lua \
+    pyproject.toml \
+    uv.lock \
     /home/$user/dotfiles/
 
 # Install Neovim plugins

@@ -10,7 +10,6 @@ Navigate to index page | :VimwikiDiaryIndex
 Generate links for each diary | :VimwikiDiaryGenerateLinks
 List vimwiki files | :Telescope find_files cwd=$HOME/vimwiki/data
 
-
 ## glow.nvim
 Preview markdown text (<leader>p) | :Glow
 
@@ -33,14 +32,8 @@ List files by file content in targeted directory | :Telescope live_grep cwd={pat
 List vim commands recenlty executed | :Telescope command_history
 List current changes for git per file | :Telescope git_status
 
-
 ## linediff
 Show diff of two separate blocks | :Linediff
-
-## coc.nvim
-Fix issues by code action (<leader>q) | :call CocActionAsync('doQuickfix')
-Execute code action (<leader>a) | :call CocActionAsync('codeAction', '')
-Show all diagnostics (<leader>da) | :CocList diagnostics
 
 ## telescope-coc
 Find coc.nvim and preview its results(tc) | :Telescope coc {subcommand}
@@ -65,14 +58,6 @@ Show diff against HEAD of current git branch | :DiffviewOpen
 ## tagbar
 Show class outline | :TagbarToggle
 
-## taskwiki
-Complete task (td) | :TaskWikiDone
-Delete task (tD) | :TaskWikiDelete
-Start or stop task (tt) | :TaskWikiToggle
-Edit task (te) | :TaskWikiEdit
-Annotate task (ta) | :TaskWikiAnnotate
-Synchronize Google cadendar with Taskwarrior(ts) | :!$HOME/vimwiki/todo/sync_task_with_calendar.sh
-
 ## vim-tw
 Show task grid | :TW {filter}
 
@@ -88,12 +73,6 @@ Continue(F5) | :lua require('dap').continue()
 Translate text into english | :TranslateX --engines=google --target_lang=en --source_lang=ja {text}
 Translate text into japanese | :TranslateX --engines=google --target_lang=ja --source_lang=en {text}
 Translate text in the clipboard into english | :TranslateX
-
-## vim-ai
-Complete the selection using the instruction by ChatGPT | :AI {instruction}
-Edit the selection using the instruction by ChatGPT | :AIEdit {instruction}
-Continue or start a new conversation by ChatGPT | :AIChat
-Start a new conversation | :AINewChat
 
 ## copilot.vim
 First, configure GitHub Copilot | :Copilot setup

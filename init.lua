@@ -236,9 +236,9 @@ api.nvim_create_user_command("Hsc", function()
     end)
 end, {})
 
--- Hse: horizontal split (above, 4 lines height) + open tmp.md, cursor moves to new window
+-- Hse: horizontal split (above, 6 lines height) + open tmp.md, cursor moves to new window
 api.nvim_create_user_command("Hse", function()
-    vim.cmd("aboveleft 4split tmp.md")
+    vim.cmd("aboveleft 10split tmp.md")
 end, {})
 
 -- Command abbreviations for lowercase usage
