@@ -26,6 +26,10 @@ COPY --chown=$user:$user bin /home/$user/dotfiles/bin
 COPY --chown=$user:$user tmux /home/$user/dotfiles/tmux
 COPY --chown=$user:$user Makefile /home/$user/dotfiles/Makefile
 COPY --chown=$user:$user config /home/$user/dotfiles/config
+COPY --chown=$user:$user \
+    pyproject.toml \
+    uv.lock \
+    /home/$user/dotfiles/
 RUN if [ "$BUILD_FROM_SOURCE" = "true" ]; then \
         make install-base-from-source; \
     else \
@@ -43,8 +47,6 @@ COPY --chown=$user:$user \
     .zshrc \
     cheatsheet.txt \
     init.lua \
-    pyproject.toml \
-    uv.lock \
     /home/$user/dotfiles/
 
 # Install Neovim plugins
