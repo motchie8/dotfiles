@@ -50,6 +50,14 @@ Functions for installation.
 ------------------------------------------------------------------------
 EOF
 
+install_python_deps() {
+    if [ ! -e "$DOTFILES_DIR"/.venv ]; then
+        info_echo """**** Setup virtual environment for dotfiles ****"""
+        cd "$DOTFILES_DIR"
+        uv sync
+    fi
+}
+
 build_neovim() {
     info_echo "**** Build Neovim from source****"
     # install prerequisites
@@ -560,6 +568,8 @@ cat /dev/null <<EOF
 Installation steps
 ------------------------------------------------------------------------
 EOF
+
+install_python_deps
 
 install_neovim
 

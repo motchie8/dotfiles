@@ -107,11 +107,6 @@ install_python() {
         info_echo "**** Install python3 ****"
         uv python install 3.12 --default --preview
     fi
-    if [ ! -e "$DOTFILES_DIR"/.venv ]; then
-        info_echo """**** Setup virtual environment for dotfiles ****"""
-        cd "$DOTFILES_DIR"
-        uv sync
-    fi
 }
 
 install_node() {
