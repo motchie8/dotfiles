@@ -422,6 +422,26 @@ install_heml() {
     fi
 }
 
+install_k9s() {
+    if ! type k9s >/dev/null 2>&1; then
+        info_echo "**** Install k9s ****"
+        if [ "$OS" = "$MAC_OS" ]; then
+            brew install derailed/k9s/k9s
+        elif [ "$OS" = "$UBUNTU" ]; then
+            if [ "$ARCH" == "arm64" ] || [ "$ARCH" == "aarch64" ]; then
+                K9S_ARCH="arm64"
+            else
+                K9S_ARCH="amd64"
+            fi
+            wget -O k9s.deb https://github.com/derailed/k9s/releases/latest/download/k9s_linux_${K9S_ARCH}.deb
+            sudo apt install -y ./k9s.deb
+            rm k9s.deb
+        else
+            exit_with_unsupported_os
+        fi
+    fi
+}
+
 install_devcontainer_cli() {
     if ! type devcontainer >/dev/null 2>&1; then
         info_echo "**** Install devcontainer cli ****"
@@ -602,6 +622,8 @@ install_gcloud_cli
 install_aws_cli
 
 install_heml
+
+install_k9s
 
 install_terraform_libs
 
