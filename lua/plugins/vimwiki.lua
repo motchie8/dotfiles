@@ -2,6 +2,7 @@ return {
     -- Vimwiki
     {
         "vimwiki/vimwiki",
+        cmd = "VimwikiMakeDiaryNote",
         init = function()
             vim.cmd([[
                 set nocompatible
@@ -45,5 +46,29 @@ return {
                 callback = setup_swap,
             })
         end,
+    },
+    -- obsidian
+    {
+        "epwalsh/obsidian.nvim",
+        version = "*", -- recommended, use latest release instead of latest commit
+        lazy = true,
+        event = {
+            "BufReadPre " .. vim.fn.expand("~") .. "/vault/**/*.md",
+            "BufNewFile " .. vim.fn.expand("~") .. "/vault/**/*.md",
+        },
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "nvim-telescope/telescope.nvim",
+            "nvim-treesitter/nvim-treesitter",
+        },
+        opts = {
+            workspaces = {
+                {
+                    name = "vault",
+                    path = "~/vaults/vault",
+                },
+            },
+            preferred_link_stype = "markdown",
+        },
     },
 }

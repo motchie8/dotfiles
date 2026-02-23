@@ -63,7 +63,7 @@ return {
             vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", { desc = "LSP Hover" })
             vim.keymap.set(
                 "n",
-                "gf",
+                "gF",
                 "<cmd>lua vim.lsp.buf.formatting()<CR>",
                 { desc = "LSP Format" }
             )
