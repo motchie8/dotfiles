@@ -476,6 +476,19 @@ install_lua_language_server() {
     fi
 }
 
+install_ripgrep() {
+    if ! type rg >/dev/null 2>&1; then
+        info_echo "**** Install ripgrep ****"
+        if [ "$OS" = "$MAC_OS" ]; then
+            brew install ripgrep
+        elif [ "$OS" = "$UBUNTU" ]; then
+            sudo apt-get install -y ripgrep
+        else
+            exit_with_unsupported_os
+        fi
+    fi
+}
+
 install_shellcheck() {
     if ! type shellcheck >/dev/null 2>&1; then
         info_echo "**** Install shellcheck ****"
@@ -630,6 +643,8 @@ install_terraform_libs
 install_devcontainer_cli
 
 install_lua_language_server
+
+install_ripgrep
 
 install_shellcheck
 
