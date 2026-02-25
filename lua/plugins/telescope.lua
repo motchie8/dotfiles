@@ -9,9 +9,9 @@ return {
             vim.api.nvim_set_keymap("n", "sq", "<Cmd>Telescope quickfix<CR>", { noremap = true })
             vim.api.nvim_set_keymap("n", "sf", "<Cmd>Telescope find_files<CR>", { noremap = true })
             vim.api.nvim_set_keymap("n", "sg", "<Cmd>Telescope git_files<CR>", { noremap = true })
-            vim.api.nvim_set_keymap("n", "sl", "<Cmd>Telescope live_grep<CR>", { noremap = true })
+            vim.api.nvim_set_keymap("n", "sc", "<Cmd>Telescope live_grep<CR>", { noremap = true })
             vim.api.nvim_set_keymap("n", "so", "<Cmd>Telescope oldfiles<CR>", { noremap = true })
-            vim.api.nvim_set_keymap("n", "sc", "<Cmd>Telescope commands<CR>", { noremap = true })
+            vim.api.nvim_set_keymap("n", "sC", "<Cmd>Telescope commands<CR>", { noremap = true })
             vim.api.nvim_set_keymap("n", "sM", "<Cmd>Telescope man_pages<CR>", { noremap = true })
             vim.api.nvim_set_keymap(
                 "n",

@@ -49,19 +49,16 @@ return {
     },
     -- obsidian
     {
-        "epwalsh/obsidian.nvim",
+        "obsidian-nvim/obsidian.nvim",
         version = "*", -- recommended, use latest release instead of latest commit
-        lazy = true,
-        event = {
-            "BufReadPre " .. vim.fn.expand("~") .. "/vault/**/*.md",
-            "BufNewFile " .. vim.fn.expand("~") .. "/vault/**/*.md",
-        },
+        ft = "markdown",
         dependencies = {
             "nvim-lua/plenary.nvim",
             "nvim-telescope/telescope.nvim",
             "nvim-treesitter/nvim-treesitter",
         },
         opts = {
+            legacy_commands = false,
             workspaces = {
                 {
                     name = "vault",

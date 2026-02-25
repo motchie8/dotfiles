@@ -20,124 +20,124 @@ return { -- Copilot(Lua)
                 gitrebase = true,
             },
             -- for agentic.nvim
-            should_attach = function(bufnr, bufname)
-                local filetype = vim.bo[bufnr].filetype
+            -- should_attach = function(bufnr, bufname)
+            --     local filetype = vim.bo[bufnr].filetype
 
-                if filetype == "AgenticInput" then
-                    return true
-                end
+            --     if filetype == "AgenticInput" then
+            --         return true
+            --     end
 
-                -- Delegate to default behavior for all other buffers
-                local default_should_attach = require("copilot.config.should_attach").default
-                return default_should_attach(bufnr, bufname)
-            end,
+            --     -- Delegate to default behavior for all other buffers
+            --     local default_should_attach = require("copilot.config.should_attach").default
+            --     return default_should_attach(bufnr, bufname)
+            -- end,
         },
     },
     -- For Claude Code and Cursor CLI agentic.nvim
-    {
-        "carlos-algms/agentic.nvim",
-        config = function()
-            local use_claude_code = os.getenv("USE_CLAUDE_CODE") or "0"
-            local use_cursor_cli = os.getenv("USE_CURSOR_CLI") or "0"
-            local acp_providers = {
-                ["claude-acp"] = {
-                    default_mode = "plan",
-                },
-                ["cursor-acp"] = {
-                    default_mode = "plan",
-                },
-            }
-            local hooks = {
-                -- Called when the user submits a prompt
-                on_prompt_submit = function(data)
-                    -- data.prompt: string - The user's prompt text
-                    -- data.session_id: string - The ACP session ID
-                    -- data.tab_page_id: number - The Neovim tabpage ID
-                    vim.notify("Prompt submitted: " .. data.prompt:sub(1, 50))
-                end,
+    -- {
+    --     "carlos-algms/agentic.nvim",
+    --     config = function()
+    --         local use_claude_code = os.getenv("USE_CLAUDE_CODE") or "0"
+    --         local use_cursor_cli = os.getenv("USE_CURSOR_CLI") or "0"
+    --         local acp_providers = {
+    --             ["claude-acp"] = {
+    --                 default_mode = "plan",
+    --             },
+    --             ["cursor-acp"] = {
+    --                 default_mode = "plan",
+    --             },
+    --         }
+    --         local hooks = {
+    --             -- Called when the user submits a prompt
+    --             on_prompt_submit = function(data)
+    --                 -- data.prompt: string - The user's prompt text
+    --                 -- data.session_id: string - The ACP session ID
+    --                 -- data.tab_page_id: number - The Neovim tabpage ID
+    --                 vim.notify("Prompt submitted: " .. data.prompt:sub(1, 50))
+    --             end,
 
-                -- Called when the agent finishes responding
-                on_response_complete = function(data)
-                    -- data.session_id: string - The ACP session ID
-                    -- data.tab_page_id: number - The Neovim tabpage ID
-                    -- data.success: boolean - Whether response completed without error
-                    -- data.error: table|nil - Error details if failed
-                    if data.success then
-                        vim.notify("Agent finished!", vim.log.levels.INFO)
-                    else
-                        vim.notify("Agent error: " .. vim.inspect(data.error), vim.log.levels.ERROR)
-                    end
-                end,
-            }
-            local diff_preview = {
-                enabled = true,
-                layout = "split",
-                center_on_navigate_hunks = true,
-            }
-            local keymaps = {
-                diff_preview = {
-                    next_hunk = "<C-j>",
-                    prev_hunk = "<C-k>",
-                },
-            }
-            if use_claude_code == "1" then
-                require("agentic").setup({
-                    provider = "claude-acp",
-                    acp_providers = acp_providers,
-                    hooks = hooks,
-                    diff_preview = diff_preview,
-                    keymaps = keymaps,
-                })
-            elseif use_cursor_cli == "1" then
-                require("agentic").setup({
-                    provider = "cursor-acp",
-                    acp_providers = acp_providers,
-                    hooks = hooks,
-                    diff_preview = diff_preview,
-                    keymaps = keymaps,
-                })
-            else
-                print(
-                    "Both USE_CLAUDE_CODE and USE_CURSOR_CLI are not set to 1. Please set one of them."
-                )
-            end
-        end,
-        -- these are just suggested keymaps; customize as desired
-        keys = {
-            {
-                "<Leader>c",
-                function()
-                    require("agentic").toggle()
-                end,
-                mode = { "n" },
-                desc = "Toggle Agentic Chat",
-            },
-            {
-                "<Leader>ca",
-                function()
-                    require("agentic").add_selection_or_file_to_context()
-                end,
-                mode = { "n", "v" },
-                desc = "Add file or selection to Agentic to Context",
-            },
-            {
-                "<Leader>cs",
-                function()
-                    require("agentic").stop_generation()
-                end,
-                mode = { "n" },
-                desc = "Stop current generation or tool execution",
-            },
-            {
-                "<Leader>C",
-                function()
-                    require("agentic").new_session()
-                end,
-                mode = { "n" },
-                desc = "New Agentic Session",
-            },
-        },
-    },
+    --             -- Called when the agent finishes responding
+    --             on_response_complete = function(data)
+    --                 -- data.session_id: string - The ACP session ID
+    --                 -- data.tab_page_id: number - The Neovim tabpage ID
+    --                 -- data.success: boolean - Whether response completed without error
+    --                 -- data.error: table|nil - Error details if failed
+    --                 if data.success then
+    --                     vim.notify("Agent finished!", vim.log.levels.INFO)
+    --                 else
+    --                     vim.notify("Agent error: " .. vim.inspect(data.error), vim.log.levels.ERROR)
+    --                 end
+    --             end,
+    --         }
+    --         local diff_preview = {
+    --             enabled = true,
+    --             layout = "split",
+    --             center_on_navigate_hunks = true,
+    --         }
+    --         local keymaps = {
+    --             diff_preview = {
+    --                 next_hunk = "<C-j>",
+    --                 prev_hunk = "<C-k>",
+    --             },
+    --         }
+    --         if use_claude_code == "1" then
+    --             require("agentic").setup({
+    --                 provider = "claude-acp",
+    --                 acp_providers = acp_providers,
+    --                 hooks = hooks,
+    --                 diff_preview = diff_preview,
+    --                 keymaps = keymaps,
+    --             })
+    --         elseif use_cursor_cli == "1" then
+    --             require("agentic").setup({
+    --                 provider = "cursor-acp",
+    --                 acp_providers = acp_providers,
+    --                 hooks = hooks,
+    --                 diff_preview = diff_preview,
+    --                 keymaps = keymaps,
+    --             })
+    --         else
+    --             print(
+    --                 "Both USE_CLAUDE_CODE and USE_CURSOR_CLI are not set to 1. Please set one of them."
+    --             )
+    --         end
+    --     end,
+    --     -- these are just suggested keymaps; customize as desired
+    --     keys = {
+    --         {
+    --             "<Leader>c",
+    --             function()
+    --                 require("agentic").toggle()
+    --             end,
+    --             mode = { "n" },
+    --             desc = "Toggle Agentic Chat",
+    --         },
+    --         {
+    --             "<Leader>ca",
+    --             function()
+    --                 require("agentic").add_selection_or_file_to_context()
+    --             end,
+    --             mode = { "n", "v" },
+    --             desc = "Add file or selection to Agentic to Context",
+    --         },
+    --         {
+    --             "<Leader>cs",
+    --             function()
+    --                 require("agentic").stop_generation()
+    --             end,
+    --             mode = { "n" },
+    --             desc = "Stop current generation or tool execution",
+    --         },
+    --         {
+    --             "<Leader>C",
+    --             function()
+    --                 require("agentic").new_session()
+    --             end,
+    --             mode = { "n" },
+    --             desc = "New Agentic Session",
+    --         },
+    --     },
+    -- },
     -- For Claude Code, Cursor CLI and Gemini CLI by toggleterm.nvim
     -- {
     --     "coder/claudecode.nvim",
