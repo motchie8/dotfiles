@@ -69,7 +69,7 @@ return {
             preferred_link_stype = "markdown",
             -- notes_subdir = "notes",
             daily_notes = {
-                folder = "dailies",
+                folder = "00-dailies",
                 default_tags = { "daily" },
                 template = "daily.md",
             },
