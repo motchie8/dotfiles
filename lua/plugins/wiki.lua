@@ -51,7 +51,8 @@ return {
     {
         "obsidian-nvim/obsidian.nvim",
         version = "*", -- recommended, use latest release instead of latest commit
-        ft = "markdown",
+        -- ft = "markdown",
+        cmd = "Obsidian",
         dependencies = {
             "nvim-lua/plenary.nvim",
             "nvim-telescope/telescope.nvim",
@@ -66,6 +67,15 @@ return {
                 },
             },
             preferred_link_stype = "markdown",
+            -- notes_subdir = "notes",
+            daily_notes = {
+                folder = "dailies",
+                default_tags = { "daily" },
+                template = "daily.md",
+            },
+            templates = {
+                folder = "templates",
+            },
         },
     },
 }

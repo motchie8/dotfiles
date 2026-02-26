@@ -7,13 +7,11 @@ return {
             "markdown",
             "vimwiki.markdown",
             "md",
-            "AgenticChat",
         },
         file_types = {
             "markdown",
             "vimwiki.markdown",
             "md",
-            "AgenticChat",
         },
         keys = {
             {
@@ -22,6 +20,8 @@ return {
                 desc = "Toggle Render Markdown View",
             },
         },
-        opts = {},
+        opts = {
+            enabled = false,
+        },
     },
 }

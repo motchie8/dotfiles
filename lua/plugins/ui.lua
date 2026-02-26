@@ -21,17 +21,13 @@ return {
 
             -- Set menu
             dashboard.section.buttons.val = {
-                dashboard.button(
-                    "d",
-                    "  > Diary",
-                    ":cd $HOME/vimwiki | VimwikiMakeDiaryNote <CR>"
-                ),
+                dashboard.button("d", "  > Daily note", ":Obsidian today<CR>"),
                 dashboard.button("c", "  > Dotfiles", ":cd $HOME/dotfiles | :e init.lua<CR>"),
                 dashboard.button("r", "  > Recent files", ":Telescope oldfiles<CR>"),
                 dashboard.button(
                     "f",
                     "  > Search wiki",
-                    ":cd $HOME/vimwiki | Telescope live_grep<CR>"
+                    ":cd $HOME/vaults/vault | Telescope live_grep<CR>"
                 ),
                 dashboard.button("e", "  > New file", ":ene <BAR> startinsert <CR>"),
                 dashboard.button("q", "󰅙  > Quit", ":qa<CR>"),
