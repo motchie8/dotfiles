@@ -21,7 +21,11 @@ return {
 
             -- Set menu
             dashboard.section.buttons.val = {
-                dashboard.button("d", "  > Daily note", ":Obsidian today<CR>"),
+                dashboard.button(
+                    "d",
+                    "  > Daily note",
+                    ":cd $HOME/vaults/vault | :Obsidian today<CR>"
+                ),
                 dashboard.button("c", "  > Dotfiles", ":cd $HOME/dotfiles | :e init.lua<CR>"),
                 dashboard.button("r", "  > Recent files", ":Telescope oldfiles<CR>"),
                 dashboard.button(
