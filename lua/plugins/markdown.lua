@@ -24,4 +24,16 @@ return {
             enabled = false,
         },
     },
+    {
+        "Kicamon/markdown-table-mode.nvim",
+        config = function()
+            require("markdown-table-mode").setup()
+            vim.keymap.set(
+                "n",
+                "<leader>mt",
+                "<cmd>Mtm<cr>",
+                { desc = "Toggle Markdown Table Mode" }
+            )
+        end,
+    },
 }
